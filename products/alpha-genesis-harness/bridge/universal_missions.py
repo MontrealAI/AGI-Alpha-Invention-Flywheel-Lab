@@ -286,7 +286,10 @@ class UniversalMissionService(WorkflowService):
         ]
         examples = {
             "construct_instrument": 'construct_instrument needs name and spec. The spec has name, inputs (field names), and outputs '
-                                    '(map of formulas). Formulas support add/sub/mul/div/min/max/sum/count/eq/lt/lte/gt/gte/and/or/not/if. Numbers are bare values.',
+                                    '(map of formulas). Formulas support add/sub/mul/div/min/max/abs/sum/count/eq/lt/lte/gt/gte/and/or/not/if. '
+                                    'Numbers are bare values. Use {"op":"if","args":[condition,when_true,when_false]} or '
+                                    '{"formula":"choose(condition, when_true, when_false)"} with a boolean condition and both branches. '
+                                    'If construction is refused, repair the named expression and resubmit it before running the artifact.',
             "run_instrument": 'run_instrument {name:"calc.json",input:{x:3}} returns actual outputs.',
             "read_artifact": 'read_artifact {name:"calc.json"} reads an artifact from this mission.',
             "write_dataset": 'write_dataset {name:"data.csv",columns:["x"],rows:[[1]]}.',
@@ -375,6 +378,21 @@ class UniversalMissionService(WorkflowService):
         self._verify(state)
         checks_passed = state["verification"]["passed"]
         required_checks = bool(state["spec"]["acceptance"])
+        proposal = next(event for event in reversed(state["events"]) if event["kind"] == "route_proposed")
+        turn_events = state["events"][proposal["index"] + 1:]
+        repairs = {}
+        for event in turn_events:
+            detail = event["detail"]
+            if event["kind"] == "tool_refused" and detail.get("code") == "INSTRUMENT_STRUCTURE":
+                repairs[detail["artifact"]] = detail["reason"]
+            elif event["kind"] == "tool_completed" and detail["tool"] == "construct_instrument":
+                repairs.pop(detail["outcome"]["artifact"], None)
+        if repairs:
+            guidance = ("Corrigez les instruments refusés avant de les exécuter. "
+                        if state["spec"]["mission"]["language"] == "fr"
+                        else "Correct the refused instruments before running them. ")
+            state["feedback"] = guidance + " ".join(reason[:360] for reason in list(repairs.values())[:4])
+            return
         if "evidence" in state["spec"]["mission"]["requirements"]:
             evidence = self._evidence(state)
             dispositions = [{key: claim[key] for key in ("id", "status", "reason")} for claim in evidence["claims"]]
@@ -395,9 +413,9 @@ class UniversalMissionService(WorkflowService):
             event["kind"] == "tool_completed" and event["detail"]["outcome"].get("operation_executed", True)
             for event in state["events"]
         )
-        proposal = next(event for event in reversed(state["events"]) if event["kind"] == "route_proposed")
-        turn_events = state["events"][proposal["index"] + 1:]
-        refused = any(event["kind"] == "tool_refused" for event in turn_events)
+        refused = any(event["kind"] == "tool_refused"
+                      and event["detail"].get("code") not in {"INSTRUMENT_STRUCTURE", "INSTRUMENT_DEPENDENCY"}
+                      for event in turn_events)
         if checks_passed or (response["done"] and not required_checks and exercised and not refused):
             state["status"] = "needs_review"
             self._event(state, "awaiting_independent_evaluation", {"development_checks_passed": checks_passed,

@@ -3,11 +3,13 @@ on:
   pull_request:
     paths:
       - 'products/alpha-genesis-harness/**'
+      - 'scripts/qualify_frontier_companion.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   push:
     branches: [main]
     paths:
       - 'products/alpha-genesis-harness/**'
+      - 'scripts/qualify_frontier_companion.py'
       - '.github/workflows/alpha-genesis-harness.yml'
 permissions:
   contents: read
@@ -23,6 +25,9 @@ jobs:
       source_sha: ${{ steps.build.outputs.source_sha }}
       archive_sha: ${{ steps.build.outputs.archive_sha }}
       archive_name: ${{ steps.build.outputs.archive_name }}
+      companion_artifact: ${{ steps.companion_upload.outputs.artifact-id }}
+      companion_sha: ${{ steps.companion.outputs.sha256 }}
+      companion_name: ${{ steps.companion.outputs.name }}
     steps:
       - name: Record platform job execution start
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
@@ -169,6 +174,38 @@ jobs:
           name: alpha-genesis-harness-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/harness-assets
           if-no-files-found: error
+      - name: Build and launch the exact Pages companion on Linux
+        id: companion
+        env:
+          EXPECTED_SOURCE: ${{ steps.build.outputs.source_sha }}
+        run: |
+          git fetch --no-tags --depth=1 --filter=blob:none origin \
+            c0a14ba028092db648516718f9127ae8166df63e 297a51c25c48031e1e6f964835f4dfae3ddb8023 \
+            1bdac817b471157092ea4aac881916824b66734e
+          python -B - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from frontier_member_value import build_mission_executor
+          from qualify_frontier_companion import launch
+          root = Path(os.environ['RUNNER_TEMP'])
+          revision = os.environ['EXPECTED_SOURCE']
+          bundles = root / 'frontier-pages-companion'
+          bundles.mkdir()
+          package = build_mission_executor(bundles, revision)
+          archive = bundles / package['download']
+          result = launch(archive, package['sha256'], revision)
+          (root / 'harness-operation/PAGES-COMPANION.json').write_text(json.dumps(result, indent=2) + '\n')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('sha256='+package['sha256']+'\nname='+archive.name+'\n')
+          PY
+      - name: Preserve source-bound Pages companion for first-use qualification
+        id: companion_upload
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-pages-companion-${{ steps.build.outputs.source_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/frontier-pages-companion/${{ steps.companion.outputs.name }}
+          if-no-files-found: error
       - name: Preserve operation evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -257,6 +294,19 @@ jobs:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
           python products/alpha-genesis-harness/scripts/qualify_platform.py "$RUNNER_TEMP/harness-platform-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --visual-modules "$RUNNER_TEMP/harness-platform-visual/node_modules" --browser-executable "$HARNESS_NATIVE_BROWSER" --output "$RUNNER_TEMP/harness-platform-operation"
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.qualify.outputs.companion_artifact }}
+          path: ${{ runner.temp }}/frontier-pages-companion
+          merge-multiple: true
+      - name: Launch the exact Pages companion with this operating system's launcher
+        env:
+          COMPANION_ARCHIVE: ${{ needs.qualify.outputs.companion_name }}
+          COMPANION_SHA: ${{ needs.qualify.outputs.companion_sha }}
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          python -B scripts/qualify_frontier_companion.py "$RUNNER_TEMP/frontier-pages-companion/$COMPANION_ARCHIVE" \
+            "$COMPANION_SHA" "$SOURCE_SHA" | tee "$RUNNER_TEMP/harness-platform-operation/PAGES-COMPANION.json"
       - name: Record native Codex isolation on this OS without authentication
         if: ${{ always() && !cancelled() }}
         env:

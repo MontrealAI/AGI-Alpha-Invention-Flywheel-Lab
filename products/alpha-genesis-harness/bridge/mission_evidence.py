@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 
 from .adapters import BridgeError, strict_json
-from .workflows import NAME, digest, require
+from .workflows import EXACT_PORTABLE_RUNNER_1_2_SHA256, NAME, digest, require
 
 
 ORIGINS = frozenset({"AUTHORIZED_MISSION_INPUT", "OPERATOR_SUPPLIED_OBSERVATION", "VERIFIED_EXTERNAL_SOURCE",
@@ -222,9 +222,13 @@ def _version(tool):
 def _compatible_operation(tool, operation, read):
     if operation["version_sha256"] == _version(tool):
         return True
-    # Existing 1.1 checkpoints used the same portable arithmetic semantics.
-    # An exact-rational artifact requires an execution by its own evaluator.
-    return (tool == "run_instrument" and operation["version_sha256"] == LEGACY_INSTRUMENT_VERSION
+    if tool != "run_instrument":
+        return False
+    if operation["version_sha256"] == EXACT_PORTABLE_RUNNER_1_2_SHA256:
+        # The structural admission check does not change 1.2 numerical results.
+        return True
+    # The 1.1 evaluator did not have exact-rational arithmetic.
+    return (operation["version_sha256"] == LEGACY_INSTRUMENT_VERSION
             and "numeric_mode" not in strict_json(read(operation["artifact"])))
 
 

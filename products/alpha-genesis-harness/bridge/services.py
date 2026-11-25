@@ -103,8 +103,14 @@ class AccessRuntime:
             return SimpleNamespace(remote=True, id=ident, kind=ident)
         return self.base.provider(ident)
 
+    def execution_identity(self, name):
+        provider = self.base.provider(name)
+        if provider.remote:
+            self._network_allowed()
+        return (id(self.base), id(provider))
+
     @contextmanager
-    def execution_slot(self, data, cancelled=lambda: False):
+    def execution_slot(self, data, cancelled=lambda: False, *, expected_identity=None):
         name = data.get("provider") if isinstance(data, dict) else None
         if name in {"chatgpt", "codex"}:
             self._network_allowed()
@@ -127,7 +133,7 @@ class AccessRuntime:
                 raise BridgeError("CANCELLED", "Execution runtime closed before dispatch.", 409)
             if name in {"chatgpt", "codex"} or provider.remote:
                 self._network_allowed()
-            if current_identity() != identity:
+            if current_identity() != identity or (expected_identity is not None and identity != expected_identity):
                 raise BridgeError("EXECUTION_IDENTITY_CHANGED", "Selected connection or account changed while queued. Submit a new request explicitly.", 409)
         with _GATES_LOCK:
             if not hasattr(target, "_harness_execution_gate"):

@@ -16,11 +16,15 @@ from .workflows import RUN, digest, encoded
 PREFIX = "/api/frontier-missions/"
 PAGES_ORIGIN = "https://montrealai.github.io"
 INTELLIGENCE = frozenset({"intelligence-status", "intelligence-discover", "intelligence-connect", "intelligence-reconnect"})
-OPERATIONS = INTELLIGENCE | {"pair", "submit", "get", "list", "pause", "resume", "cancel", "export", "disconnect", "release"}
-COMMANDS = frozenset({"submit", "pause", "resume", "cancel", "disconnect"})
+PREPARE = "prepare-intelligence"
+SETUP_STATUS = "mission-intelligence-status"
+OPERATIONS = INTELLIGENCE | {"pair", "submit", "get", "list", "pause", "resume", "cancel", "export", "disconnect", "release",
+                             PREPARE, SETUP_STATUS}
+COMMANDS = frozenset({"submit", "pause", "resume", "cancel", "disconnect", PREPARE})
 COMMAND_ID = re.compile(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\Z")
 TOKEN = re.compile(r"[A-Za-z0-9_-]{43}\Z")
 ALLOWED_HEADERS = frozenset({"content-type", "x-frontier-session", "x-frontier-command"})
+DRAFT_FORMAT = "frontier-paired-mission-draft/v1"
 
 
 def check(condition, code, status=400):
@@ -44,7 +48,7 @@ class PagesMissions:
     """One opt-in browser session for one private, owner-selected workspace."""
 
     def __init__(self, service, *, role=None, origin=PAGES_ORIGIN, lease_minutes=60, turns=8,
-                 actions=24, output_tokens=1024, announce, clock=None, intelligence=None, evidence_input=None):
+                 actions=24, output_tokens=1024, announce, clock=None, intelligence=None, evidence_input=None, remote=False):
         check(valid_origin(origin), "MISSION_ORIGIN")
         check(type(lease_minutes) is int and 1 <= lease_minutes <= 1440, "MISSION_LEASE")
         check(type(turns) is int and 1 <= turns <= 100, "MISSION_TURNS")
@@ -61,6 +65,7 @@ class PagesMissions:
                   and isinstance(evidence_input.get("context", ""), str), "MISSION_EVIDENCE_INPUT")
         self.service = service
         self.intelligence = intelligence
+        self.remote = remote is True
         self.evidence_input = evidence_input
         self.origin = origin
         self.role = role
@@ -75,6 +80,8 @@ class PagesMissions:
         self._command_scope = None
         self._code = None
         self._commands = {}
+        self._setup_tickets = {}
+        self._mission_tickets = {}
         self._rotate_code()
 
     def _rotate_code(self):
@@ -89,6 +96,80 @@ class PagesMissions:
     def _admit_session(self, session):
         check(self.clock() < self.expires, "MISSION_LEASE_EXPIRED", 403)
         self._verify(session, self._session, "MISSION_SESSION")
+
+    def _clear_tickets(self):
+        self._setup_tickets.clear()
+        self._mission_tickets.clear()
+
+    def _remove_ticket(self, ident):
+        old = self._mission_tickets.pop(ident, None)
+        if old is not None:
+            self._setup_tickets.pop(old, None)
+
+    def _stage_response(self, row, issue=False):
+        result = self._summary(self.service.stage_view(row))
+        if issue and result["status"] == "awaiting_consent":
+            self._remove_ticket(row["id"])
+            ticket = secrets.token_urlsafe(32)
+            hashed = hashlib.sha256(ticket.encode()).digest()
+            self._setup_tickets[hashed] = {"id": row["id"], "revision": row["revision"], "scope": self._command_scope}
+            self._mission_tickets[row["id"]] = hashed
+            result["setup_ticket"] = ticket
+        return result
+
+    def _pending_review(self, ticket):
+        check(self.remote and self._session is not None and self.clock() < self.expires,
+              "MISSION_INTELLIGENCE_CONSENT", 403)
+        check(isinstance(ticket, str) and TOKEN.fullmatch(ticket), "MISSION_SETUP_TICKET", 403)
+        entry = self._setup_tickets.get(hashlib.sha256(ticket.encode()).digest())
+        check(entry and entry["scope"] == self._command_scope, "MISSION_SETUP_TICKET", 403)
+        row = self.service.stage_record(entry["id"])
+        check(row and row["revision"] == entry["revision"]
+              and self.service.stage_view(row)["status"] == "awaiting_consent", "MISSION_STAGE_CHANGED", 409)
+        return entry, row
+
+    def _profile_review(self, entry, profile):
+        scope = entry["scope"]
+        return self.service.review_profile(entry["id"], profile, deadline=self.expires, budgets=self.budgets,
+                                           clock=self.clock, session_current=lambda: scope == self._command_scope)
+
+    def review(self, ticket, profile=None):
+        """Native-only review, behind the local companion's own authentication."""
+        from .paired_missions import DATA_SCOPE, OPERATIONS
+        with self._lock:
+            entry, row = self._pending_review(ticket)
+            reviewed = self._profile_review(entry, profile) if profile is not None else None
+            if reviewed:
+                entry["review"] = reviewed
+            else:
+                entry.pop("review", None)
+            return {**self._stage_response(row), "revision": row["revision"],
+                    "profile": reviewed.native_profile() if reviewed else None,
+                    "scope": reviewed.scope() if reviewed else {**self.budgets, "data": DATA_SCOPE,
+                        "operations": list(OPERATIONS), "expires_at": self.expires.isoformat()}}
+
+    def approve(self, body):
+        """Consume an explicitly reviewed, native-only approval once."""
+        with self._lock:
+            check(isinstance(body, dict) and set(body) == {"ticket", "revision", "profile", "consent"}
+                  and body["consent"] is True, "MISSION_INTELLIGENCE_CONSENT", 403)
+            entry, row = self._pending_review(body["ticket"])
+            check(body["revision"] == row["revision"], "MISSION_STAGE_CHANGED", 409)
+            old = entry.get("review")
+            check(old and body["profile"] == old.id, "MISSION_PROFILE_REVIEW", 409)
+            current = self._profile_review(entry, body["profile"])
+            check(old.matches(current), "MISSION_PROFILE_CHANGED", 409)
+            self._remove_ticket(row["id"])
+            return self._summary(self.service.authorize(row, current))
+
+    def revoke(self, ident):
+        """Native-only revocation of a staged or actively authorized mission."""
+        with self._lock:
+            check(self.remote and isinstance(ident, str) and RUN.fullmatch(ident), "MISSION_INPUT")
+            row = self.service.stage_record(ident)
+            check(row, "MISSION_NOT_FOUND", 404)
+            self._remove_ticket(ident)
+            return self._stage_response(self.service.revoke_permit(ident))
 
     def _scope(self, *, require_ready=False):
         budgets = self.budgets.copy()
@@ -112,7 +193,7 @@ class PagesMissions:
             check(self.intelligence is not None, "MISSION_INTELLIGENCE_UNAVAILABLE", 404)
             if action == "status":
                 check(not body, "MISSION_INPUT")
-                return {**self.intelligence.status(), "scope": self._scope()}
+                return {**self.intelligence.status(), "scope": self._scope(), "native_api_setup": self.remote}
             check(not self._selecting, "MISSION_INTELLIGENCE_BUSY", 409)
             selecting = action in {"connect", "reconnect"}
             if selecting:
@@ -198,27 +279,75 @@ class PagesMissions:
             spec["context"] = "\n".join(part for part in (preference, spec.get("context", "")) if part)
         return spec
 
-    def _submit(self, body, command):
+    def _ambition(self, body, command):
         check(set(body) in ({"ambition", "language"}, {"ambition", "language", "previous"}), "MISSION_INPUT")
         ambition = body["ambition"]
         check(isinstance(ambition, str) and ambition.strip() and len(ambition.encode()) <= 24 * 1024,
               "MISSION_AMBITION")
         check(body["language"] in ("en", "fr"), "MISSION_LANGUAGE")
         ident = "wf_" + hashlib.sha256(("frontier-pages-mission-v1:" + command).encode()).hexdigest()[:24]
-        spec = self._mission_spec(ambition, body["language"])
         if "previous" in body:
             previous = body["previous"]
             check(isinstance(previous, str) and RUN.fullmatch(previous) and previous != ident, "MISSION_INPUT")
-            view = self.service.revise(previous, spec, identity=ident)
+        return ident
+
+    def _submit(self, body, command):
+        ident = self._ambition(body, command)
+        check(not self.remote or not self.service.stage_record(ident), "MISSION_IDENTITY_CONFLICT", 409)
+        spec = self._mission_spec(body["ambition"], body["language"])
+        previous = body.get("previous")
+        if previous:
+            staging = self.service.stage_record(previous) if self.remote else None
+            if staging:
+                view = self.service.revise_from_stage(staging, spec, ident)
+                self.service.supersede_stage(previous)
+                self._remove_ticket(previous)
+            else:
+                view = self.service.revise(previous, spec, identity=ident)
         else:
             view = self.service.submit(spec, identity=ident)
         if view["status"] == "ready" and view.get("model_calls", 0) == 0 and not view.get("worker_active"):
             view = self.service.start(view["id"])
         return self._summary(view)
 
+    def _prepare(self, body, command):
+        check(self.remote, "MISSION_INTELLIGENCE_UNAVAILABLE", 404)
+        ident = self._ambition(body, command)
+        row = self.service.stage(ident, body)
+        if body.get("previous"):
+            self._remove_ticket(body["previous"])
+        return self._stage_response(row, issue=True)
+
+    def _get(self, ident, issue=False):
+        row = self.service.stage_record(ident) if self.remote else None
+        if issue:
+            check(row, "MISSION_NOT_FOUND", 404)
+        return self._stage_response(row, issue=issue) if row else self._summary(self.service.get(ident))
+
+    def _list(self):
+        runs = self.service.list()["runs"]
+        if self.remote:
+            by_id = {row["id"]: row for row in runs}
+            for staged in self.service.stage_records():
+                current = by_id.get(staged["id"])
+                if current:
+                    if staged["status"] in {"superseded", "cancelled", "revoked"}:
+                        current["status"] = staged["status"]
+                    elif current["status"] in {"ready", "paused", "interrupted"} and not current["worker_active"] and not self.service.has_permit(current["id"]):
+                        current["status"] = "awaiting_consent"
+                else:
+                    by_id[staged["id"]] = {"id": staged["id"], "objective": staged["body"]["ambition"],
+                                           "status": staged["status"], "updated_at": staged["created_at"]}
+            runs = sorted(by_id.values(), key=lambda row: row.get("updated_at", ""))
+        return {"missions": [{"id": row["id"], "ambition": row.get("objective", ""), "status": row["status"]}
+                             for row in runs[-40:]]}
+
     def _resume(self, ident):
         view = self.service.get(ident)
         spec = view["spec"]
+        if self.remote and self.service.stage_record(ident):
+            check(spec["local_only"] is False and self.service.has_permit(ident), "MISSION_INTELLIGENCE_CONSENT", 403)
+            return self.service.resume(ident)
         scope = self._scope(require_ready=True)
         role = {key: scope[key] for key in ("provider", "model")}
         check(spec["local_only"] is True and spec["roles"] == {"builder": role}
@@ -231,6 +360,14 @@ class PagesMissions:
 
     def import_local(self, archive):
         """Restore historical work from an owner-supplied file, paused under this policy."""
+        if self.remote and isinstance(archive, dict) and archive.get("schema") == DRAFT_FORMAT:
+            draft = archive.get("mission")
+            check(isinstance(draft, dict) and {"ambition", "language", "original_ambition"} <= set(draft), "MISSION_INPUT")
+            body = {key: draft[key] for key in ("ambition", "language")}
+            ident = self._ambition(body, secrets.token_hex(16))
+            original = draft["original_ambition"]
+            check(isinstance(original, str) and original.strip() and len(original.encode()) <= 24 * 1024, "MISSION_INPUT")
+            return self._stage_response(self.service.stage(ident, body, imported_original=original))
         check(isinstance(archive, dict) and isinstance(archive.get("state"), dict), "MISSION_INPUT")
         old = archive["state"].get("spec")
         check(isinstance(old, dict) and isinstance(old.get("mission"), dict), "MISSION_INPUT")
@@ -249,6 +386,7 @@ class PagesMissions:
                 self._session = hashlib.sha256(token.encode()).digest()
                 self._command_scope = secrets.token_hex(12)
                 self._commands.clear()
+                self._clear_tickets()
                 self._rotate_code()
                 return {"session": token, "command_scope": self._command_scope,
                         "expires_at": self.expires.isoformat(), "scope": self._scope(),
@@ -257,6 +395,7 @@ class PagesMissions:
             if operation == "release":
                 check(not body, "MISSION_INPUT")
                 self._session = self._command_scope = None
+                self._clear_tickets()
                 return {"released": True}
             if operation in COMMANDS:
                 check(isinstance(command, str) and command.startswith(self._command_scope + "."),
@@ -268,27 +407,45 @@ class PagesMissions:
                 if previous:
                     check(previous[0] == signature, "MISSION_COMMAND_CHANGED", 409)
                     ident = previous[1]
-                    return self._summary(self.service.get(ident)) if ident else {"disconnected": True}
+                    return self._get(ident, issue=operation == PREPARE) if ident else {"disconnected": True}
                 check(len(self._commands) < 4096, "MISSION_COMMAND_CAPACITY", 429)
             if operation == "submit":
                 result = self._submit(body, command)
+            elif operation == PREPARE:
+                result = self._prepare(body, command)
             elif operation == "list":
                 check(not body, "MISSION_INPUT")
-                return {"missions": [{"id": row["id"], "ambition": row.get("objective", ""), "status": row["status"]}
-                                     for row in self.service.list()["runs"][-40:]]}
+                return self._list()
             elif operation == "disconnect":
                 check(not body, "MISSION_INPUT")
+                self._session = self._command_scope = None
+                self._clear_tickets()
                 for row in self.service.list()["runs"]:
                     if row["status"] == "running" or row.get("worker_active"):
                         self.service.pause(row["id"])
-                self._session = self._command_scope = None
                 result = {"disconnected": True}
             else:
-                check(operation in {"get", "pause", "resume", "cancel", "export"}
+                check(operation in {"get", "pause", "resume", "cancel", "export", SETUP_STATUS}
                       and set(body) == {"id"} and isinstance(body["id"], str) and RUN.fullmatch(body["id"]), "MISSION_INPUT")
-                action = self._resume if operation == "resume" else getattr(self.service, operation)
-                view = action(body["id"])
-                result = view if operation == "export" else self._summary(view)
+                ident = body["id"]
+                staged = self.service.stage_record(ident) if self.remote else None
+                if operation in {"get", SETUP_STATUS}:
+                    result = self._get(ident, issue=operation == SETUP_STATUS)
+                elif staged and operation == "cancel":
+                    self._remove_ticket(ident)
+                    result = self._stage_response(self.service.cancel_stage(ident))
+                elif staged and operation in {"pause", "resume"}:
+                    stage = self.service.stage_view(staged)["status"]
+                    check(stage not in {"superseded", "cancelled", "revoked"}, "MISSION_STATE", 409)
+                    check(stage != "awaiting_consent", "MISSION_INTELLIGENCE_CONSENT", 403)
+                    action = self._resume if operation == "resume" else self.service.pause
+                    result = self._summary(action(ident))
+                elif staged and operation == "export" and not self.service.has_execution(ident):
+                    result = {"schema": DRAFT_FORMAT, "mission": self._stage_response(staged)}
+                else:
+                    action = self._resume if operation == "resume" else getattr(self.service, operation)
+                    view = action(ident)
+                    result = view if operation == "export" else self._summary(view)
             if operation in COMMANDS:
                 # Submission identities are derived from the command UUID and are also durable in HARNESS.
                 self._commands[command] = (signature, result.get("id"))

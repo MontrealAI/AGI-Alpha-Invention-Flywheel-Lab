@@ -470,6 +470,40 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .mission-execution-connection input { max-width: 100%; }
 .intelligence-choice { border-block-start: 1px solid rgba(208,169,119,.24); padding-block: .7rem; }
 .intelligence-choice > summary { cursor: pointer; color: #f4d8a5; }
+.intelligence-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: .85rem;
+  margin-block: .85rem 1.15rem;
+}
+.intelligence-option {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(.9rem,2.2vw,1.35rem);
+  border: 1px solid #775979;
+  border-radius: .45rem;
+  background: linear-gradient(155deg,#342340,#22182d 70%);
+}
+.intelligence-option h4, .intelligence-next h4 { color: #ffe1aa; margin: 0 0 .45rem; font-size: 1.1rem; }
+.intelligence-option p { color: #e5d6e9; margin: 0 0 .9rem; }
+.intelligence-option button { margin-top: auto; min-height: 44px; max-width: 100%; text-align: start; }
+.intelligence-browser { width: 100%; margin-top: .9rem; padding-top: .8rem; border-top: 1px solid #775979; }
+.intelligence-browser p:last-child { margin: .45rem 0 0; }
+.intelligence-next {
+  margin-block: .95rem 1.2rem;
+  padding: .95rem;
+  border-inline-start: 2px solid #edc38b;
+  background: #23182f;
+  overflow-wrap: anywhere;
+}
+.intelligence-next p { margin: .35rem 0 .8rem; }
+.intelligence-next a, .intelligence-return a { display: inline-flex; align-items: center; min-height: 44px; }
+.mission-connection input[type='checkbox'] { width: auto; }
+#execution-code-form input { width: min(100%,32rem); margin: .35rem .4rem .35rem 0; }
+#mission-import-artifact { display: block; max-width: 100%; color: var(--ink); }
+.mission-returned-files { padding-inline-start: 1.35rem; overflow-wrap: anywhere; }
 #intelligence-select-form { margin-block: .8rem; }
 #intelligence-select-form select { width: 100%; max-width: 36rem; }
 #intelligence-select-form label:has(input) { margin-block: .65rem; }
@@ -477,7 +511,7 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 #execution-evidence h6 { color: #f4d8a5; font-size: .9rem; margin: .4rem 0; }
 .mission-console .mv-actions a, .mission-capabilities a { display: inline-flex; align-items: center; min-height: 44px; }
 .mission-keeper { margin-block: 1.15rem .65rem; }
-@media (max-width: 680px) { .mission-brief { grid-template-columns: 1fr; } }
+@media (max-width: 680px) { .mission-brief, .intelligence-grid { grid-template-columns: 1fr; } }
 .mf-sample {
   display: flex;
   flex-direction: column;

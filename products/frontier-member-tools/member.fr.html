@@ -12,7 +12,7 @@
     </div>
     <nav class="mv-nav mf-destinations" aria-label="Sections de l’espace Member First">
       <a href="#my-frontier" aria-current="page">Ma frontière</a>
-      <a href="#mv-earlier">Veille</a>
+      <a href="#mv-earlier">Intelligence</a>
       <a href="#mv-tools">Capacités</a>
       <a href="#mv-results">Mes résultats</a>
     </nav>
@@ -31,7 +31,7 @@
             <textarea id="goal-text" rows="3" maxlength="24576" autocomplete="off" spellcheck="false"></textarea>
             <button id="goal-submit" type="submit" class="entry-button" disabled>Activer FRONTIER Ω <span aria-hidden="true">→</span></button>
           </div>
-          <p id="goal-local">Votre mission reste dans cette session jusqu’à ce que vous l’exportiez ou choisissiez une connexion d’intelligence.</p>
+          <p id="goal-local">Choisissez comment utiliser les données de votre mission. Téléchargez une copie pour conserver le travail de cet onglet.</p>
           <details class="goal-more" id="mission-examples">
             <summary>Exemples facultatifs</summary>
             <div class="goal-presets">
@@ -60,6 +60,7 @@
           <div id="mission-assumptions-group" hidden><dt>Hypothèses</dt><dd><ul id="mission-assumptions"></ul></dd></div>
         </dl>
         <details id="mission-work-panel"><summary>Travail à examiner</summary><pre id="mission-work"></pre><button id="mission-work-download" type="button" class="quiet">Télécharger le travail obtenu</button></details>
+        <ul class="mission-returned-files" id="mission-returned-files" hidden></ul>
         <ul class="mv-links mission-capabilities" id="mission-capabilities"></ul>
       </div>
       <div id="mission-published" class="mission-published" hidden>
@@ -68,7 +69,7 @@
         <p class="mv-links" id="mission-published-links"></p>
       </div>
       <section id="mission-execution" class="mission-execution" aria-labelledby="execution-title" hidden>
-        <h5 id="execution-title">Exécution locale</h5>
+        <h5 id="execution-title">Exécution de la mission</h5>
         <p id="execution-status" role="status"></p>
         <p id="execution-counts" class="packet-meta"></p>
         <section id="execution-evidence" aria-labelledby="execution-evidence-title" hidden>
@@ -83,6 +84,7 @@
           <button id="execution-pause" type="button" class="quiet" hidden>Suspendre l’exécution</button>
           <button id="execution-resume" type="button" class="quiet" hidden>Reprendre l’exécution</button>
           <button id="execution-cancel" type="button" class="quiet" hidden>Annuler l’exécution</button>
+          <button id="execution-approve" type="button" class="entry-button" hidden>Examiner l’autorisation du fournisseur</button>
           <button id="execution-retry" type="button" class="quiet" hidden>Vérifier la mission transmise</button>
           <button id="execution-export" type="button" class="quiet" disabled>Télécharger le dossier d’exécution</button>
         </div>
@@ -90,25 +92,28 @@
       <div class="mv-actions mission-actions">
         <button id="execution-send-current" type="button" class="entry-button" hidden>Démarrer l’exécution locale</button>
         <button id="mission-run-local" type="button" class="entry-button" hidden>Exécuter avec mon modèle local</button>
-        <a id="mission-configure" class="quiet" href="#mission-intelligence">Configurer mon intelligence</a>
+        <a id="mission-configure" class="entry-button" href="#mission-intelligence">Choisir mon intelligence <span aria-hidden="true">→</span></a>
         <button id="mission-prepare" type="button" class="quiet">Préparer une mission assistée</button>
         <button id="mission-pause" type="button" class="quiet" hidden>Mettre en pause</button>
         <button id="mission-continue" type="button" class="quiet" hidden>Poursuivre l’enquête</button>
       </div>
       <details id="mission-handoff" hidden>
-        <summary>Consigne préparée pour la mission</summary>
-        <p>Relisez la consigne exacte avant de la transmettre. Ouvrez l’assistant de votre choix séparément, puis rapportez sa réponse structurée.</p>
+        <summary>Poursuivre avec un assistant</summary>
+        <p>Relisez la consigne, puis utilisez-la dans ChatGPT ou votre assistant habituel. Rapportez le travail dans cette mission pour l’examiner.</p>
         <label for="mission-prompt">Consigne préparée pour la mission</label>
         <textarea id="mission-prompt" rows="8" readonly></textarea>
         <label class="mv-check"><input id="mission-share" type="checkbox"> J’ai relu la consigne et je peux transmettre ces renseignements à l’assistant de mon choix.</label>
         <div class="mv-actions">
           <button id="mission-copy" type="button" class="quiet" disabled>Copier la consigne relue</button>
           <button id="mission-prompt-download" type="button" class="quiet" disabled>Télécharger la consigne relue</button>
-          <a id="mission-assistant" href="https://chatgpt.com/" hidden rel="noreferrer">Ouvrir ChatGPT</a>
+          <a id="mission-assistant" href="https://chatgpt.com/" target="_blank" hidden rel="noopener noreferrer">Ouvrir ChatGPT dans un nouvel onglet</a>
         </div>
-        <label for="mission-reply">Réponse structurée</label>
+        <label for="mission-reply">Collez la réponse de l’assistant</label>
         <textarea id="mission-reply" rows="5" maxlength="100000" autocomplete="off" spellcheck="false"></textarea>
-        <button id="mission-import-reply" type="button" class="quiet">Ouvrir la réponse</button>
+        <div class="mv-actions">
+          <button id="mission-import-reply" type="button" class="entry-button">Conserver la réponse pour examen</button>
+          <label for="mission-import-artifact">Ou ajoutez un fichier texte (jusqu’à 32 Kio)<input id="mission-import-artifact" type="file"></label>
+        </div>
       </details>
       <div class="mv-actions mission-secondary">
         <button id="mission-revise" type="button" class="quiet">Réviser l’ambition</button>
@@ -289,31 +294,64 @@
   </section>
   <section class="mv-section foundry-panel" id="my-intelligence" aria-labelledby="my-intelligence-title" data-member-view hidden>
     <h3 id="my-intelligence-title" tabindex="-1">Mon intelligence <span>Ω</span></h3>
-    <p class="mf-section-intro">Connectez votre intelligence une seule fois et reprenez votre ambition.</p>
+    <p class="mf-section-intro">Utilisez l’intelligence dont vous disposez déjà. Reprenez la même ambition quand vous êtes prêt.</p>
     <details class="foundry-stage mission-connection" id="mission-intelligence" open>
       <summary>Choisir comment exécuter votre mission</summary>
-      <details class="intelligence-choice">
-        <summary>Utiliser mon abonnement ChatGPT</summary>
-        <p>Utilisez la connexion officielle si votre abonnement et l’application y sont admissibles. Si elle est indisponible, vous pouvez préparer une démarche assistée.</p>
-        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#chatgpt-et-codex">Configuration de ChatGPT et de Codex</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Ouvrir ChatGPT et Codex sur cet appareil</a></p>
-      </details>
-      <details class="intelligence-choice mission-execution-connection" open>
-        <summary>Utiliser l’intelligence sur mon ordinateur</summary>
-        <p>Décompressez le téléchargement. Ouvrez le fichier Launch-FRONTIER de votre système et saisissez ici le code à usage unique.</p>
-        <p class="mv-links"><a href="frontier-harness-executor-1.2.0.zip" download>Télécharger l’exécuteur local</a>
-          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#français">Guide de configuration locale</a></p>
+      <div class="intelligence-grid">
+        <article class="intelligence-option">
+          <h4>ChatGPT</h4>
+          <p>Relisez la consigne de mission, ouvrez votre compte ChatGPT, puis rapportez le travail ici.</p>
+          <button type="button" class="entry-button" data-frontier-assisted>Continuer avec ChatGPT · mode assisté</button>
+        </article>
+        <article class="intelligence-option">
+          <h4>Sur mon ordinateur</h4>
+          <p>Détectez un modèle local en cours d’exécution et vérifiez qu’il répond. Votre mission peut s’exécuter sur cet ordinateur.</p>
+          <button type="button" class="entry-button" data-frontier-connection="local">Détecter mon intelligence locale</button>
+          <div class="intelligence-browser" id="intelligence-browser" hidden>
+            <p>Essayez le modèle intégré à votre navigateur pour une première analyse. Il est possible que le navigateur doive le télécharger.</p>
+            <button type="button" class="quiet" id="intelligence-browser-start">Essayer le modèle de ce navigateur</button>
+            <button type="button" class="quiet" id="intelligence-browser-cancel" hidden>Annuler</button>
+            <p id="intelligence-browser-status" role="status"></p>
+          </div>
+        </article>
+        <article class="intelligence-option">
+          <h4>Mon fournisseur d’IA</h4>
+          <p>Utilisez votre propre compte et votre clé dans le compagnon privé. Vérifiez le modèle, les données et le plafond de dépenses avant de transmettre la mission.</p>
+          <button type="button" class="entry-button" data-frontier-connection="api">Connecter mon API en toute sécurité</button>
+        </article>
+        <article class="intelligence-option">
+          <h4>Modèles locaux et outils vérifiés</h4>
+          <p>Privilégiez un outil vérifié quand il convient. Utilisez votre modèle local testé si la mission demande du raisonnement ou un nouveau travail.</p>
+          <button type="button" class="entry-button" data-frontier-connection="hybrid">Utiliser la meilleure intelligence disponible</button>
+        </article>
+      </div>
+      <section class="intelligence-next" id="intelligence-next" aria-labelledby="intelligence-next-title" hidden>
+        <h4 id="intelligence-next-title" tabindex="-1">État de la connexion</h4>
+        <p id="intelligence-route-status" role="status"></p>
+        <div class="mv-actions">
+          <a id="intelligence-open-native" class="entry-button" target="_blank" rel="noopener noreferrer" hidden>Poursuivre dans la configuration privée</a>
+          <button id="intelligence-check-native" class="quiet" type="button" hidden>Vérifier l’état de la mission</button>
+          <button id="intelligence-cancel-native" class="quiet" type="button" hidden>Annuler cette configuration</button>
+          <button id="intelligence-assist" class="quiet" type="button" data-frontier-assisted hidden>Utiliser plutôt un assistant</button>
+        </div>
+      </section>
+      <details class="intelligence-choice mission-execution-connection">
+        <summary>Compagnon de bureau et jumelage</summary>
+        <p id="intelligence-desktop">Sur un ordinateur, décompressez le compagnon, lancez le fichier Launch-FRONTIER correspondant à votre système et copiez le code à usage unique.</p>
+        <p id="intelligence-mobile" hidden>La configuration locale se fait sur un ordinateur. Sur cet appareil, vous pouvez poursuivre une mission assistée avec ChatGPT.</p>
+        <p class="mv-links"><a id="intelligence-companion-download" href="frontier-harness-executor-1.3.0.zip" download>Télécharger le compagnon de bureau</a></p>
         <form id="execution-code-form" autocomplete="off">
-          <label for="execution-code">Code de jumelage à usage unique</label>
+          <label for="execution-code">Code à usage unique du compagnon de bureau</label>
           <input type="password" id="execution-code" required maxlength="43" autocomplete="off" spellcheck="false">
-          <button type="submit" class="quiet">Jumeler ce navigateur</button>
+          <button type="submit" class="entry-button">Jumeler ce navigateur</button>
         </form>
         <p id="execution-connection" role="status"></p>
         <div id="intelligence-local-controls" hidden>
           <p id="intelligence-readiness" role="status"></p>
           <div id="intelligence-install" hidden>
             <p id="intelligence-device"></p>
-            <p>Consultez le guide d’installation d’un moteur, puis démarrez un modèle et relancez la détection.</p>
-            <p class="mv-links"><a href="https://ollama.com/download">Ollama</a> <a href="https://lmstudio.ai/download">LM Studio</a> <a href="https://github.com/ggml-org/llama.cpp/releases">llama.cpp</a> <a href="https://docs.vllm.ai/en/latest/getting_started/installation/">vLLM</a></p>
+            <p>Si un modèle est déjà installé, démarrez-le et relancez la détection. Pour une première installation, choisissez Ollama ou LM Studio, puis lancez un modèle adapté à la mémoire disponible ci-dessus.</p>
+            <p class="mv-links"><a href="https://ollama.com/download" target="_blank" rel="noopener noreferrer">Obtenir Ollama</a> <a href="https://lmstudio.ai/download" target="_blank" rel="noopener noreferrer">Obtenir LM Studio</a></p>
           </div>
           <div class="foundry-actions">
             <button id="intelligence-discover" type="button" class="quiet">Détecter les modèles locaux</button>
@@ -328,18 +366,16 @@
         </div>
         <button id="execution-disconnect" type="button" class="quiet" hidden>Déconnecter et suspendre le travail en cours</button>
       </details>
-      <details class="intelligence-choice">
-        <summary>Connecter un fournisseur d’IA</summary>
-        <p>Configurez le fournisseur dans l’espace HARNESS local. Avant toute exécution, vérifiez le compte, le modèle et les limites de dépenses. Les crédits API des abonnements admissibles sont liés à une organisation API distincte.</p>
-        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#accès-api-autorisé">Configuration du fournisseur et des crédits API</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Ouvrir l’espace HARNESS local</a></p>
-      </details>
-      <details class="intelligence-choice">
-        <summary>Combiner modèles et outils vérifiés</summary>
-        <p>Jumelez cet ordinateur et choisissez de privilégier les outils vérifiés lors de la sélection d’un modèle local. Ce choix reste sur votre ordinateur.</p>
-        <p><a href="#execution-code-form">Jumeler cet ordinateur</a></p>
-      </details>
+      <div class="mv-actions intelligence-return">
+        <a href="#frontier-mission-panel" id="mission-return" hidden>Revenir à votre mission</a>
+        <button type="button" id="mission-checkpoint" class="quiet" hidden>Télécharger cette mission</button>
+        <a href="#mission-keeper" id="mission-restore">Rouvrir une mission</a>
+        <a href="#mission-keeper" id="execution-recover" hidden>Ouvrir les missions du compagnon</a>
+      </div>
+      <p id="mission-checkpoint-status" role="status"></p>
       <details class="intelligence-choice">
         <summary>Paramètres de connexion avancés</summary>
+      <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#français" target="_blank" rel="noopener noreferrer">Documentation technique sur les connexions et les fournisseurs</a></p>
       <form id="mission-connection-form" autocomplete="off">
         <h4>Inférence locale</h4>
         <div class="foundry-fields">
@@ -354,7 +390,6 @@
         <button type="submit" class="quiet">Utiliser cette configuration locale</button>
       </form>
       <p id="mission-connection-status" class="status" role="status"></p>
-      <p><a href="#frontier-mission-panel" id="mission-return" hidden>Revenir à votre mission</a></p>
       </details>
     </details>
     <template id="foundry-public-data"><!-- FOUNDRY_PUBLIC_DATA --></template>
@@ -577,7 +612,7 @@ python3 verify_factory.py</code></pre>
     <p><a id="mf-current-result" href="#mv-screen-result" hidden>Revenir au résultat de cette session</a></p>
     <details id="mission-keeper" class="mission-keeper">
       <summary>Enregistrer ou rouvrir une mission</summary>
-      <p>Enregistrez un fichier pour poursuivre la mission après un verrouillage, une actualisation ou un changement d’appareil. Il contient votre ambition et votre travail. Conservez-le dans un emplacement sous votre contrôle.</p>
+      <p>Téléchargez un fichier de mission pour conserver le travail de cet onglet après une actualisation, un verrouillage ou un changement d’appareil. Gardez ce fichier dans un endroit que vous contrôlez. Après le jumelage, vous pouvez aussi rouvrir les missions enregistrées par le compagnon.</p>
       <div class="mv-actions">
         <button id="mission-export" type="button" class="quiet" disabled>Télécharger la mission actuelle</button>
         <label for="mission-import">Rouvrir un fichier de mission<input id="mission-import" type="file" accept=".json,application/json"></label>
