@@ -1,0 +1,161 @@
+{
+  "cases_sha256": "c41c0ea88d10b000b9bb260965011014799cbc7970f1b25624685d69f2a894fc",
+  "records": [
+    {
+      "id": "external-01",
+      "record": {
+        "order": [
+          "commit",
+          "signal",
+          "choose"
+        ],
+        "actors": [
+          "leader",
+          "referee",
+          "follower"
+        ],
+        "access": [
+          true,
+          true
+        ],
+        "irrevocable": true
+      }
+    },
+    {
+      "id": "external-02",
+      "record": {
+        "order": [
+          "commit",
+          "signal",
+          "choose"
+        ],
+        "actors": [
+          "leader",
+          "referee",
+          "follower"
+        ],
+        "access": [
+          false,
+          true
+        ],
+        "irrevocable": true
+      }
+    },
+    {
+      "id": "external-03",
+      "record": {
+        "order": [
+          "commit",
+          "choose",
+          "signal"
+        ],
+        "actors": [
+          "leader",
+          "referee",
+          "follower"
+        ],
+        "access": [
+          false,
+          false
+        ],
+        "irrevocable": true
+      }
+    },
+    {
+      "id": "external-04",
+      "record": {
+        "order": [
+          "commit",
+          "signal",
+          "choose"
+        ],
+        "actors": [
+          "leader",
+          "referee",
+          "follower"
+        ],
+        "access": [
+          true,
+          true
+        ],
+        "irrevocable": false
+      }
+    },
+    {
+      "id": "external-05",
+      "record": {
+        "order": [
+          "commit",
+          "signal",
+          "choose"
+        ],
+        "actors": [
+          "leader",
+          "referee",
+          "follower"
+        ],
+        "access": [
+          null,
+          true
+        ],
+        "irrevocable": null
+      }
+    },
+    {
+      "id": "external-06",
+      "record": {
+        "order": [
+          "commit",
+          "signal",
+          "choose"
+        ],
+        "actors": [
+          "follower",
+          "referee",
+          "leader"
+        ],
+        "access": [
+          true,
+          true
+        ],
+        "irrevocable": true
+      }
+    },
+    {
+      "id": "external-07",
+      "record": {
+        "order": null,
+        "actors": [
+          "leader",
+          "referee",
+          "follower"
+        ],
+        "access": [
+          false,
+          true
+        ],
+        "irrevocable": true
+      }
+    },
+    {
+      "id": "external-08",
+      "record": {
+        "order": [
+          "commit",
+          "signal",
+          "choose"
+        ],
+        "actors": [
+          "leader",
+          "referee",
+          "follower"
+        ],
+        "access": [
+          true,
+          false
+        ],
+        "irrevocable": true
+      }
+    }
+  ]
+}

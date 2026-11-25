@@ -1,0 +1,223 @@
+{
+  "cases": 8,
+  "custody": "Separate authorship and checking in a shared administration environment. Input and reference frozen before exposure. References released only after all prediction hashes froze.",
+  "frozen_sha256": {
+    "included_predictions": "42229fff063b93b41cf2cdad3e6b4fa536e12f03f1432f522ef165c1ee972899",
+    "inputs": "c41c0ea88d10b000b9bb260965011014799cbc7970f1b25624685d69f2a894fc",
+    "local_predictions": "482297a34e54a20ff5a3d37e8afdfe457bee9721cf7d940a097bff9a7a2bd437",
+    "reference": "a84e3bc64d7f0b7bcf790e4566b68a55d0cdbf570e2571b64e2a0305264ae95d"
+  },
+  "method": "Independent exact canonical JSON values and literal event-role-access scope rules. Known conflicts block, missing fields remain unresolved, malformed predictions are uninterpreted.",
+  "results": {
+    "adapted_direct": {
+      "differences": {
+        "external-02": {
+          "actual": "blocked",
+          "differing_fields": [
+            "access"
+          ],
+          "reference": "qualified"
+        },
+        "external-03": {
+          "actual": "unresolved",
+          "differing_fields": [
+            "order",
+            "access"
+          ],
+          "reference": "blocked"
+        },
+        "external-04": {
+          "actual": "qualified",
+          "differing_fields": [
+            "irrevocable"
+          ],
+          "reference": "blocked"
+        },
+        "external-05": {
+          "actual": "blocked",
+          "differing_fields": [
+            "access",
+            "irrevocable"
+          ],
+          "reference": "unresolved"
+        },
+        "external-06": {
+          "actual": "qualified",
+          "differing_fields": [
+            "actors"
+          ],
+          "reference": "blocked"
+        },
+        "external-07": {
+          "actual": "blocked",
+          "differing_fields": [
+            "order",
+            "access"
+          ],
+          "reference": "unresolved"
+        },
+        "external-08": {
+          "actual": "unresolved",
+          "differing_fields": [
+            "access"
+          ],
+          "reference": "blocked"
+        }
+      },
+      "exact_records": 1,
+      "expected_dispositions": 1,
+      "false_scope_proposals": [
+        "external-04",
+        "external-06"
+      ]
+    },
+    "base_direct": {
+      "differences": {
+        "external-01": {
+          "actual": "uninterpreted",
+          "differing_fields": [
+            "order",
+            "actors",
+            "access",
+            "irrevocable"
+          ],
+          "reference": "qualified"
+        },
+        "external-03": {
+          "actual": "blocked",
+          "differing_fields": [
+            "order",
+            "access"
+          ],
+          "reference": "blocked"
+        },
+        "external-04": {
+          "actual": "blocked",
+          "differing_fields": [
+            "access",
+            "irrevocable"
+          ],
+          "reference": "blocked"
+        },
+        "external-05": {
+          "actual": "qualified",
+          "differing_fields": [
+            "access",
+            "irrevocable"
+          ],
+          "reference": "unresolved"
+        },
+        "external-06": {
+          "actual": "uninterpreted",
+          "differing_fields": [
+            "order",
+            "actors",
+            "access",
+            "irrevocable"
+          ],
+          "reference": "blocked"
+        },
+        "external-07": {
+          "actual": "qualified",
+          "differing_fields": [
+            "order"
+          ],
+          "reference": "unresolved"
+        },
+        "external-08": {
+          "actual": "blocked",
+          "differing_fields": [
+            "access"
+          ],
+          "reference": "blocked"
+        }
+      },
+      "exact_records": 1,
+      "expected_dispositions": 4,
+      "false_scope_proposals": [
+        "external-05",
+        "external-07"
+      ]
+    },
+    "base_retrieval": {
+      "differences": {
+        "external-02": {
+          "actual": "uninterpreted",
+          "differing_fields": [
+            "order",
+            "actors",
+            "access",
+            "irrevocable"
+          ],
+          "reference": "qualified"
+        },
+        "external-03": {
+          "actual": "qualified",
+          "differing_fields": [
+            "order",
+            "access"
+          ],
+          "reference": "blocked"
+        },
+        "external-04": {
+          "actual": "blocked",
+          "differing_fields": [
+            "access",
+            "irrevocable"
+          ],
+          "reference": "blocked"
+        },
+        "external-05": {
+          "actual": "qualified",
+          "differing_fields": [
+            "access",
+            "irrevocable"
+          ],
+          "reference": "unresolved"
+        },
+        "external-06": {
+          "actual": "qualified",
+          "differing_fields": [
+            "actors"
+          ],
+          "reference": "blocked"
+        },
+        "external-07": {
+          "actual": "uninterpreted",
+          "differing_fields": [
+            "order",
+            "actors",
+            "access",
+            "irrevocable"
+          ],
+          "reference": "unresolved"
+        },
+        "external-08": {
+          "actual": "uninterpreted",
+          "differing_fields": [
+            "order",
+            "actors",
+            "access",
+            "irrevocable"
+          ],
+          "reference": "blocked"
+        }
+      },
+      "exact_records": 1,
+      "expected_dispositions": 2,
+      "false_scope_proposals": [
+        "external-03",
+        "external-05",
+        "external-06"
+      ]
+    },
+    "included_direct": {
+      "differences": {},
+      "exact_records": 8,
+      "expected_dispositions": 8,
+      "false_scope_proposals": []
+    }
+  },
+  "schema": "frontier/independent-strategic-holdout-score/v1",
+  "scorer_sha256": "cc4cbf841213eb88cd60ebee8afa21ed34047af561d5338c0dc61cebb583c03d"
+}

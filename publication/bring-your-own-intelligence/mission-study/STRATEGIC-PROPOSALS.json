@@ -1,0 +1,71 @@
+[
+  {
+    "id": "timing-x01",
+    "units": "same",
+    "witness": {
+      "actors": ["planner", "operator"],
+      "events": {"announce": "planner", "bind_policy": "planner", "fix_state": "operator", "receive": "planner", "bind_action": "planner"},
+      "phases": {"notice": "announce", "policy": "bind_policy", "fix": "fix_state", "signal": "receive", "row": "bind_action"},
+      "before": [["announce", "fix_state"], ["bind_policy", "fix_state"], ["fix_state", "receive"], ["fix_state", "bind_action"], ["receive", "bind_action"]],
+      "access": [["announce", "operator", "fix_state", true], ["bind_policy", "operator", "fix_state", true], ["receive", "planner", "bind_action", true], ["receive", "operator", "bind_action", false]],
+      "revisions": {"complete": true, "events": []}
+    },
+    "evidence": {
+      "before_0_and_1": "the operator observes both commitments and fixes the intake state irrevocably",
+      "before_2_and_3": "Before any reading or maintenance action the operator observes both commitments and fixes the intake state irrevocably.",
+      "before_4_and_signal_visibility": "only the planner sees the clean-or-fouled indication before executing the binding maintenance action",
+      "no_revision": "fixes the intake state irrevocably",
+      "units": "deducted in the same maintenance minutes from the payoff in either state"
+    }
+  },
+  {
+    "id": "timing-x02",
+    "units": "same",
+    "witness": {
+      "actors": ["coordonnateur", "exploitant"],
+      "events": {"commande": "coordonnateur", "regle": "coordonnateur", "fixation": "exploitant", "releve": "coordonnateur", "trajet": "coordonnateur"},
+      "phases": {"notice": "commande", "policy": "regle", "fix": "fixation", "signal": "releve", "row": "trajet"},
+      "before": [["commande", "fixation"], ["fixation", "trajet"], ["trajet", "releve"]],
+      "access": [["commande", "exploitant", "fixation", true]],
+      "revisions": {"complete": true, "events": []}
+    },
+    "evidence": {
+      "before_0_notice_and_no_revision": "L'exploitant constate la commande et fixe l'état, qui ne peut plus changer.",
+      "before_1": "Le coordinateur arrête alors son itinéraire de façon irrévocable.",
+      "before_2": "Ce n'est qu'après cet arrêt que le relevé éventuellement commandé est remis au coordinateur.",
+      "units": "dans la même unité que les gains"
+    }
+  },
+  {
+    "id": "timing-x03",
+    "units": "different",
+    "witness": {
+      "actors": ["purchaser", "opponent"],
+      "events": {"notice": "purchaser", "policy": "purchaser", "load": "opponent", "preview": "purchaser", "service": "purchaser", "replace_load": "opponent"},
+      "phases": {"notice": "notice", "policy": "policy", "fix": "load", "signal": "preview", "row": "service"},
+      "before": [["service", "replace_load"]],
+      "access": [["service", "opponent", "replace_load", true]],
+      "revisions": {"complete": false, "events": ["replace_load"]}
+    },
+    "evidence": {
+      "before_0_revision_and_access": "expressly allowed to see the actual service action and then replace the load state",
+      "units": "The preview fee is in compute seconds, and no exchange rate to capacity credits is authorized."
+    }
+  },
+  {
+    "id": "timing-x04",
+    "units": "unknown",
+    "witness": {
+      "actors": ["decideur", "autre_partie"],
+      "events": {"annonce": "decideur", "regle": "decideur", "fixation": "autre_partie", "prevision": "decideur", "action": "decideur"},
+      "phases": {"notice": "annonce", "policy": "regle", "fix": "fixation", "signal": "prevision", "row": "action"},
+      "before": [],
+      "access": [],
+      "revisions": {"complete": false, "events": []}
+    },
+    "evidence": {
+      "timing_visibility_unresolved": "Il ne précise pas qui reçoit la prévision, quand le scénario devient définitif, ni si la prévision précède l'engagement de l'action.",
+      "missingness_and_units_unresolved": "ne donne ni son prix ni sa précision par scénario"
+    }
+  }
+]

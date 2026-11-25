@@ -1,0 +1,483 @@
+{
+  "schema": "frontier/exact-operator-package-continuity-v1",
+  "qualification": "EXACT_ARCHIVE_REVIEW_ONLY",
+  "go": true,
+  "release_receipt_sha256": "743e66948d9f4f885bb898df18bad6326bc2799fca8cc8f967c502df1fb387fe",
+  "release_revision": "9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+  "release_workflow_run": "45637319050",
+  "source_sha256": {
+    "audit.py": "72aee49be8bd746b17079a3fc2d83cb1eb107fe582f7ed59125934aa5d96b1c5",
+    "readiness.sql": "8055761651b36ce60d03cc94486f724654adcceeec138bc1c8acb16cc88ff101",
+    "REGISTRATION.json": "965acc83463e267017451420a58fd577948c7bffbe5e86fc6b3e8bda87ee5e2b",
+    "TRANSFER-REGISTRATION.json": "9258eb5284a4e4216077052522938c9d821a29efd33b6083ad383a24cd1ac8ff"
+  },
+  "provenance_checks": {
+    "1.1.0": {
+      "bridge/relational.py": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+      "bridge/universal_missions.py": "b11e601e5557d7457c2e6bf90f0fc4c44e2dc7e7411ec7dfc9ed7882027f8579",
+      "bridge/instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+      "bridge/workflows.py": "a0a5b9ea3a89a8932d2f8a7249b0babe90338a2a1b0134a81596813f57a5d960",
+      "bridge/mission_tools.py": "c64452be8a9831e936daf14b7073684637371da208bc8da0c1bdf519477ce948",
+      "Launch-FRONTIER.sh": "505795f5dc5d99b86f56859315b7c50747b0aac66fd519a3c32934bfa9a516fb",
+      "Launch-FRONTIER.command": "d916f386db8a8e2ca92e6ace9c3ebd72dfd9d74da062b460ad695b038b285b14",
+      "Launch-FRONTIER.cmd": "31538ba428d90b10a2d43d65169ecc2fa0dd2fb739d268962d50af2892af999a",
+      "docs/CHATGPT-PLAN.md": "7494cc617a67b9d096a0020ebc592471a9831bdfd14b8484407b0a89dbd874a6",
+      "docs/MODEL-CONNECTIONS.md": "0dd97302c7394db773d53c6ab8dab17771a5c7ffb4c2dfd3e637f2fd5304bfea",
+      "START.md": "b033855ebe137fdd800d4c4ddf60a5f16e3762423ae599f5e8f6f2ea57d911aa"
+    },
+    "1.2.0": {
+      "bridge/relational.py": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+      "bridge/universal_missions.py": "42d4037a83b616fed050a5d3b3bb764496be33a08fcaec74bc87a34c113ca8ab",
+      "bridge/instruments.py": "9c7dede3414cebcf2a99043cb1ef39e546f5b413157e53d2959d131cbfdb8eb7",
+      "bridge/workflows.py": "860ad47a0b773993256a8e4fe069faf1afcec88cddce0680a5b5cc63bd66d324",
+      "bridge/mission_tools.py": "c64452be8a9831e936daf14b7073684637371da208bc8da0c1bdf519477ce948",
+      "Launch-FRONTIER.sh": "505795f5dc5d99b86f56859315b7c50747b0aac66fd519a3c32934bfa9a516fb",
+      "Launch-FRONTIER.command": "d916f386db8a8e2ca92e6ace9c3ebd72dfd9d74da062b460ad695b038b285b14",
+      "Launch-FRONTIER.cmd": "31538ba428d90b10a2d43d65169ecc2fa0dd2fb739d268962d50af2892af999a",
+      "docs/CHATGPT-PLAN.md": "f3d602c556eb6e60a76921af549cf51947ed1481999ec4691025d52ccf88149b",
+      "docs/MODEL-CONNECTIONS.md": "0dd97302c7394db773d53c6ab8dab17771a5c7ffb4c2dfd3e637f2fd5304bfea",
+      "START.md": "b9ebaff70dd79200d31f9b91ae45fd34e5d74358a7168af3e1908f81746d37f5"
+    },
+    "1.5.0": {
+      "verify_factory.py": "e6f9d6fbc5c991f419400e1cbe8d5bd1d96ee7e19c9243f72303a90c304008db",
+      "evidence_truth.py": "b62e251d1fbe039804775b27b99267c7b1fc41428cfc39acfee5411b8e30ab41",
+      "study/factory/FACTORY.json": "c79ffbb7d592f8a866c712f43e1fc450f3c246f0698d3f73d48ca9eaef636726",
+      "study/factory/REGISTRATION.md": "016f85be644a7a4279ef03eed08f80531c61127bb27ae2ec1fe31b4fa6a9fcd5"
+    }
+  },
+  "constructed": {
+    "name": "archive-readiness.json",
+    "sha256": "6e9737523750c3757ec22b7b61bc68949fd47bb10d5d79fd22f1ed6ab6dd7d4f",
+    "bytes": 1036,
+    "previous_sha256": null,
+    "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+    "sqlite_version": "3.53.1",
+    "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES",
+    "qualification": "UNVERIFIED"
+  },
+  "costs": {
+    "source_pin_acquisition_wall_seconds": 0.08164435000071535,
+    "construction_wall_seconds": 0.036683967999124434,
+    "new_public_network_requests": 0,
+    "runtime_inference_requests": 0,
+    "first_worked_example_purchases": 0,
+    "inference_authoring_tokens_or_cost": null,
+    "human_attention_or_maintenance_cost": null
+  },
+  "scope": "Actual public MONTREAL.AI package preflight, using prior observed publisher receipt and archive bytes. Included-Codex assisted authoring and bounded SQLite interpretation. No code execution from inspected ZIPs, protected evaluator custody or measured economic return.",
+  "cases": {
+    "released-1.1": {
+      "publisher": {
+        "version": "1.1.0",
+        "archive_sha256": "58e1aac31e1cd1bfb92c53f213a16e28a7009580dd06072a029a331f959a491a",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/297a51c25c48031e1e6f964835f4dfae3ddb8023"
+      },
+      "observation": {
+        "case_id": "released-1.1",
+        "archive_sha256": "58e1aac31e1cd1bfb92c53f213a16e28a7009580dd06072a029a331f959a491a",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/297a51c25c48031e1e6f964835f4dfae3ddb8023",
+        "package_version": "1.1.0",
+        "inventory_verified": 1,
+        "source_verified": 1,
+        "inventory_count": 47
+      },
+      "detail": {
+        "bytes": 1122252,
+        "measurement": "PYTHON_SHA256_AND_SHA256SUM_AGREE",
+        "manifest_sha256": "d1292545b26c3de444c8e0769f2b24957620491bd5daacf9e76d2eb7b7645350",
+        "required_sources": 11
+      },
+      "expected": "VERIFIED_ARCHIVE",
+      "agree": true,
+      "decisions": {
+        "assisted_harness": "VERIFIED_ARCHIVE",
+        "equal_content_ordinary": "VERIFIED_ARCHIVE",
+        "incumbent_full_read": "VERIFIED_ARCHIVE"
+      },
+      "execution": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "rows": [
+          [
+            "1.1.0",
+            "released-1.1",
+            "VERIFIED_ARCHIVE",
+            "58e1aac31e1cd1bfb92c53f213a16e28a7009580dd06072a029a331f959a491a",
+            "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/297a51c25c48031e1e6f964835f4dfae3ddb8023",
+            47
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "artifact_sha256": "6e9737523750c3757ec22b7b61bc68949fd47bb10d5d79fd22f1ed6ab6dd7d4f",
+        "input_sha256": "42df98cdcc1a95f6f27e6c57104549db85193f13bf64cebf007d73b797f11277",
+        "output_sha256": "c7ab739f21762cb8ece2aeb3f052f01a62c3c6a49339923cf27515e205460d0c",
+        "status": "EXECUTED",
+        "qualification": "UNVERIFIED",
+        "artifact": "archive-readiness.json",
+        "input_origin": "OPERATOR_APPROVED_DATASET",
+        "dataset": "release-check"
+      },
+      "acquisition_wall_seconds": 0.008452793998003472,
+      "timed_repetitions": 7,
+      "median_wall_seconds": {
+        "assisted_harness": 0.04414736399485264,
+        "equal_content_ordinary": 4.8770016292110085e-06,
+        "incumbent_full_read": 0.008749786000407767
+      }
+    },
+    "released-1.2": {
+      "publisher": {
+        "version": "1.2.0",
+        "archive_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19"
+      },
+      "observation": {
+        "case_id": "released-1.2",
+        "archive_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+        "package_version": "1.2.0",
+        "inventory_verified": 1,
+        "source_verified": 1,
+        "inventory_count": 50
+      },
+      "detail": {
+        "bytes": 1166924,
+        "measurement": "PYTHON_SHA256_AND_SHA256SUM_AGREE",
+        "manifest_sha256": "f0138a3772bd10c48d40c00511417aca39678ed24eb7b20088362c755716ae49",
+        "required_sources": 11
+      },
+      "expected": "VERIFIED_ARCHIVE",
+      "agree": true,
+      "decisions": {
+        "assisted_harness": "VERIFIED_ARCHIVE",
+        "equal_content_ordinary": "VERIFIED_ARCHIVE",
+        "incumbent_full_read": "VERIFIED_ARCHIVE"
+      },
+      "execution": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "rows": [
+          [
+            "1.2.0",
+            "released-1.2",
+            "VERIFIED_ARCHIVE",
+            "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+            "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+            50
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "artifact_sha256": "6e9737523750c3757ec22b7b61bc68949fd47bb10d5d79fd22f1ed6ab6dd7d4f",
+        "input_sha256": "eaf7ab551d1ad8942f91946b238e8bb325af9962f657a95c0a8510446f8683b1",
+        "output_sha256": "6fdd389e56b9f2612de04b11119aa8b093872ac2418b9f1b9852d81cbff7d459",
+        "status": "EXECUTED",
+        "qualification": "UNVERIFIED",
+        "artifact": "archive-readiness.json",
+        "input_origin": "OPERATOR_APPROVED_DATASET",
+        "dataset": "release-check"
+      },
+      "acquisition_wall_seconds": 0.007022752994089387,
+      "timed_repetitions": 7,
+      "median_wall_seconds": {
+        "assisted_harness": 0.03236545299296267,
+        "equal_content_ordinary": 4.6670029405504465e-06,
+        "incumbent_full_read": 0.008758252995903604
+      }
+    },
+    "staged-same-name-1.2": {
+      "publisher": {
+        "version": "1.2.0",
+        "archive_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19"
+      },
+      "observation": {
+        "case_id": "staged-same-name-1.2",
+        "archive_sha256": "46e78f225c2f0f582253669d2112ce90e2dccb6afdc5104fc9d66bcdd1dbc171",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/5955c08d36d31b77a310720ae2ba17142fca9794",
+        "package_version": "1.2.0",
+        "inventory_verified": 1,
+        "source_verified": 0,
+        "inventory_count": 50
+      },
+      "detail": {
+        "bytes": 1166101,
+        "measurement": "PYTHON_SHA256_AND_SHA256SUM_AGREE",
+        "manifest_sha256": "650a285345ff0879a462e15b382212547f7ca4ae6f4caa6008f4e925dfb9846c",
+        "required_sources": 11
+      },
+      "expected": "HOLD_ARCHIVE_MISMATCH",
+      "agree": true,
+      "decisions": {
+        "assisted_harness": "HOLD_ARCHIVE_MISMATCH",
+        "equal_content_ordinary": "HOLD_ARCHIVE_MISMATCH",
+        "incumbent_full_read": "HOLD_ARCHIVE_MISMATCH"
+      },
+      "execution": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "rows": [
+          [
+            "1.2.0",
+            "staged-same-name-1.2",
+            "HOLD_ARCHIVE_MISMATCH",
+            "46e78f225c2f0f582253669d2112ce90e2dccb6afdc5104fc9d66bcdd1dbc171",
+            "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/5955c08d36d31b77a310720ae2ba17142fca9794",
+            50
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "artifact_sha256": "6e9737523750c3757ec22b7b61bc68949fd47bb10d5d79fd22f1ed6ab6dd7d4f",
+        "input_sha256": "9e0a8a5c23799aee725e75c9f053bf96b529cbbe60610d8bfb773994164dea4e",
+        "output_sha256": "ef7046c0361f1c4e5c68acac16fd32bac0ad09e6768a92ec9b61535f397791bd",
+        "status": "EXECUTED",
+        "qualification": "UNVERIFIED",
+        "artifact": "archive-readiness.json",
+        "input_origin": "OPERATOR_APPROVED_DATASET",
+        "dataset": "release-check"
+      },
+      "acquisition_wall_seconds": 0.007029043001239188,
+      "timed_repetitions": 1,
+      "median_wall_seconds": {
+        "assisted_harness": 0.029784500002278946,
+        "equal_content_ordinary": 6.4400010160170496e-06,
+        "incumbent_full_read": 0.0035758290032390505
+      }
+    },
+    "missing-file": {
+      "publisher": {
+        "version": "1.2.0",
+        "archive_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19"
+      },
+      "observation": {
+        "case_id": "missing-file",
+        "archive_sha256": null,
+        "source_url": null,
+        "package_version": null,
+        "inventory_verified": null,
+        "source_verified": null,
+        "inventory_count": null
+      },
+      "detail": {
+        "measurement": "MISSING",
+        "control": "SIMULATED_MISSING_APPROVED_FILE"
+      },
+      "expected": "HOLD_MISSING_PACKAGE",
+      "agree": true,
+      "decisions": {
+        "assisted_harness": "HOLD_MISSING_PACKAGE",
+        "equal_content_ordinary": "HOLD_MISSING_PACKAGE",
+        "incumbent_full_read": "HOLD_MISSING_PACKAGE"
+      },
+      "execution": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "rows": [
+          [
+            "1.2.0",
+            "missing-file",
+            "HOLD_MISSING_PACKAGE",
+            null,
+            null,
+            null
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "artifact_sha256": "6e9737523750c3757ec22b7b61bc68949fd47bb10d5d79fd22f1ed6ab6dd7d4f",
+        "input_sha256": "a79ef4b0a35d8d746a880689f4d578637ed0f5865efe4c3d42b244fbf4b70a75",
+        "output_sha256": "8c13063c2383a17fb2b22c0b5f34c37e2589a9537f8bde30408c4d26d6d3717b",
+        "status": "EXECUTED",
+        "qualification": "UNVERIFIED",
+        "artifact": "archive-readiness.json",
+        "input_origin": "OPERATOR_APPROVED_DATASET",
+        "dataset": "release-check"
+      },
+      "acquisition_wall_seconds": 1.9930012058466673e-06,
+      "timed_repetitions": 1,
+      "median_wall_seconds": {
+        "assisted_harness": 0.030149608995998278,
+        "equal_content_ordinary": 7.0309979491867125e-06,
+        "incumbent_full_read": 4.1972998587880284e-05
+      }
+    },
+    "withdrawn-publisher-binding": {
+      "publisher": {
+        "version": "1.2.0",
+        "archive_sha256": null,
+        "source_url": null
+      },
+      "observation": {
+        "case_id": "withdrawn-publisher-binding",
+        "archive_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+        "package_version": "1.2.0",
+        "inventory_verified": 1,
+        "source_verified": 1,
+        "inventory_count": 50
+      },
+      "detail": {
+        "bytes": 1166924,
+        "measurement": "PYTHON_SHA256_AND_SHA256SUM_AGREE",
+        "manifest_sha256": "f0138a3772bd10c48d40c00511417aca39678ed24eb7b20088362c755716ae49",
+        "required_sources": 11,
+        "control": "AUTHORITY_WITHDRAWAL"
+      },
+      "expected": "HOLD_MISSING_PUBLISHER_BINDING",
+      "agree": true,
+      "decisions": {
+        "assisted_harness": "HOLD_MISSING_PUBLISHER_BINDING",
+        "equal_content_ordinary": "HOLD_MISSING_PUBLISHER_BINDING",
+        "incumbent_full_read": "HOLD_MISSING_PUBLISHER_BINDING"
+      },
+      "execution": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "rows": [
+          [
+            "1.2.0",
+            "withdrawn-publisher-binding",
+            "HOLD_MISSING_PUBLISHER_BINDING",
+            "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+            "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+            50
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "artifact_sha256": "6e9737523750c3757ec22b7b61bc68949fd47bb10d5d79fd22f1ed6ab6dd7d4f",
+        "input_sha256": "c59e6b23f7dc1f1d55f34eef1bb0902dc3cfd7199bb4451d8e535f317d11d5c4",
+        "output_sha256": "ba420407a4a0311b3dbcdbd71a0c5d62f86587a773390b9e2f537bdc2e3af835",
+        "status": "EXECUTED",
+        "qualification": "UNVERIFIED",
+        "artifact": "archive-readiness.json",
+        "input_origin": "OPERATOR_APPROVED_DATASET",
+        "dataset": "release-check"
+      },
+      "acquisition_wall_seconds": 0.006997295000473969,
+      "timed_repetitions": 1,
+      "median_wall_seconds": {
+        "assisted_harness": 0.03252928899746621,
+        "equal_content_ordinary": 6.590002158191055e-06,
+        "incumbent_full_read": 4.304399772081524e-05
+      }
+    },
+    "factory-successor": {
+      "publisher": {
+        "version": "1.5.0",
+        "archive_sha256": "5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/436bb1b142a0da1f2c272f77821b75c3efdd73fe"
+      },
+      "observation": {
+        "case_id": "factory-successor",
+        "archive_sha256": "5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+        "package_version": "1.5.0",
+        "inventory_verified": 1,
+        "source_verified": 1,
+        "inventory_count": 164
+      },
+      "detail": {
+        "bytes": 1805184,
+        "measurement": "PYTHON_SHA256_AND_SHA256SUM_AGREE",
+        "manifest_sha256": "267fc07758198f8b7be2c29c413034c43fa8bf98e53a3d916e2e8b4a2ccdfe2e",
+        "required_sources": 4
+      },
+      "expected": "VERIFIED_ARCHIVE",
+      "agree": true,
+      "decisions": {
+        "assisted_harness": "VERIFIED_ARCHIVE",
+        "equal_content_ordinary": "VERIFIED_ARCHIVE",
+        "incumbent_full_read": "VERIFIED_ARCHIVE"
+      },
+      "execution": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "rows": [
+          [
+            "1.5.0",
+            "factory-successor",
+            "VERIFIED_ARCHIVE",
+            "5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791",
+            "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+            164
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "artifact_sha256": "6e9737523750c3757ec22b7b61bc68949fd47bb10d5d79fd22f1ed6ab6dd7d4f",
+        "input_sha256": "2ce76dbe7c9443efcb80b50c229b08f743ba80ae7e46f0b3182059640b52fa24",
+        "output_sha256": "3b65b03db5e63d10d65dce8f1d8460202b81f7d2baf275b8a08ded26ddc9c311",
+        "status": "EXECUTED",
+        "qualification": "UNVERIFIED",
+        "artifact": "archive-readiness.json",
+        "input_origin": "OPERATOR_APPROVED_DATASET",
+        "dataset": "release-check"
+      },
+      "acquisition_wall_seconds": 0.011381690004782286,
+      "timed_repetitions": 9,
+      "median_wall_seconds": {
+        "assisted_harness": 0.03197710299718892,
+        "equal_content_ordinary": 4.6770001063123345e-06,
+        "incumbent_full_read": 0.016010983003070578
+      }
+    },
+    "factory-binding-withdrawn": {
+      "publisher": {
+        "version": "1.5.0",
+        "archive_sha256": null,
+        "source_url": null
+      },
+      "observation": {
+        "case_id": "factory-binding-withdrawn",
+        "archive_sha256": "5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791",
+        "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+        "package_version": "1.5.0",
+        "inventory_verified": 1,
+        "source_verified": 1,
+        "inventory_count": 164
+      },
+      "detail": {
+        "bytes": 1805184,
+        "measurement": "PYTHON_SHA256_AND_SHA256SUM_AGREE",
+        "manifest_sha256": "267fc07758198f8b7be2c29c413034c43fa8bf98e53a3d916e2e8b4a2ccdfe2e",
+        "required_sources": 4,
+        "control": "AUTHORITY_WITHDRAWAL"
+      },
+      "expected": "HOLD_MISSING_PUBLISHER_BINDING",
+      "agree": true,
+      "decisions": {
+        "assisted_harness": "HOLD_MISSING_PUBLISHER_BINDING",
+        "equal_content_ordinary": "HOLD_MISSING_PUBLISHER_BINDING",
+        "incumbent_full_read": "HOLD_MISSING_PUBLISHER_BINDING"
+      },
+      "execution": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "rows": [
+          [
+            "1.5.0",
+            "factory-binding-withdrawn",
+            "HOLD_MISSING_PUBLISHER_BINDING",
+            "5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791",
+            "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+            164
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "artifact_sha256": "6e9737523750c3757ec22b7b61bc68949fd47bb10d5d79fd22f1ed6ab6dd7d4f",
+        "input_sha256": "bf0de53b0659782ac235e30e38e736318dc281f39497a7094e4023f55fdc66be",
+        "output_sha256": "71e4be0ea2478ce7a2d26d1d23102623267c1014f9987c63b213736956999877",
+        "status": "EXECUTED",
+        "qualification": "UNVERIFIED",
+        "artifact": "archive-readiness.json",
+        "input_origin": "OPERATOR_APPROVED_DATASET",
+        "dataset": "release-check"
+      },
+      "acquisition_wall_seconds": 0.010142105995328166,
+      "timed_repetitions": 1,
+      "median_wall_seconds": {
+        "assisted_harness": 0.03042381200066302,
+        "equal_content_ordinary": 6.7400033003650606e-06,
+        "incumbent_full_read": 4.561900277622044e-05
+      }
+    }
+  },
+  "successor": {
+    "retained_mechanism": "Declared source scope plus explicit unavailable observation",
+    "original_inventor_matched_run": false,
+    "scope_withdrawal_observed": true,
+    "ordinary_equal_content_tied": true,
+    "gate": "NO_GO_CAUSAL_IMPROVEMENT_OR_NEW_GENERATION"
+  }
+}

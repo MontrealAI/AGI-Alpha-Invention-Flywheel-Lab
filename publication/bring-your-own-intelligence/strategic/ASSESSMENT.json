@@ -1,0 +1,661 @@
+{
+  "advance_to_larger_confirmation": false,
+  "assessor_source_sha256": "081ba045683500ac1554194e31726e56c0a4b9889f83ef75378ed4dda862c40f",
+  "assisted_predictions_sha256": "42229fff063b93b41cf2cdad3e6b4fa536e12f03f1432f522ef165c1ee972899",
+  "checkpoint_sha256": "9dbf08d161b597111a6b090b2146d65deb79ce25e8e6fd7a54e416c2da563e4b",
+  "deployment": "NO_GO",
+  "grade": {
+    "adapted_direct": {
+      "cases": [
+        {
+          "family": "public_offer",
+          "full_record_match": true,
+          "id": "external-01",
+          "language": "en",
+          "proposal_compatible": true,
+          "reference_disposition": "compatible",
+          "reviewed_policy": {
+            "response": "accept",
+            "status": "certified",
+            "surplus": "3/35"
+          },
+          "reward": 1
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": false,
+          "id": "external-02",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "compatible",
+          "reviewed_policy": {
+            "fields": [
+              "access"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-03",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "order",
+              "access"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-04",
+          "language": "fr",
+          "proposal_compatible": true,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "irrevocable"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": -2
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": false,
+          "id": "external-05",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "abstain",
+          "reviewed_policy": {
+            "fields": [
+              "access",
+              "irrevocable"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-06",
+          "language": "fr",
+          "proposal_compatible": true,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "actors"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": -2
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": false,
+          "id": "external-07",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "abstain",
+          "reviewed_policy": {
+            "fields": [
+              "order",
+              "access"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-08",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "access"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        }
+      ],
+      "certified_family_counts": {
+        "private_signaling": 0,
+        "public_offer": 1
+      },
+      "compatible_reference_cases": 2,
+      "false_admissions": 0,
+      "false_solver_proposals": 2,
+      "field_exact_matches": {
+        "access": 3,
+        "actors": 7,
+        "irrevocable": 6,
+        "order": 6
+      },
+      "held_cases": 8,
+      "invalid_completions": 0,
+      "language_exact_matches": {
+        "en": 1,
+        "fr": 0
+      },
+      "record_matches": 1
+    },
+    "base_direct": {
+      "cases": [
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-01",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "compatible",
+          "reviewed_policy": {
+            "status": "invalid_proposal"
+          },
+          "reward": 0
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": true,
+          "id": "external-02",
+          "language": "fr",
+          "proposal_compatible": true,
+          "reference_disposition": "compatible",
+          "reviewed_policy": {
+            "certificate": {
+              "column0_probability": "7/9",
+              "policy": [
+                {
+                  "mass": "1/9",
+                  "rows": [
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "mass": "8/9",
+                  "rows": [
+                    0,
+                    1
+                  ]
+                }
+              ],
+              "value": "19/9"
+            },
+            "status": "certified",
+            "value": "19/9"
+          },
+          "reward": 1
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-03",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "order",
+              "access"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-04",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "access",
+              "irrevocable"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": false,
+          "id": "external-05",
+          "language": "en",
+          "proposal_compatible": true,
+          "reference_disposition": "abstain",
+          "reviewed_policy": {
+            "fields": [
+              "access",
+              "irrevocable"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": -2
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-06",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "status": "invalid_proposal"
+          },
+          "reward": 0
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": false,
+          "id": "external-07",
+          "language": "fr",
+          "proposal_compatible": true,
+          "reference_disposition": "abstain",
+          "reviewed_policy": {
+            "fields": [
+              "order"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": -2
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-08",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "access"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        }
+      ],
+      "certified_family_counts": {
+        "private_signaling": 1,
+        "public_offer": 0
+      },
+      "compatible_reference_cases": 2,
+      "false_admissions": 0,
+      "false_solver_proposals": 2,
+      "field_exact_matches": {
+        "access": 2,
+        "actors": 6,
+        "irrevocable": 4,
+        "order": 4
+      },
+      "held_cases": 8,
+      "invalid_completions": 2,
+      "language_exact_matches": {
+        "en": 0,
+        "fr": 1
+      },
+      "record_matches": 1
+    },
+    "base_retrieval": {
+      "cases": [
+        {
+          "family": "public_offer",
+          "full_record_match": true,
+          "id": "external-01",
+          "language": "en",
+          "proposal_compatible": true,
+          "reference_disposition": "compatible",
+          "reviewed_policy": {
+            "response": "accept",
+            "status": "certified",
+            "surplus": "3/35"
+          },
+          "reward": 1
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": false,
+          "id": "external-02",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "compatible",
+          "reviewed_policy": {
+            "status": "invalid_proposal"
+          },
+          "reward": 0
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-03",
+          "language": "en",
+          "proposal_compatible": true,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "order",
+              "access"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": -2
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-04",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "access",
+              "irrevocable"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": 0
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": false,
+          "id": "external-05",
+          "language": "en",
+          "proposal_compatible": true,
+          "reference_disposition": "abstain",
+          "reviewed_policy": {
+            "fields": [
+              "access",
+              "irrevocable"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": -2
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-06",
+          "language": "fr",
+          "proposal_compatible": true,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "fields": [
+              "actors"
+            ],
+            "status": "refused_disagreement"
+          },
+          "reward": -2
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": false,
+          "id": "external-07",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "abstain",
+          "reviewed_policy": {
+            "status": "invalid_proposal"
+          },
+          "reward": 0
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": false,
+          "id": "external-08",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "status": "invalid_proposal"
+          },
+          "reward": 0
+        }
+      ],
+      "certified_family_counts": {
+        "private_signaling": 0,
+        "public_offer": 1
+      },
+      "compatible_reference_cases": 2,
+      "false_admissions": 0,
+      "false_solver_proposals": 3,
+      "field_exact_matches": {
+        "access": 2,
+        "actors": 4,
+        "irrevocable": 3,
+        "order": 4
+      },
+      "held_cases": 8,
+      "invalid_completions": 3,
+      "language_exact_matches": {
+        "en": 1,
+        "fr": 0
+      },
+      "record_matches": 1
+    },
+    "included_assisted": {
+      "cases": [
+        {
+          "family": "public_offer",
+          "full_record_match": true,
+          "id": "external-01",
+          "language": "en",
+          "proposal_compatible": true,
+          "reference_disposition": "compatible",
+          "reviewed_policy": {
+            "response": "accept",
+            "status": "certified",
+            "surplus": "3/35"
+          },
+          "reward": 1
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": true,
+          "id": "external-02",
+          "language": "fr",
+          "proposal_compatible": true,
+          "reference_disposition": "compatible",
+          "reviewed_policy": {
+            "certificate": {
+              "column0_probability": "7/9",
+              "policy": [
+                {
+                  "mass": "1/9",
+                  "rows": [
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "mass": "8/9",
+                  "rows": [
+                    0,
+                    1
+                  ]
+                }
+              ],
+              "value": "19/9"
+            },
+            "status": "certified",
+            "value": "19/9"
+          },
+          "reward": 1
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": true,
+          "id": "external-03",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "conflicts": [
+              "order",
+              "access[0]",
+              "access[1]"
+            ],
+            "missing": [],
+            "status": "incompatible"
+          },
+          "reward": 1
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": true,
+          "id": "external-04",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "conflicts": [
+              "irrevocable"
+            ],
+            "missing": [],
+            "status": "incompatible"
+          },
+          "reward": 1
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": true,
+          "id": "external-05",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "abstain",
+          "reviewed_policy": {
+            "conflicts": [],
+            "missing": [
+              "access[0]",
+              "irrevocable"
+            ],
+            "status": "abstain"
+          },
+          "reward": 1
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": true,
+          "id": "external-06",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "conflicts": [
+              "actors[0]",
+              "actors[2]"
+            ],
+            "missing": [],
+            "status": "incompatible"
+          },
+          "reward": 1
+        },
+        {
+          "family": "private_signaling",
+          "full_record_match": true,
+          "id": "external-07",
+          "language": "fr",
+          "proposal_compatible": false,
+          "reference_disposition": "abstain",
+          "reviewed_policy": {
+            "conflicts": [],
+            "missing": [
+              "order"
+            ],
+            "status": "abstain"
+          },
+          "reward": 1
+        },
+        {
+          "family": "public_offer",
+          "full_record_match": true,
+          "id": "external-08",
+          "language": "en",
+          "proposal_compatible": false,
+          "reference_disposition": "incompatible",
+          "reviewed_policy": {
+            "conflicts": [
+              "access[1]"
+            ],
+            "missing": [],
+            "status": "incompatible"
+          },
+          "reward": 1
+        }
+      ],
+      "certified_family_counts": {
+        "private_signaling": 1,
+        "public_offer": 1
+      },
+      "compatible_reference_cases": 2,
+      "false_admissions": 0,
+      "false_solver_proposals": 0,
+      "field_exact_matches": {
+        "access": 8,
+        "actors": 8,
+        "irrevocable": 8,
+        "order": 8
+      },
+      "held_cases": 8,
+      "invalid_completions": 0,
+      "language_exact_matches": {
+        "en": 4,
+        "fr": 4
+      },
+      "record_matches": 8
+    }
+  },
+  "inputs_sha256": "c41c0ea88d10b000b9bb260965011014799cbc7970f1b25624685d69f2a894fc",
+  "prediction_wall_seconds": {
+    "adapted_direct": 18.453440238998155,
+    "base_direct": 26.168327441002475,
+    "base_retrieval": 28.43828962599946
+  },
+  "predictions_sha256": "482297a34e54a20ff5a3d37e8afdfe457bee9721cf7d940a097bff9a7a2bd437",
+  "reference_sha256": "a84e3bc64d7f0b7bcf790e4566b68a55d0cdbf570e2571b64e2a0305264ae95d",
+  "registration_sha256": "2e0e6087c731c96e9053fda71286f5151d493a734ac8232e1c193f9d501870de",
+  "schema": "frontier/strategic-protocol-assessment/v1",
+  "solver_scope": {
+    "private_signaling": {
+      "accuracy": [
+        80,
+        70
+      ],
+      "fee": 0,
+      "id": "scoped-noisy-signal-test",
+      "payoffs": [
+        [
+          3,
+          -1
+        ],
+        [
+          -2,
+          4
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    "public_offer": {
+      "price": "19/7",
+      "value": "2.8"
+    }
+  },
+  "training_result_sha256": "960b9d2bc592d4a8d1db1fa27f285b8a3892d812a8b362fc8ff147b10ba8c562"
+}

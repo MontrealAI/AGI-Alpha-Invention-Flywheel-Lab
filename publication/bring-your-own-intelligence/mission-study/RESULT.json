@@ -1,0 +1,703 @@
+{
+  "schema": "frontier/assisted-allocation-assessment-v1",
+  "scope": "Two included-Codex assisted authoring arms, isolated native SQLite, and public synthetic inputs. One separate fixture author and one separate comparison author under shared administration. No live model dispatch, governance admission, or real scheduling execution.",
+  "verdict": "GO_SCOPED_PUBLIC_FIXTURES",
+  "intelligence": "Included Codex operating in separate agent contexts. Hosted inference model revision, tokens, infrastructure costs and all human attention remain unmeasured.",
+  "artifact": {
+    "name": "allocation.json",
+    "sha256": "006666c263b61367c16bb2d479a25c8fc661552a95cdbe24c2a9692180c125f3",
+    "bytes": 4831,
+    "previous_sha256": null,
+    "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+    "sqlite_version": "3.53.1",
+    "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES",
+    "qualification": "UNVERIFIED"
+  },
+  "sql_source_sha256": "ab33a8e7037ec7188806fd6cc496cdda9370d524978b6442c44c8df9a22b2a4b",
+  "ordinary_source_sha256": "3eb06ebd7a5d1ce9a810ae4f69ec71a8e24c5a8d3feaf2a570fe9cedd80db480",
+  "independent_fixture_sha256": "7cf9aee809f9440ff9f777606037b72a42824d9d9c00c60b13d8945deedb95d4",
+  "assessor_sha256": "fec0fe0e44b605b02db2a749752cefea8c3f1663d4458131b91215a5320710f2",
+  "registration_sha256": "0a2c3d42ca20adc18eb8c9e57e8ccff8508ca6bb3f53981e855bc346c9e4f2d4",
+  "first_construction": {
+    "status": "TABLE_READ_ONLY",
+    "reason": "COUNT(*) uses an implicit SQLite table record; the unchanged read-only authorizer requires an explicit approved column.",
+    "sql_source_sha256": "bb4a8385b5222aa4161e850d926b6d0397299058351df012cdabc46ece9901de"
+  },
+  "held_acceptance": {
+    "matches": 46,
+    "denominator": 46,
+    "cases": {
+      "public-example": {
+        "pass": true,
+        "input_sha256": "491d823528d704a75784d3ed169eced54fb9a333b4bed043a78458ca82c34179",
+        "output_sha256": "21abdec0075af434b165d42b797ca4cd49b21187cec5e929237c8ac55e836d29",
+        "disposition": "OK"
+      },
+      "separately-authored-allocation_a": {
+        "pass": true,
+        "input_sha256": "4f21b9a4104df824863b63d09a15c0bc4aec08ef6dd81714a948f28edbeab483",
+        "output_sha256": "e46d15ba9e0fe87b9fc9e3eea5ae6c46f23071f5bf379cfaaab413b7b4f19247",
+        "disposition": "OK"
+      },
+      "separately-authored-incomplete_scenario": {
+        "pass": true,
+        "input_sha256": "8584a52838925c0d03bff2d1d1401fdee22dbf0cc1ab28b021e9c29097f43222",
+        "output_sha256": "ca0e2552127349b23c452180be25fb4c59cdf4963990377c366f42c57ee1ae46",
+        "disposition": "MISSING_FORECAST"
+      },
+      "missing-cell": {
+        "pass": true,
+        "input_sha256": "b1a9fdefe0602879055ddf66daa93c11c53d7ac16a78fe48dd1e4b00bc748776",
+        "output_sha256": "3c7f2fcd0677441815f830397a8e97c8b8c85ee056906d3b22c73c1b54f4762f",
+        "disposition": "MISSING_FORECAST"
+      },
+      "null-forecast": {
+        "pass": true,
+        "input_sha256": "f3b3365d229d005cd28414c49d0b6a94ab3cc94c43e88abb10fca93ba9725859",
+        "output_sha256": "9109c073fdb8791b52ffd5de801fec7dbb5fea11ea079cde824b86740f1cdf60",
+        "disposition": "MISSING_FORECAST"
+      },
+      "duplicate-forecast": {
+        "pass": true,
+        "input_sha256": "dfbd64d89dd72bbd01d55427e7c5b25d41352a1e811e4bf8f76daece71415312",
+        "output_sha256": "576d9fe2b9e3103199f34ec83811785c39dc80d148e6744cdf47ee5ba7b0bd2a",
+        "disposition": "INVALID_INPUT"
+      },
+      "unknown-group": {
+        "pass": true,
+        "input_sha256": "b4955a73c38be9ec1b39c65139aa09a72c57a9a5e8954a5f97238899532f935c",
+        "output_sha256": "576d9fe2b9e3103199f34ec83811785c39dc80d148e6744cdf47ee5ba7b0bd2a",
+        "disposition": "INVALID_INPUT"
+      },
+      "negative-demand": {
+        "pass": true,
+        "input_sha256": "e21edba7263294f1d3003d25b6dcc05724436b0db945a69247d0cfb56268a6e2",
+        "output_sha256": "576d9fe2b9e3103199f34ec83811785c39dc80d148e6744cdf47ee5ba7b0bd2a",
+        "disposition": "INVALID_INPUT"
+      },
+      "empty-budget": {
+        "pass": true,
+        "input_sha256": "41ea95f91d9dd81885cd25a3b33974859780aa31d1eb84912bd0013319c83a7e",
+        "output_sha256": "576d9fe2b9e3103199f34ec83811785c39dc80d148e6744cdf47ee5ba7b0bd2a",
+        "disposition": "INVALID_INPUT"
+      },
+      "infeasible-minima": {
+        "pass": true,
+        "input_sha256": "cebbf3ea402da232dfc46ac961d4c4a004eb550a8d30923e0128726ac8c5637c",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "null-budget-row": {
+        "pass": true,
+        "input_sha256": "4188eca7879181eeac68ecdb366ad32f9c6fd66dc47e0d99e357615a48c86b9e",
+        "output_sha256": "576d9fe2b9e3103199f34ec83811785c39dc80d148e6744cdf47ee5ba7b0bd2a",
+        "disposition": "INVALID_INPUT"
+      },
+      "max-capacity-count": {
+        "pass": true,
+        "input_sha256": "3575263aba6ba4283ad29b94862c0c1cde119dfa90543e85ad8029e3a61f34a1",
+        "output_sha256": "21abdec0075af434b165d42b797ca4cd49b21187cec5e929237c8ac55e836d29",
+        "disposition": "OK"
+      },
+      "all-unconstrained-max-work": {
+        "pass": true,
+        "input_sha256": "c8eb2d3543121768addfd644639a9a624b40b17e153e367a33788f3853961f34",
+        "output_sha256": "fc7d890b62911ed00db6402877d82c8aaa68a88cc8592291c0a4b875a024c3d4",
+        "disposition": "OK"
+      },
+      "row-order-invariance": {
+        "pass": true,
+        "input_sha256": "c9a62cb414777f61629d3fd8aaf3555678e0ca3781ddc41fad9c3071ca07dc17",
+        "output_sha256": "21abdec0075af434b165d42b797ca4cd49b21187cec5e929237c8ac55e836d29",
+        "disposition": "OK"
+      },
+      "permutation-01": {
+        "pass": true,
+        "input_sha256": "30909ef4ea0b5674bbd394b55ca3393cc275acc1251f5917669e236b2f707f77",
+        "output_sha256": "57cac6a97aa1cb26ebb880a0ea544af495b87dd270b764a7243c7d6d7f597fd8",
+        "disposition": "OK"
+      },
+      "permutation-02": {
+        "pass": true,
+        "input_sha256": "324349aa816905bd1564bff55a93580dd9c3a16371688c5e3af9cfe4a13e6212",
+        "output_sha256": "a50fc1008534de6c741a4db1f704b58d9c4b545877c262424008993f00766b46",
+        "disposition": "OK"
+      },
+      "permutation-03": {
+        "pass": true,
+        "input_sha256": "7d20336a0bde6efc7e2b80a875c92443d350fb3b1bf05754a1ee876c756179ea",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-04": {
+        "pass": true,
+        "input_sha256": "e58bb00aaaee68374f18d83b50f142cd4fb092afcb0f35f1d903933085c7777b",
+        "output_sha256": "870a00691123203efa1ee6e87871970ff6c6dfcbedf06cc8bcccace878796986",
+        "disposition": "OK"
+      },
+      "permutation-05": {
+        "pass": true,
+        "input_sha256": "cce827de898923a21bbc394b501b2e1b7346f05700505c95cee6bf048b82fd32",
+        "output_sha256": "a928932b3964f949ac235febd7d544ab01159560fea6e1f0abf00b916868c105",
+        "disposition": "OK"
+      },
+      "permutation-06": {
+        "pass": true,
+        "input_sha256": "794f165ecf1eedc61cb3dcb16db0f9838c04d6753812c1f42d8317b0bcf7f72d",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-07": {
+        "pass": true,
+        "input_sha256": "6baa7e82dba6fe201969af10f19777263bd05fb6131f1139e34124b5186ff78a",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-08": {
+        "pass": true,
+        "input_sha256": "240bdd7aa2bd56bbc1d72b9e852567c7fa60a145656ee5753e5091751f536268",
+        "output_sha256": "9f56ae519005779a7e384363967e4104f8dda5748f6690ba152588a40a189525",
+        "disposition": "OK"
+      },
+      "permutation-09": {
+        "pass": true,
+        "input_sha256": "44ee3c9336c04266d8d6866d036e581ec63deffc129733b4fd25d4e644ed1d11",
+        "output_sha256": "479a6b17f34c30259fba94c9b661067e5db44827f7edeed332195bcda1702283",
+        "disposition": "OK"
+      },
+      "permutation-10": {
+        "pass": true,
+        "input_sha256": "6811f22ec922807d4f16a3f8b765e1ab1980d8fcbbbf0ea09f39b16151a93a13",
+        "output_sha256": "3d7beb9693e5cf380f6b20e5337062d05e2ee1756cc54e1f77dc0a6c12860899",
+        "disposition": "OK"
+      },
+      "permutation-11": {
+        "pass": true,
+        "input_sha256": "4e7ec7706947c4f8fdbf768563f15a281ca5c3c757123da8e5043e0e967f5a9a",
+        "output_sha256": "6aa0a50e74884f162ae2f16d40af5f15a6e222c75f9ffbf373534453c8e10eb3",
+        "disposition": "OK"
+      },
+      "permutation-12": {
+        "pass": true,
+        "input_sha256": "fedc230cab986b98e16f60330962a4f0cd938aed839b67f796494905afac59c7",
+        "output_sha256": "91935df5c9dadf95f150b10a7e5a3d769339c3492429ce2f2b4eb6fd60c6daf8",
+        "disposition": "OK"
+      },
+      "permutation-13": {
+        "pass": true,
+        "input_sha256": "fd90d29f10277b7c36290f0004d38f9442bed4bef1325de49e6bd15d0d17aae2",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-14": {
+        "pass": true,
+        "input_sha256": "db7dadd43ffd2304518f8cff71d1c461dad3d7cf2bb9f82a5349fbd0f2f484ba",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-15": {
+        "pass": true,
+        "input_sha256": "d75ef64bdae8ffab17338c2da6ff1f9eff046736e2d0fbee5150bb31766058b1",
+        "output_sha256": "1742df790cc00d99f225e3531c5e1ae691fa8cd96728250c5d06640fb49bd196",
+        "disposition": "OK"
+      },
+      "permutation-16": {
+        "pass": true,
+        "input_sha256": "f2e3cb3a37e38a4511d2a0575ad675b0a040554e841de29210833dad17fc4bad",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-17": {
+        "pass": true,
+        "input_sha256": "b86b3aa6cb1a99caf829b7f89c438215f3ae231f96ade38ba3d4b0158cae0dae",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-18": {
+        "pass": true,
+        "input_sha256": "406521eb626fb008eb3ff1deb58feaf6f6d88979beb30468b8fa15c756913249",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-19": {
+        "pass": true,
+        "input_sha256": "38a4e6ec02ad413763d93276e97ae3f3ccb061b259e53cccfcaa13b4129d4c3b",
+        "output_sha256": "eee59b117026e642cddf82fc60251ee51e326e5d9ddd6237e054264be9a252e9",
+        "disposition": "OK"
+      },
+      "permutation-20": {
+        "pass": true,
+        "input_sha256": "7160fe82612e313725b67353afccd1a3153a67d84e216d9fdeab424bb59e03dc",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-21": {
+        "pass": true,
+        "input_sha256": "818db9fa1a96965cc50a93a937baf4581dbd5986e3af0102134f12c9ceca0f95",
+        "output_sha256": "d079eb85fb943f3fa4d0d5254fc0f8299bd40efaf9db8150c6f13d250d13c6be",
+        "disposition": "OK"
+      },
+      "permutation-22": {
+        "pass": true,
+        "input_sha256": "310dd93225fccedca39a300f7bcf964096dbd96b935aec29bf195c380a8a8580",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-23": {
+        "pass": true,
+        "input_sha256": "9546736e3d2f2e2dcea0002c344d2f2e1c06a55509c0590fc3dc25b331a86b64",
+        "output_sha256": "7fd35f1fcbcd307a966424f0b99623a341fe9e478b21fd34a068595112a9c9c3",
+        "disposition": "OK"
+      },
+      "permutation-24": {
+        "pass": true,
+        "input_sha256": "c8caae97533b62659f7868eefae821ad8b67a02a46270239c72ee265ca82374b",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-25": {
+        "pass": true,
+        "input_sha256": "8384d3d355cc1764cec8c885b344df1e1e31bee2b029ef44e5c8332fe9a0f50f",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-26": {
+        "pass": true,
+        "input_sha256": "7b1dd6bd51dff77a00038cb65f052b9005fd1c66adf9d7c7261d5b80eaf22b6d",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-27": {
+        "pass": true,
+        "input_sha256": "78d2e4559139bc96ba3fca9b835ccbc53a93e0939f0eb33392ce503a54cd2934",
+        "output_sha256": "4d7deedc8ba37b29d022682cf802328f7f03f663980ebf0835ef124fe7ed814a",
+        "disposition": "OK"
+      },
+      "permutation-28": {
+        "pass": true,
+        "input_sha256": "67b23834ccf5f7d48cf162e7083b3ee9848f231f4458d005e92ba50a263d1adc",
+        "output_sha256": "dff1128fa569612edbea77cd4ddeb1ed6277c3cf25bfb6a0fd6ce98a2ab4ddcc",
+        "disposition": "OK"
+      },
+      "permutation-29": {
+        "pass": true,
+        "input_sha256": "c8a0750c35eea2965e51e705d29ce28187cac85fcd8fd33c1fc3e2cb7c66cfd8",
+        "output_sha256": "c3e76734486defcf32803314b643759f2ed350610b4bc491f4874317acaf04ff",
+        "disposition": "OK"
+      },
+      "permutation-30": {
+        "pass": true,
+        "input_sha256": "ff940132077b4bc169c1548694a073f39bffaff2b70647fe45cab52215420eaa",
+        "output_sha256": "126e8eaf80510cfc9ae8d80fd4fcb4515217ae0da5c0f6d4d9a4835a0e58d3ae",
+        "disposition": "OK"
+      },
+      "permutation-31": {
+        "pass": true,
+        "input_sha256": "c1da48b75d375d621f183427eb76c4d9d8a7ef7459743e8e7656d3c162336ee9",
+        "output_sha256": "745f6189bd160f1768689ad8c192023c3ca2456304e9aee4cde87142d0017ce9",
+        "disposition": "INFEASIBLE_MINIMA"
+      },
+      "permutation-32": {
+        "pass": true,
+        "input_sha256": "5baef2cd1df92a61aab4d22528b73d556803265376c4c2f29ce9acb25e596a7f",
+        "output_sha256": "0e5f1282fc3a1e7ba7e192aa0c250a6c95455ee439f0d8b20b19f8240ffaeb24",
+        "disposition": "OK"
+      }
+    },
+    "controls": {
+      "missing-cell": true,
+      "null-forecast": true,
+      "duplicate-forecast": true,
+      "unknown-group": true,
+      "negative-demand": true,
+      "empty-budget": true,
+      "null-budget-row": true,
+      "infeasible-minima": true,
+      "row-order-invariance": true,
+      "blind-ordinary-certificate": true,
+      "blind-absence": true,
+      "opportunity-loss-conserved": true
+    }
+  },
+  "public_example": [
+    [
+      "OK",
+      "choir-demand",
+      "choir",
+      2,
+      5,
+      2,
+      3,
+      4,
+      4,
+      2,
+      2,
+      2,
+      16
+    ],
+    [
+      "OK",
+      "choir-demand",
+      "dance",
+      2,
+      2,
+      2,
+      0,
+      2,
+      2,
+      0,
+      2,
+      2,
+      16
+    ],
+    [
+      "OK",
+      "choir-demand",
+      "theatre",
+      3,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      2,
+      2,
+      16
+    ],
+    [
+      "OK",
+      "mixed-demand",
+      "choir",
+      2,
+      2,
+      2,
+      0,
+      1,
+      1,
+      -1,
+      1,
+      2,
+      16
+    ],
+    [
+      "OK",
+      "mixed-demand",
+      "dance",
+      2,
+      4,
+      2,
+      2,
+      4,
+      4,
+      2,
+      1,
+      2,
+      16
+    ],
+    [
+      "OK",
+      "mixed-demand",
+      "theatre",
+      3,
+      2,
+      2,
+      0,
+      2,
+      2,
+      0,
+      1,
+      2,
+      16
+    ],
+    [
+      "OK",
+      "theatre-demand",
+      "choir",
+      2,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      2,
+      2,
+      16
+    ],
+    [
+      "OK",
+      "theatre-demand",
+      "dance",
+      2,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      2,
+      2,
+      16
+    ],
+    [
+      "OK",
+      "theatre-demand",
+      "theatre",
+      3,
+      5,
+      3,
+      2,
+      5,
+      5,
+      2,
+      2,
+      2,
+      16
+    ]
+  ],
+  "independent_positive": [
+    [
+      "OK",
+      "evening",
+      "chamber",
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "evening",
+      "percussion",
+      2,
+      4,
+      2,
+      2,
+      2,
+      2,
+      0,
+      1,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "evening",
+      "spoken",
+      2,
+      3,
+      2,
+      1,
+      3,
+      3,
+      1,
+      1,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "matinee",
+      "chamber",
+      1,
+      3,
+      1,
+      2,
+      1,
+      1,
+      0,
+      0,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "matinee",
+      "percussion",
+      2,
+      2,
+      2,
+      0,
+      2,
+      2,
+      0,
+      0,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "matinee",
+      "spoken",
+      2,
+      2,
+      2,
+      0,
+      2,
+      2,
+      0,
+      0,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "returning",
+      "chamber",
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      -1,
+      0,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "returning",
+      "percussion",
+      2,
+      2,
+      2,
+      0,
+      2,
+      2,
+      0,
+      0,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "returning",
+      "spoken",
+      2,
+      3,
+      2,
+      1,
+      3,
+      3,
+      1,
+      0,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "weekend",
+      "chamber",
+      1,
+      2,
+      1,
+      1,
+      2,
+      2,
+      1,
+      1,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "weekend",
+      "percussion",
+      2,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      16
+    ],
+    [
+      "OK",
+      "weekend",
+      "spoken",
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      16
+    ]
+  ],
+  "independent_missing": [
+    [
+      "MISSING_FORECAST",
+      "returning",
+      "chamber",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      "MISSING_FORECAST",
+      "returning",
+      "percussion",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      "MISSING_FORECAST",
+      "returning",
+      "spoken",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  ],
+  "cost": {
+    "harness_agent_registration_to_valid_example_utc_s_approx": 122,
+    "ordinary_agent_authoring_s_approx": 38,
+    "construction_worker_wall_seconds": 0.05771796400222229,
+    "assay_wall_seconds": 3.8781144989989116,
+    "assay_parent_cpu_seconds_excludes_worker_children": 0.09617120599999998,
+    "median_wall_seconds": {
+      "assisted_harness": 0.03887969450443052,
+      "ordinary_direct": 6.547399971168488e-05,
+      "portable_replay": 0.03907757200067863
+    },
+    "paid_requests": 0,
+    "runtime_inference_requests": 0,
+    "external_eval_custody": false
+  }
+}

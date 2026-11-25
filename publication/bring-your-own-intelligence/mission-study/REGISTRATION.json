@@ -1,0 +1,26 @@
+{
+  "schema": "frontier/assisted-robust-allocation-registration-v1",
+  "frozen_at_utc": "2026-11-25T16:06:07Z",
+  "source_context": "1bdac817b471157092ea4aac881916824b66734e",
+  "ambition": "Allocate a shared rehearsal hall across three community groups when attendance forecasts disagree, and show who bears the loss if the forecasts are wrong.",
+  "ambition_fr": "Répartir les créneaux d’une salle de répétition entre trois groupes communautaires quand les prévisions de fréquentation divergent, et montrer qui subit la perte si les prévisions sont erronées.",
+  "selection": "An assistant working independently of the member-routing implementation chose the objective before examining the new router. Real capacity, forecasts, participation agreements and preferences were not supplied. Run only a public worked example and synthetic acceptance fixtures.",
+  "contract": {
+    "groups": [1, 3],
+    "scenarios": [1, 4],
+    "slot_budget": [0, 8],
+    "allocation": "Integer slots between each group's stated minimum and maximum using no more than the stated budget. One unit of demand represents one attendance-equivalent slot.",
+    "opportunity_loss": "For each scenario, subtract the chosen schedule's total served demand from the maximum over the same feasible schedules with that scenario known. Served demand per group is min(slots, demand).",
+    "ordering": ["Minimize maximum scenario regret", "Maximize total service summed equally across all listed scenarios", "Choose lexicographically smallest slot vector ordered by group ID"],
+    "allocation_of_loss": "For every group and scenario show unmet demand and signed foregone service versus the lexicographically first scenario-optimal schedule. Signed differences sum to scenario regret and can be negative for groups who receive more under the robust schedule.",
+    "missing_or_invalid_input": "Produce no allocation if the budget, group, scenario or grid has missing, extra, duplicate or invalid information. Mark a missing declared forecast pair explicitly. Infeasible contractual minimums have a separate disposition.",
+    "guardrail": "The objective is total service and worst-case opportunity loss across stated scenarios. It neither protects individual loss nor estimates probabilities or agreements. Apply it to actual hall operations only after those facts and the tie rule are approved."
+  },
+  "arms": [
+    "Assisted included Codex constructing a portable, read-only table instrument in the qualified HARNESS evaluator.",
+    "Ordinary direct use of the same included Codex with independently structured Python standard-library enumeration and no private data. Same data contract, held inputs and exact whole-row acceptance. No randomized inference comparison."
+  ],
+  "cases": "Fixed named cases plus 32 deterministic pseudo-random small allocations (Python Random seed 6319), all retain order-invariant exact group and scenario rows. Include an external-to-construction shared-workspace fixture authored separately if available. No provider receives these acceptance inputs.",
+  "gate": "All unchanged artifact outputs must exactly match the plain-language reference and portable replay for the full case roster. Failures remain in the first attempted outcome. No production promotion or superiority follows from equal accuracy.",
+  "resource_policy": "Included assistant, one local standard-library Python and SQLite execution environment, zero paid requests, zero new external contacts, no deployment, purchase, site scheduling or actual community data. Record construction and verification wall/CPU when available. Full hosted inference cost, human attention and ongoing economics are unknown."
+}

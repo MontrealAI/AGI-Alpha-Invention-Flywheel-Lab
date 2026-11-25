@@ -1,0 +1,24 @@
+{
+  "groups": [
+    {"group_id": "choir", "min_slots": 1, "max_slots": 5},
+    {"group_id": "dance", "min_slots": 0, "max_slots": 4},
+    {"group_id": "theatre", "min_slots": 1, "max_slots": 5}
+  ],
+  "scenarios": [
+    {"scenario_id": "choir-demand"},
+    {"scenario_id": "mixed-demand"},
+    {"scenario_id": "theatre-demand"}
+  ],
+  "forecasts": [
+    {"scenario_id": "choir-demand", "group_id": "choir", "demand": 5},
+    {"scenario_id": "choir-demand", "group_id": "dance", "demand": 2},
+    {"scenario_id": "choir-demand", "group_id": "theatre", "demand": 1},
+    {"scenario_id": "mixed-demand", "group_id": "choir", "demand": 2},
+    {"scenario_id": "mixed-demand", "group_id": "dance", "demand": 4},
+    {"scenario_id": "mixed-demand", "group_id": "theatre", "demand": 2},
+    {"scenario_id": "theatre-demand", "group_id": "choir", "demand": 1},
+    {"scenario_id": "theatre-demand", "group_id": "dance", "demand": 1},
+    {"scenario_id": "theatre-demand", "group_id": "theatre", "demand": 5}
+  ],
+  "budget": [{"total_slots": 7}]
+}
