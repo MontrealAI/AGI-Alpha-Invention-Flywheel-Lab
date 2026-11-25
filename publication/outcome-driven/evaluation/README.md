@@ -44,7 +44,7 @@ The model is Qwen3-8B Q4_K_M served by llama.cpp build `b12242` on loopback. The
 
 From the checkout containing this document, with a compatible model server on the configured loopback port, use the following runs. Set `previous` to a separately archived checkout at the registered ancestor. Set `candidate` to `f61020768e0a1e18da46e6c1a3426bef63c9a925`. All 34 consumed files match that commit and the subsequent test-only commit `5955c08d36d31b77a310720ae2ba17142fca9794` byte for byte. The source map and commit comparison are in [CANDIDATE-FREEZE.json](CANDIDATE-FREEZE.json) and [CANDIDATE-REVISION.json](CANDIDATE-REVISION.json).
 
-The later review-corrected release candidate `2dcf1f252e7bb6eff528a2ef60e3314cab477e88` rejects contradictory explicit schema declarations before model dispatch. It matches 32 of the 34 study source files. The registered missions do not contain explicit schema conflicts. Recorded model behavior and elapsed times belong to the preregistered experimental source.
+The later release candidate `2dcf1f252e7bb6eff528a2ef60e3314cab477e88` rejects contradictory explicit schema declarations before SQLite execution and claim verification. Approved data remain available to the authorized local constructor. The candidate matches 32 of the 34 study source files. The registered missions had consistent schema declarations. Recorded model behavior and elapsed times belong to the preregistered experimental source.
 
 ```bash
 evaluation=$PWD/publication/outcome-driven/evaluation
