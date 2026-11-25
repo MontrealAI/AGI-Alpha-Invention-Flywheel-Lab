@@ -26,13 +26,17 @@
     <h2 id="native-mission-title" data-native-text="mission">Review your mission</h2>
     <pre id="native-ambition" class="native-ambition"></pre>
     <details id="native-original-panel" hidden><summary data-native-text="original">Original ambition</summary><pre id="native-original" class="native-ambition"></pre></details>
+    <section id="native-instruction-panel" aria-labelledby="native-instruction-label" hidden>
+      <h3 id="native-instruction-label" data-native-text="instruction">Follow-up instruction</h3>
+      <p id="native-instruction" class="native-ambition"></p>
+    </section>
     <p id="native-review-revision" class="subtle"></p>
     <form id="native-approve-form" hidden>
       <label for="native-review-profile" data-native-text="chooseProfile">Verified connection</label>
       <select id="native-review-profile" required></select>
       <button id="native-review-details" class="button secondary" type="button" data-native-text="review">Review sharing and limits</button>
       <div id="native-scope" class="native-scope" hidden>
-        <p data-native-text="scopeData">The selected provider receives the mission text and context generated during this run. Existing private files and unrelated projects stay on this device.</p>
+        <p data-native-text="scopeData">The provider receives the current and original ambition, the follow-up shown above, and context generated during this run. Local documents and earlier run results stay on this device.</p>
         <dl id="native-scope-limits" class="native-limits"></dl>
         <label class="check-label"><input type="checkbox" id="native-mission-consent" required><span data-native-text="missionConsent">I approve this provider, this mission revision, and the limits above.</span></label>
         <button class="button primary" type="submit" data-native-text="approve">Authorize this mission</button>

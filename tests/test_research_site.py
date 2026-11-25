@@ -249,7 +249,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 29)
-        self.assertEqual(len(site.PAGES), 40)
+        self.assertEqual(len(site.PAGES), 41)
         self.assertTrue({'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'}.issubset(site.PAGES))
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
@@ -608,6 +608,8 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/frontier-goals.mjs', 'frontier-omega-alpha/foundry-core.mjs',
              'frontier-omega-alpha/frontier-mission.mjs', 'frontier-omega-alpha/frontier-mission-router.mjs',
              'frontier-omega-alpha/frontier-mission-ui.mjs', 'frontier-omega-alpha/frontier-execution.mjs',
+             'frontier-omega-alpha/companion-start.html', 'frontier-omega-alpha/frontier-companion-link.mjs',
+             'frontier-omega-alpha/frontier-assisted-work.mjs',
              'frontier-omega-alpha/frontier-browser-model.mjs',
              'frontier-omega-alpha/foundry-ui.mjs', 'frontier-omega-alpha/foundry-study.mjs',
              *site.DECISION_EDITION_ASSETS},

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {fingerprint} from '../docs/research/frontier-omega-alpha/outcome-receipt.mjs';
+import {addMissionInstruction, setMissionDocuments} from '../docs/research/frontier-omega-alpha/frontier-mission.mjs';
 import {createMissionRequest} from '../docs/research/frontier-omega-alpha/frontier-mission-router.mjs';
 import {
   beginMission, bindMissionRequest, cancelMission, continueMission, createMission, exportMission, importMission, interruptMission,
@@ -19,6 +20,25 @@ const report = {
   evidence: [{label: 'Catalogue record', url: 'https://example.test/archive', sha256: 'a'.repeat(64)}],
   artifacts: [{label: 'Reproduction notes', kind: 'plain text', content: 'Input → check → record'}],
 };
+
+test('conversation preserves the exact ambition and restores local documents without execution authority', async () => {
+  const sources = [{name:'observations.csv',text:'station,valid\nTémiscamingue,yes\n'}];
+  const followUp = '  Revoir les observations.\nCiter le tableau d’origine.  ';
+  const original = setMissionDocuments(createMission(exactAmbition), sources);
+  const waiting = prepareMission(original, {provider:'assisted'});
+  const next = addMissionInstruction(waiting, followUp);
+  assert.equal(missionPacket(next).instruction, followUp);
+  assert.equal(next.ambition, exactAmbition);
+  assert.equal(next.status, 'ready');
+  assert.equal(next.request, null);
+  assert.equal(missionPacket(next).documents, undefined);
+  assert.deepEqual((await importMission(await exportMission(next))).documents, sources);
+  assert.deepEqual(next.turns.map(turn => turn.instruction), [followUp]);
+  assert.equal(missionPacket(reviseMission(next, frenchAmbition)).instruction, null);
+  assert.throws(() => setMissionDocuments(next, [{name:'../private.csv',text:'ok'}]), /MISSION_DOCUMENTS/);
+  assert.throws(() => setMissionDocuments(next, [...sources, ...sources]), /MISSION_DOCUMENTS/);
+  assert.throws(() => addMissionInstruction(next, '🚀'.repeat(513)), /MISSION_INSTRUCTION/);
+});
 
 test('the exact ambition and long multilingual work are preserved independently of catalogue matches', () => {
   const mission = createMission(exactAmbition);

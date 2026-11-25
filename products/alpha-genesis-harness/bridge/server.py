@@ -33,10 +33,40 @@ PRODUCT = Path(__file__).resolve().parent.parent
 APP = PRODUCT / "app"
 STATIC_FILES = {"/": "index.html", "/index.html": "index.html", "/app.js": "app.js",
                 "/engine.js": "engine.js", "/styles.css": "styles.css", "/workshop.js": "workshop.js",
-                "/native-intelligence.js": "native-intelligence.js"}
+                "/native-intelligence.js": "native-intelligence.js", "/frontier-pairing.js": "frontier-pairing.js"}
 INTELLIGENCE_API = "/api/frontier-intelligence/"
 PAIR_GUIDE = "/frontier-pair/"
+PAIR_NAVIGATION = {"/frontier-connect?lang=en": "en", "/frontier-connect?lang=fr": "fr"}
 FRONTIER_URL = PAGES_ORIGIN + "/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/"
+
+
+def connection_page(language, origin):
+    if language == "fr":
+        title = "Jumeler le compagnon FRONTIER Ω"
+        detail = "L’onglet qui a ouvert cette fenêtre demande l’accès à l’espace de travail de ce compagnon. Vérifiez que vous avez lancé le jumelage dans Mon Frontier. Vous approuverez l’utilisation d’une API payante pour chaque mission."
+        waiting = "Ouvrez le jumelage depuis l’onglet de votre mission."
+        ready = "L’onglet de votre mission attend votre autorisation."
+        success = "Jumelage autorisé. Retour à votre mission…"
+        error = "Le jumelage a échoué. Revenez à votre mission et réessayez ou utilisez un code de jumelage."
+        approve, cancel = "Autoriser cet onglet", "Annuler"
+    else:
+        title = "Connect the FRONTIER Ω companion"
+        detail = "The tab that opened this window is requesting access to this companion’s workspace. Confirm that you started the connection from My Frontier. You’ll approve paid API use for each mission."
+        waiting = "Open the connection from your mission tab."
+        ready = "Your mission tab is waiting for your approval."
+        success = "Connection approved. Returning to your mission…"
+        error = "The connection failed. Return to your mission and try again or use a pairing code."
+        approve, cancel = "Allow this tab", "Cancel"
+    return (
+        f'<!doctype html><html lang="{language}"><meta charset="utf-8"><meta name="viewport" '
+        f'content="width=device-width,initial-scale=1"><title>{title}</title>'
+        '<link rel="stylesheet" href="/styles.css"><script src="/frontier-pairing.js" defer></script>'
+        f'<main class="frontier-pairing" id="frontier-connection" data-origin="{escape(origin, quote=True)}">'
+        f'<h1>{title}</h1><p>{detail}</p><p id="pairing-status" role="status" '
+        f'data-ready="{ready}" data-success="{success}" data-error="{error}">{waiting}</p>'
+        f'<button class="button primary" id="approve-pairing" type="button" disabled>{approve}</button> '
+        f'<button class="button" id="cancel-pairing" type="button">{cancel}</button></main></html>'
+    ).encode("utf-8")
 
 
 class NativeMechanism:
@@ -315,7 +345,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            setup_navigation = False
+            pairing_language = PAIR_NAVIGATION.get(self.path)
+            setup_navigation = pairing_language is not None
             if self.path.startswith("/?"):
                 try:
                     query = parse_qs(self.path[2:], keep_blank_values=True, max_num_fields=3, strict_parsing=True)
@@ -326,17 +357,27 @@ class Handler(BaseHTTPRequestHandler):
                                     and query["route"] in (["local"], ["api"], ["hybrid"])
                                     and query["lang"] in (["en"], ["fr"]))
             self.boundary(setup_navigation=setup_navigation)
+            if pairing_language:
+                bridge = self.server.pages_missions
+                if bridge is None:
+                    raise BridgeError("MISSION_DISABLED", "Launch the member companion to connect your mission.", 404)
+                return self.send_bytes(200, connection_page(pairing_language, bridge.origin), "text/html; charset=utf-8")
             if self.path.startswith(PAIR_GUIDE):
                 code = escape(self.server.consume_pairing_guide(self.path[len(PAIR_GUIDE):]))
                 page = (
                     '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" '
                     'content="width=device-width,initial-scale=1"><title>FRONTIER Ω · Pair this computer</title>'
-                    '<link rel="stylesheet" href="/styles.css"><main><h1>FRONTIER Ω</h1>'
-                    '<h2>Pair this computer <span lang="fr">· Jumelez cet ordinateur</span></h2>'
-                    '<p>Copy the one-use code, then open My Intelligence.</p>'
-                    '<p lang="fr">Copiez le code à usage unique, puis ouvrez Mon intelligence.</p>'
-                    f'<p><code>{code}</code></p><p><a href="{FRONTIER_URL}#mission-intelligence">English</a>'
-                    f' · <a lang="fr" href="{FRONTIER_URL}fr.html#mission-intelligence">Français</a></p>'
+                    '<link rel="stylesheet" href="/styles.css"><script src="/frontier-pairing.js" defer></script>'
+                    '<main class="frontier-pairing"><h1>FRONTIER Ω</h1>'
+                    '<h2>Your companion is running <span lang="fr">· Votre compagnon est prêt</span></h2>'
+                    '<p>Return to your mission and choose <strong>Connect desktop companion</strong>.</p>'
+                    '<p lang="fr">Revenez à votre mission et choisissez <strong>Jumeler le compagnon</strong>.</p>'
+                    '<details><summary>Use a pairing code <span lang="fr">· Utiliser un code de jumelage</span></summary>'
+                    f'<p><code id="manual-pairing-code">{code}</code></p>'
+                    '<p><button class="button" id="copy-pairing" type="button" hidden>Copy code <span lang="fr">· Copier le code</span></button></p>'
+                    '<p id="copy-pairing-status" role="status"></p></details>'
+                    f'<p><a href="{FRONTIER_URL}#my-frontier">English</a>'
+                    f' · <a lang="fr" href="{FRONTIER_URL}fr.html#my-frontier">Français</a></p>'
                     '<p>Keep the connector open while you run missions.</p>'
                     '<p lang="fr">Gardez le connecteur ouvert pendant vos missions.</p></main></html>'
                 )
@@ -447,6 +488,11 @@ class Handler(BaseHTTPRequestHandler):
             return self.server.native_intelligence.status()
         if action in {"discover", "verify", "disconnect"}:
             return getattr(self.server.native_intelligence, action.replace("-", "_"))(data)
+        if action == "pair-approve":
+            missions = self.server.pages_missions
+            if missions is None:
+                raise BridgeError("MISSION_DISABLED", "Launch the member companion to connect your mission.", 409)
+            return missions.approve_connection(data)
         if action in {"mission-review", "mission-authorize", "mission-revoke"}:
             missions = self.server.pages_missions
             if missions is None:

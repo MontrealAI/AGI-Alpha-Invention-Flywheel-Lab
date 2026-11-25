@@ -13,6 +13,7 @@ import platform
 import re
 import secrets
 import shutil
+import subprocess
 import threading
 from time import monotonic
 from urllib.parse import urlsplit
@@ -73,8 +74,27 @@ def _format(policy):
     return "json" if policy["json_mode"] else "prompt_json"
 
 
-def _host_info(root):
-    system = platform.system()
+def _windows_memory():
+    import ctypes
+    from ctypes.wintypes import DWORD
+
+    class MemoryStatus(ctypes.Structure):
+        _fields_ = [("length", DWORD), ("load", DWORD),
+                    ("physical_total", ctypes.c_ulonglong), ("physical_available", ctypes.c_ulonglong),
+                    ("pagefile_total", ctypes.c_ulonglong), ("pagefile_available", ctypes.c_ulonglong),
+                    ("virtual_total", ctypes.c_ulonglong), ("virtual_available", ctypes.c_ulonglong),
+                    ("extended_virtual_available", ctypes.c_ulonglong)]
+
+    status = MemoryStatus()
+    status.length = ctypes.sizeof(status)
+    if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)):
+        return status.physical_total, status.physical_available
+    return None, None
+
+
+def _host_memory(system):
+    if system == "Windows":
+        return _windows_memory()
     total, available = None, None
     try:
         size = os.sysconf("SC_PAGE_SIZE")
@@ -84,6 +104,12 @@ def _host_info(root):
         available = pages * size if pages >= 0 and size > 0 else None
     except (AttributeError, OSError, ValueError):
         pass
+    if system == "Darwin" and total is None:
+        try:
+            total = int(subprocess.check_output(["/usr/sbin/sysctl", "-n", "hw.memsize"],
+                                                stderr=subprocess.DEVNULL, timeout=2).strip()) or None
+        except (OSError, ValueError, subprocess.SubprocessError):
+            pass
     if system == "Linux":
         try:
             with Path("/proc/meminfo").open(encoding="ascii") as source:
@@ -93,12 +119,30 @@ def _host_info(root):
                         break
         except (OSError, ValueError, IndexError):
             pass
+    return total, available
+
+
+def _launcher_found(engine, system):
+    if any(shutil.which(executable) for executable in LAUNCHERS[engine]):
+        return True
+    if engine == "lm-studio":
+        suffix = ".exe" if system == "Windows" else ""
+        return any((Path.home() / ".lmstudio" / "bin" / (name + suffix)).is_file() for name in LAUNCHERS[engine])
+    if system == "Darwin" and engine == "ollama":
+        app = Path("Ollama.app/Contents/Resources/ollama")
+        return any((location / app).is_file() for location in (Path("/Applications"), Path.home() / "Applications"))
+    return False
+
+
+def _host_info(root):
+    system = platform.system()
+    total, available = _host_memory(system)
     try:
         storage = shutil.disk_usage(next(p for p in (root, *root.parents) if p.is_dir())).free
     except (OSError, StopIteration):
         storage = None
     engines = [{"engine": engine, "label": PRESETS[engine]["label"], "installation": GUIDES[engine],
-                "launcher_found": any(shutil.which(executable) for executable in LAUNCHERS[engine])}
+                "launcher_found": _launcher_found(engine, system)}
                for engine in ENGINES]
     return {"system": system, "architecture": platform.machine(), "logical_cpus": os.cpu_count(),
             "physical_memory_bytes": total, "available_memory_bytes": available,

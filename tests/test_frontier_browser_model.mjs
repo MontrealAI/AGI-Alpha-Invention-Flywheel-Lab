@@ -37,7 +37,7 @@ test('forwards the exact ambition to the selected browser runtime and releases t
       destroy() { closed = true; },
     };
   }};
-  const result = await runBrowserStarter({ambition, language: 'fr', signal: controller.signal,
+  const result = await runBrowserStarter({ambition, instruction: null, language: 'fr', signal: controller.signal,
     onProgress: value => progress.push(value), onReady() { ready = true; }}, fixture);
   assert.equal(result, 'Travail proposé.');
   assert.deepEqual(progress, [0.5]);
@@ -56,6 +56,33 @@ test('fails closed on a Chromium echo before sending the member ambition', async
     {message: 'BROWSER_MODEL_UNVERIFIED'});
   assert.equal(calls, 1);
   assert.equal(closed, true);
+});
+
+test('continues a browser mission with the original ambition, previous work and exact latest instruction', async () => {
+  let prompt;
+  const fixture = {create() { return {
+    prompt(messages) {
+      const current = messages[0].content;
+      if (current.startsWith('Test de connexion.')) return current.match(/F-[a-f0-9]{8}/u)[0];
+      prompt = current;
+      return 'Un essai comparatif avec les deux jeux de mesures.';
+    },
+    destroy() {},
+  }; }};
+  const ambition = '  Percer ce mystère scientifique.\nConserver la portée.  ';
+  const previousWork = 'Deux essais donnent des résultats divergents.';
+  const instruction = 'Utilisez les données du deuxième essai.\nExpliquez la différence.';
+  await runBrowserStarter({ambition, previousWork, instruction, language: 'fr'}, fixture);
+  assert.equal(prompt, `Ambition originale\n${ambition}\n\nTravail précédent\n${previousWork}\n\nDernière consigne\n${instruction}`);
+});
+
+test('stops before creating a session if the combined context is too large', async () => {
+  let created = false;
+  const fixture = {create() { created = true; }};
+  await assert.rejects(runBrowserStarter({ambition: 'Preserve this ambition.',
+    instruction: 'Test the new model.', previousWork: 'é'.repeat(13 * 1024), language: 'en'}, fixture),
+  {message: 'BROWSER_MODEL_CONTEXT'});
+  assert.equal(created, false);
 });
 
 test('a late browser response cannot complete a canceled draft', async () => {

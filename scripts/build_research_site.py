@@ -62,7 +62,8 @@ ASSETS += ('frontier-conclave-hero.png', 'frontier-conclave-salon.png', 'FRONTIE
 PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html')
 PAGES += ('ignition/index.html', 'ignition/demo.html')
 ASSETS += ('ignition/studio.css', 'ignition/public.js')
-PAGES += ('frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html')
+COMPANION_GUIDE = 'frontier-omega-alpha/companion-start.html'
+PAGES += ('frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html', COMPANION_GUIDE)
 DECISION_EDITION_ASSETS = tuple(
     f'frontier-omega-alpha/decision-editions/{name}'
     for name in ('index.json', 'verify.py', '45278828750.tar.zst', '45287921702.tar.zst')
@@ -80,8 +81,10 @@ ASSETS += (
     'frontier-omega-alpha/frontier-mission.mjs',
     'frontier-omega-alpha/frontier-mission-router.mjs',
     'frontier-omega-alpha/frontier-mission-ui.mjs',
+    'frontier-omega-alpha/frontier-assisted-work.mjs',
     'frontier-omega-alpha/frontier-browser-model.mjs',
     'frontier-omega-alpha/frontier-execution.mjs',
+    'frontier-omega-alpha/frontier-companion-link.mjs',
     'frontier-omega-alpha/foundry-core.mjs',
     'frontier-omega-alpha/foundry-ui.mjs',
     'frontier-omega-alpha/foundry-study.mjs',
@@ -126,6 +129,7 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/frontier-harness-executor-1.1.0.zip',
     'frontier-omega-alpha/frontier-harness-executor-1.2.0.zip',
     'frontier-omega-alpha/frontier-harness-executor-1.3.0.zip',
+    'frontier-omega-alpha/frontier-harness-executor-1.4.0.zip',
     'frontier-omega-alpha/opportunity-capture.json',
 })
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')
@@ -359,10 +363,16 @@ def validate(source, *, staged=False):
             url = urlsplit(link)
             if url.scheme:
                 frontier_source = name in POSSIBILITY_PAGES and (possibility_source(link) or link in (
-                    'https://metamask.io/download', 'https://chatgpt.com/', 'https://ollama.com/download',
+                    'https://metamask.io/download', 'https://chatgpt.com/', 'https://chatgpt.com/codex/',
+                    'https://ollama.com/download',
                     'https://lmstudio.ai/download', 'https://docs.vllm.ai/en/latest/getting_started/installation/',
                 ))
-                if not frontier_source and link not in EXTERNAL_RESEARCH_REFERENCES and (url.scheme != 'https' or url.netloc != 'github.com'):
+                companion_source = name == COMPANION_GUIDE and link in (
+                    'https://www.python.org/downloads/', PUBLIC_SITE + 'frontier-omega-alpha/#my-frontier',
+                    PUBLIC_SITE + 'frontier-omega-alpha/fr.html#my-frontier',
+                )
+                if (not frontier_source and not companion_source and link not in EXTERNAL_RESEARCH_REFERENCES
+                        and (url.scheme != 'https' or url.netloc != 'github.com')):
                     raise ValueError(f'Unexpected external link: {link}')
                 continue
             if url.netloc or url.query:

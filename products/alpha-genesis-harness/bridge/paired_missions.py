@@ -8,7 +8,7 @@ import hashlib
 import hmac
 
 from .adapters import BridgeError, strict_json
-from .universal_missions import UniversalMissionService, expires
+from .universal_missions import PROPOSE_OUTCOME, UniversalMissionService, expires
 from .workflows import DEFAULT_TOOLS, MAX_STATE, RUN, TERMINAL, _atomic, _regular, digest, encoded
 
 
@@ -138,6 +138,7 @@ class PairedMissionService(UniversalMissionService):
         return file.exists() or file.is_symlink()
 
     def stage(self, ident, body):
+        require("documents" not in body, "MISSION_DOCUMENT_LOCAL_ONLY")
         with self._stage_lock:
             records = self._stage_records()
             earlier = records.get(ident)
@@ -152,11 +153,9 @@ class PairedMissionService(UniversalMissionService):
                 old = records.get(previous)
                 if old:
                     original = old["original_ambition"]
-                    if old["status"] == "awaiting_consent" and self.stage_view(old)["status"] == "awaiting_consent":
-                        old["status"] = "superseded"
                 else:
                     original = self.get(previous)["original_ambition"]
-            self._check_ambitions(body["ambition"], original)
+            self.check_member_text(body["ambition"], original, body.get("instruction", ""))
             row = {"id": ident, "body": body, "original_ambition": original, "status": "awaiting_consent",
                    "revision": digest([ident, body, original]), "created_at": datetime.now(timezone.utc).isoformat()}
             records[ident] = row
@@ -167,9 +166,16 @@ class PairedMissionService(UniversalMissionService):
         with self._stage_lock:
             records = self._stage_records()
             row = records.get(ident)
-            if row and row["status"] == "awaiting_consent" and self.stage_view(row)["status"] == "awaiting_consent":
-                row["status"] = "superseded"
-                self._save_stages(records)
+            if not row or row["status"] != "awaiting_consent":
+                return
+            active = self.has_execution(ident)
+            if active and self.get(ident)["status"] in TERMINAL:
+                return
+            row["status"] = "superseded"
+            self._save_stages(records)
+            if active:
+                permit = self._permits.pop(ident, None)
+                self._cancel_revoked_dispatch(self.cancel(ident), permit)
 
     def cancel_stage(self, ident):
         with self._stage_lock:
@@ -198,6 +204,7 @@ class PairedMissionService(UniversalMissionService):
             return view
         return {"id": ident, "objective": body["ambition"], "original_ambition": row["original_ambition"],
                 "language": body["language"], "parent_run_id": body.get("previous"), "status": row["status"],
+                "instruction": body.get("instruction", ""),
                 "actions": 0, "model_calls": 0, "events": [], "artifacts": {}, "worker_active": False}
 
     def review_profile(self, ident, profile, *, deadline, budgets, clock, session_current):
@@ -228,19 +235,21 @@ class PairedMissionService(UniversalMissionService):
         original = {"id": prior["id"], "spec": {"mission": {"original_ambition": prior["original_ambition"]}}}
         return self._submit(self._workflow_spec(spec, prior=original), ident)
 
-    def _check_ambitions(self, ambition, original):
-        require(all(self.redact_private(value) == value for value in {ambition, original}), "MISSION_INPUT_SECRET")
+    def check_member_text(self, *values):
+        require(all(self.redact_private(value) == value for value in set(values) if value), "MISSION_INPUT_SECRET")
 
     def authorize(self, row, review):
         with self._stage_lock:
             ident, body = row["id"], row["body"]
             require(self.stage_record(ident) == row and row["status"] == "awaiting_consent", "MISSION_STAGE_CHANGED", 409)
             require(review.current(), "MISSION_PROFILE_NOT_READY", 409)
-            self._check_ambitions(body["ambition"], row["original_ambition"])
+            instruction = body.get("instruction", "")
+            self.check_member_text(body["ambition"], row["original_ambition"], instruction)
             if not self.has_execution(ident):
                 inputs = {"ambition": body["ambition"], "language": body["language"], **review.role,
                           "expires_at": review.expires_at.isoformat(), "max_turns": review.turns, "max_actions": review.actions,
-                          "max_output_tokens": review.output_tokens, "local_only": False, "tools": DEFAULT_TOOLS}
+                          "max_output_tokens": review.output_tokens, "local_only": False, "tools": DEFAULT_TOOLS,
+                          "member_workspace": True, "instruction": instruction}
                 predecessor = body.get("previous")
                 if predecessor:
                     self.revise_from_stage({"id": predecessor, "original_ambition": row["original_ambition"]}, inputs, ident)
@@ -249,13 +258,16 @@ class PairedMissionService(UniversalMissionService):
             with self._lock(ident):
                 state = self._load(ident)
                 spec = state["spec"]
+                mission = spec["mission"]
+                tools = [*DEFAULT_TOOLS, PROPOSE_OUTCOME] if mission.get("member_workspace") else DEFAULT_TOOLS
                 require(state["status"] not in TERMINAL and ident not in self._workers and ident not in self._inflight
                         and ident not in self._waiting, "MISSION_STATE", 409)
-                require(spec["objective"] == body["ambition"] and spec["mission"]["language"] == body["language"]
-                        and spec["mission"]["original_ambition"] == row["original_ambition"]
-                        and spec["mission"].get("parent_run_id") == body.get("previous") and spec["local_only"] is False
+                require(spec["objective"] == body["ambition"] and mission["language"] == body["language"]
+                        and mission["original_ambition"] == row["original_ambition"]
+                        and mission.get("parent_run_id") == body.get("previous") and spec["local_only"] is False
                         and spec["roles"] == {"builder": review.role} and spec["context"] == ""
-                        and spec["mission"]["requirements"] == {} and spec["tool_permissions"] == DEFAULT_TOOLS,
+                        and mission.get("instruction", "") == instruction and not mission.get("documents")
+                        and not mission.get("previous_work") and mission["requirements"] == {} and spec["tool_permissions"] == tools,
                         "MISSION_FRESH_SCOPE")
                 self._event(state, "remote_mission_approved", {"profile": review.id, **review.scope()})
                 self._save(state)

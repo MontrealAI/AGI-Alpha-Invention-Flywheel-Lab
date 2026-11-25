@@ -64,18 +64,23 @@ PREVIOUS_EXECUTOR_SHA256 = '58e1aac31e1cd1bfb92c53f213a16e28a7009580dd06072a029a
 OUTCOME_EXECUTOR_ZIP = 'frontier-harness-executor-1.2.0.zip'
 OUTCOME_EXECUTOR_BASELINE = '1bdac817b471157092ea4aac881916824b66734e'
 OUTCOME_EXECUTOR_SHA256 = 'bb56fe369550897904bdb875a0e3830029a84af02c18788210cd10c5832d1fb9'
-EXECUTOR_ZIP = 'frontier-harness-executor-1.3.0.zip'
+INTELLIGENCE_EXECUTOR_ZIP = 'frontier-harness-executor-1.3.0.zip'
+INTELLIGENCE_EXECUTOR_BASELINE = 'cef4d1caa38b14555613dc25d180c42798b62b78'
+INTELLIGENCE_EXECUTOR_SHA256 = '443f0288f5057f7b6f87ce875b8f009736a738c916bde06440adfce3fb4c7b1c'
+EXECUTOR_ZIP = 'frontier-harness-executor-1.4.0.zip'
 HISTORICAL_EXECUTORS = {LEGACY_EXECUTOR_ZIP: LEGACY_EXECUTOR_SHA256,
                         PREVIOUS_EXECUTOR_ZIP: PREVIOUS_EXECUTOR_SHA256,
-                        OUTCOME_EXECUTOR_ZIP: OUTCOME_EXECUTOR_SHA256}
+                        OUTCOME_EXECUTOR_ZIP: OUTCOME_EXECUTOR_SHA256,
+                        INTELLIGENCE_EXECUTOR_ZIP: INTELLIGENCE_EXECUTOR_SHA256}
 EXECUTION_PUBLICATION = MAIN / 'publication/mission-executor'
 EVIDENCE_PUBLICATION = MAIN / 'publication/evidence-bound'
 OUTCOME_PUBLICATION = MAIN / 'publication/outcome-driven'
 INTELLIGENCE_PUBLICATION = MAIN / 'publication/bring-your-own-intelligence'
 MISSION_MARKER = '<!-- UNIVERSAL_PUBLIC_RUNS -->'
 PUBLIC_MISSIONS = MAIN / 'publication/universal'
-MISSION_ASSETS = ('frontier-mission.mjs', 'frontier-mission-router.mjs', 'frontier-mission-ui.mjs',
-                  'frontier-execution.mjs', 'frontier-browser-model.mjs', GAME_THEORY_ZIP, OBSERVATION_ZIP,
+MISSION_ASSETS = ('frontier-mission.mjs', 'frontier-mission-router.mjs', 'frontier-mission-ui.mjs', 'frontier-assisted-work.mjs',
+                  'frontier-execution.mjs', 'frontier-browser-model.mjs', 'frontier-companion-link.mjs', 'companion-start.html',
+                  GAME_THEORY_ZIP, OBSERVATION_ZIP,
                   *HISTORICAL_EXECUTORS, EXECUTOR_ZIP)
 ACTIVATION_ARCHIVE_SHA256 = {
     ACTIVATION_ZIP: ACTIVATION_SHA256,
@@ -168,7 +173,8 @@ def package(path, files, name, pin, scope, version='1.0.0'):
         for filename, raw in sorted({**files, 'manifest.json': stable(manifest) + b'\n'}.items()):
             entry = ZipInfo(filename)
             entry.compress_type = ZIP_STORED
-            entry.external_attr = (0o755 if filename in {'Launch-FRONTIER.sh', 'Launch-FRONTIER.command'} else 0o644) << 16
+            launcher = filename.removeprefix('runtime/') in {'Launch-FRONTIER.sh', 'Launch-FRONTIER.command'}
+            entry.external_attr = (0o755 if launcher else 0o644) << 16
             release.writestr(entry, raw)
     return {**manifest, 'download': path.name, 'sha256': digest(path.read_bytes()), 'bytes': path.stat().st_size}
 
@@ -494,10 +500,21 @@ def build_mission_executor(destination, revision):
     sources.update({name: harness / name for name in (
         'bridge/native_intelligence.py', 'bridge/paired_missions.py', 'app/native-intelligence.js',
     )})
-    files = {name: source.read_bytes() for name, source in sources.items()}
+    intelligence = {name: pinned(INTELLIGENCE_EXECUTOR_BASELINE, source.relative_to(MAIN).as_posix())
+                    for name, source in sources.items()}
+    released = package(destination / INTELLIGENCE_EXECUTOR_ZIP, intelligence, 'frontier-harness-executor',
+                       INTELLIGENCE_EXECUTOR_BASELINE,
+                       'Private HARNESS missions with local intelligence, reviewed handoff and native mission-scoped provider authorization.',
+                       version='1.3.0')
+    if released['sha256'] != INTELLIGENCE_EXECUTOR_SHA256:
+        raise ValueError('The published HARNESS executor 1.3.0 changed')
+    del sources['START.md']
+    sources.update({name: harness / name for name in ('app/frontier-pairing.js', 'bridge/mission_documents.py')})
+    files = {'runtime/' + name: source.read_bytes() for name, source in sources.items()}
+    files['START-HERE.html'] = (ASSETS / 'companion-start.html').read_bytes()
     return package(destination / EXECUTOR_ZIP, files, 'frontier-harness-executor', revision,
-                   'Private HARNESS missions with local intelligence, reviewed handoff and native mission-scoped provider authorization.',
-                   version='1.3.0')
+                   'Private HARNESS missions with companion approval, local intelligence and mission-scoped provider authorization.',
+                   version='1.4.0')
 
 
 def build_public_missions(destination, revision):

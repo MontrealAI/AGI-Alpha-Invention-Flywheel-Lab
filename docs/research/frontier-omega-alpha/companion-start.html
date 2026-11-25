@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>FRONTIER Ω · Desktop companion</title>
+<style>
+  :root { color-scheme: dark; background: #151022; color: #f8f2fb; font: 1rem/1.55 system-ui, sans-serif; }
+  main { width: min(100% - 2rem, 42rem); margin: 10vh auto 5vh; }
+  section { padding: clamp(1.2rem, 5vw, 2.5rem); border: 1px solid #786588; border-radius: 1.15rem; background: #241932; }
+  h1 { font: 400 clamp(1.9rem, 6vw, 2.8rem)/1.15 Georgia, serif; margin: 0 0 .9rem; }
+  a { color: #f6d99c; }
+  nav { margin-bottom: 1.2rem; }
+  summary { cursor: pointer; }
+  li { margin: .55rem 0; }
+  code { overflow-wrap: anywhere; }
+  :focus-visible { outline: 2px solid #f6d99c; outline-offset: 3px; }
+  .skip-link { position: absolute; top: .5rem; left: .5rem; transform: translateY(-200%); padding: .6rem; background: #241932; }
+  .skip-link:focus { transform: none; }
+  #fr:not(:target), #skip-fr, body:has(#fr:target) :is(#en, #skip-en) { display: none; }
+  body:has(#fr:target) #skip-fr { display: block; }
+</style>
+<a class="skip-link" id="skip-en" href="#en">Skip to content</a>
+<a class="skip-link" id="skip-fr" href="#fr" lang="fr">Aller au contenu</a>
+<main>
+  <nav aria-label="Language / Langue"><a href="#en" lang="en">English</a> · <a href="#fr" lang="fr">Français</a></nav>
+  <section id="en" tabindex="-1">
+    <h1>Set up the FRONTIER Ω companion</h1>
+    <p>Extract the complete download. The companion needs <a href="https://www.python.org/downloads/">Python 3.11 or later</a>.</p>
+    <ol>
+      <li>Open the <strong>runtime</strong> folder and follow the steps for this computer below.</li>
+      <li>Keep the companion running. Return to your existing mission and choose <strong>Connect desktop companion</strong>.</li>
+      <li>Select <strong>Allow this tab</strong> in the companion window. The original mission stays open.</li>
+    </ol>
+    <details><summary>Windows</summary><p>Open <strong>Launch-FRONTIER.cmd</strong>. Keep its window open.</p></details>
+    <details><summary>macOS</summary><p>This package contains a command-line launcher for trusted development setups. For browser-local or assisted work, <a href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/#my-frontier">return to My Frontier</a>.</p></details>
+    <details><summary>Linux</summary><p>Open a terminal in <strong>runtime</strong> and run <code>sh Launch-FRONTIER.sh</code>. Keep its window open.</p></details>
+    <details><summary>Use a pairing code</summary><p>Open <strong>Use a pairing code</strong> in the companion’s browser page. Copy the code and paste it in your mission’s pairing form.</p></details>
+  </section>
+  <section id="fr" lang="fr" tabindex="-1">
+    <h1>Configurer le compagnon FRONTIER Ω</h1>
+    <p>Extrayez l’archive au complet. Le compagnon nécessite <a href="https://www.python.org/downloads/">Python 3.11 ou une version ultérieure</a>.</p>
+    <ol>
+      <li>Ouvrez le dossier <strong>runtime</strong> et suivez les étapes ci-dessous pour cet ordinateur.</li>
+      <li>Laissez le compagnon en marche. Revenez à votre mission et choisissez <strong>Jumeler le compagnon</strong>.</li>
+      <li>Sélectionnez <strong>Autoriser cet onglet</strong> dans la fenêtre du compagnon. La mission d’origine reste ouverte.</li>
+    </ol>
+    <details><summary>Windows</summary><p>Ouvrez <strong>Launch-FRONTIER.cmd</strong>. Laissez sa fenêtre ouverte.</p></details>
+    <details><summary>macOS</summary><p>Cette archive contient un lanceur en ligne de commande destiné aux environnements de développement de confiance. Pour travailler dans le navigateur ou en mode assisté, <a href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/fr.html#my-frontier">revenez à Mon Frontier</a>.</p></details>
+    <details><summary>Linux</summary><p>Ouvrez un terminal dans <strong>runtime</strong> et exécutez <code>sh Launch-FRONTIER.sh</code>. Laissez sa fenêtre ouverte.</p></details>
+    <details><summary>Utiliser un code de jumelage</summary><p>Ouvrez <strong>Utiliser un code de jumelage</strong> dans la page du compagnon. Copiez le code et collez-le dans le formulaire de jumelage de votre mission.</p></details>
+  </section>
+</main>
+</html>

@@ -55,9 +55,11 @@ function setupShell() {
     member.toggleAttribute('data-public-view', !view);
     for (const section of views) section.hidden = section !== view;
     for (const link of destinations) {
-      if (view && link.hash === `#${view.id}`) link.setAttribute('aria-current', 'page');
+      const destination = view?.id === 'mv-earlier' ? 'my-intelligence' : view?.id;
+      if (destination && link.hash === `#${destination}`) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     }
+    window.dispatchEvent(new CustomEvent('frontier:member-view', {detail:view?.id}));
     if (remember && location.hash !== `#${target.id}`) history.pushState(null, '', `#${target.id}`);
     if (!focus) return;
     const label = view && id(view.getAttribute('aria-labelledby'));

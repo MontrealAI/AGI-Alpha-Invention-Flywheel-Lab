@@ -181,7 +181,7 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 --filter=blob:none origin \
             c0a14ba028092db648516718f9127ae8166df63e 297a51c25c48031e1e6f964835f4dfae3ddb8023 \
-            1bdac817b471157092ea4aac881916824b66734e
+            1bdac817b471157092ea4aac881916824b66734e cef4d1caa38b14555613dc25d180c42798b62b78
           python -B - <<'PY'
           import json, os, sys
           from pathlib import Path

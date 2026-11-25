@@ -21,8 +21,8 @@
   const strings = {
     fr: {
       title: 'Connectez votre fournisseur d’IA', intro: 'Choisissez un compte, testez un modèle et définissez les limites de cette connexion privée.',
-      mission: 'Examinez votre mission', original: 'Ambition d’origine', chooseProfile: 'Connexion vérifiée',
-      review: 'Examiner les données et les limites', scopeData: 'Le fournisseur reçoit le texte de la mission et le contexte généré durant cette exécution. Vos fichiers privés existants et les autres projets restent sur cet ordinateur.',
+      mission: 'Examinez votre mission', original: 'Ambition d’origine', instruction: 'Instruction de suivi', chooseProfile: 'Connexion vérifiée',
+      review: 'Examiner les données et les limites', scopeData: 'Le fournisseur reçoit l’ambition actuelle et celle d’origine, l’instruction affichée ci-dessus et le contexte créé durant cette exécution. Les documents locaux et les résultats des exécutions précédentes restent sur cet appareil.',
       missionConsent: 'J’autorise ce fournisseur pour cette révision de la mission et selon les limites ci-dessus.', approve: 'Autoriser cette mission',
       approved: 'Mission autorisée', approvedDetail: 'Revenez à Mon univers FRONTIER pour poursuivre la même mission avec cette connexion.',
       return: 'Retour à Mon univers FRONTIER', profiles: 'Vos connexions sur cet ordinateur', newProfile: 'Connecter un fournisseur',
@@ -273,6 +273,8 @@
     $('native-ambition').textContent = mission.ambition;
     $('native-original-panel').hidden = mission.ambition === mission.original_ambition || !mission.original_ambition;
     $('native-original').textContent = mission.original_ambition || '';
+    $('native-instruction-panel').hidden = !mission.instruction;
+    $('native-instruction').textContent = mission.instruction || '';
     $('native-review-revision').textContent = `${t('revision')} ${mission.revision}`;
     const profiles = status?.profiles?.filter(profile => profile.ready) || [];
     const select = $('native-review-profile');

@@ -165,7 +165,7 @@ function fakeWallet() {
 
 async function foundryJourney(page, language, width) {
   const french = language === 'fr';
-  const nav = page.locator('.mf-intelligence-link');
+  const nav = page.locator('.mf-destinations a[href="#my-intelligence"]');
   await nav.press('Enter');
   assert.equal(await nav.getAttribute('aria-current'), 'page');
   assert.equal(await page.locator(':focus').getAttribute('id'), 'my-intelligence-title');
@@ -478,11 +478,21 @@ async function foundryJourney(page, language, width) {
 }
 
 async function destination(page, name) {
-  const nav = page.locator(`.mf-destinations a[href="#${name}"]`);
+  const destinationId = name === 'mv-earlier' ? 'my-intelligence' : name;
+  const nav = page.locator(`.mf-destinations a[href="#${destinationId}"]`);
   await nav.press('Enter');
+  if (name === 'mv-earlier') await page.locator('#my-intelligence a[href="#mv-earlier"]').press('Enter');
   assert.equal(await nav.getAttribute('aria-current'), 'page');
   assert.equal(await page.locator('[data-member-view]:visible').count(), 1);
   assert.equal(await page.locator(`#${name}`).isVisible(), true);
+}
+
+async function ambitionInput(page) {
+  if (!await page.locator('#my-frontier').isVisible()) await destination(page, 'my-frontier');
+  const input = page.locator('#goal-text');
+  if (!await input.isVisible()) await page.locator('#mission-revise').click();
+  await input.waitFor({state:'visible'});
+  return input;
 }
 
 async function memberWorkbench(page, language) {
@@ -555,9 +565,9 @@ async function memberWorkbench(page, language) {
 }
 
 async function matchGoal(page, goal, record, action) {
-  if (!await page.locator('#goal-text').isVisible()) await destination(page, 'my-frontier');
-  await page.locator('#goal-text').fill(goal);
-  await page.locator('#goal-text').press('Enter');
+  const input = await ambitionInput(page);
+  await input.fill(goal);
+  await input.press('Enter');
   const result = page.locator('#goal-result');
   assert.equal(await result.isVisible(), Boolean(record));
   if (record) assert.equal(await result.getAttribute('data-record'), record);
@@ -569,43 +579,70 @@ function content(name, item) {
 }
 
 async function ownerConnectionJourney(page, language, width) {
-  const ambition = 'Build a frontier capability.';
+  const ambition = 'Capture the exponential of AI progrees.';
   await page.locator('#goal-text').fill(ambition);
   await page.locator('#goal-submit').click();
-  await page.locator('#mission-configure').press('Enter');
-  const choices = page.locator('.intelligence-grid');
-  assert.deepEqual(await choices.locator('button:is([data-frontier-assisted],[data-frontier-connection])').allTextContents(), language === 'fr'
-    ? ['Continuer avec ChatGPT · mode assisté','Détecter mon intelligence locale','Connecter mon API en toute sécurité','Utiliser la meilleure intelligence disponible']
-    : ['Continue with ChatGPT · assisted','Find my local intelligence','Connect my API securely','Use the best available intelligence']);
-  assert.equal(await choices.locator('a').count(), 0);
+  assert.equal(await page.locator('#goal-text').isVisible(), false);
+  assert.equal(await page.locator('#my-frontier').isVisible(), true);
+  assert.equal(await page.locator('#goal-result').isVisible(), false);
+  assert.equal(await page.locator('#mission-published').isVisible(), false);
+  const choices = page.locator('#frontier-mission-panel .intelligence-grid');
+  await choices.waitFor({state:'visible'});
+  assert.equal(await choices.locator('[data-frontier-assisted]').count(), 1);
+  assert.deepEqual(await choices.locator('[data-frontier-connection]').evaluateAll(items => items.map(item => item.dataset.frontierConnection)), ['local','api']);
   for (const route of ['local','api','hybrid']) {
-    await choices.locator(`[data-frontier-connection="${route}"]`).click();
-    assert.equal(await page.locator('#execution-code-form').isVisible(), true);
-    assert.equal(await page.locator(':focus').getAttribute('id'), 'execution-code');
+    const choice = page.locator(`#mission-intelligence [data-frontier-connection="${route}"]`);
+    if (!await choice.isVisible()) await choice.locator('xpath=ancestor::details[1]').locator(':scope > summary').click();
+    await choice.click();
+    assert.equal(await page.locator('#my-frontier').isVisible(), true);
+    assert.equal(await page.locator('#my-intelligence').isVisible(), false);
     assert.equal(await page.locator('#intelligence-open-native').getAttribute('href'), null);
     assert.equal(await page.locator('#intelligence-check-native').isVisible(), false);
-    assert.match(await page.locator('#intelligence-companion-download').getAttribute('href'), /frontier-harness-executor-1\.3\.0\.zip/u);
+    assert.match(await page.locator('#intelligence-companion-download').getAttribute('href'), /frontier-harness-executor-1\.4\.0\.zip/u);
     assert.equal(await page.locator('#mission-ambition').textContent(), ambition);
   }
   await capture(page, language, width, 'choose-intelligence');
   await choices.locator('[data-frontier-assisted]').click();
   const prompt = page.locator('#mission-prompt');
   await prompt.waitFor({state:'visible'});
-  assert.match(await prompt.inputValue(), /Build a frontier capability\./u);
+  const brief = await prompt.inputValue();
+  assert.ok(brief.includes(ambition));
+  assert.ok(brief.length < 1600);
+  assert.doesNotMatch(brief, /frontier\/mission-route-result-v1|requestId/u);
   assert.equal(await page.locator('#mission-share').isChecked(), false);
   assert.equal(await page.locator('#mission-assistant').isVisible(), false);
   await page.locator('#mission-share').check();
   assert.equal(await page.locator('#mission-assistant').getAttribute('href'), 'https://chatgpt.com/');
   assert.equal(await page.locator('#mission-assistant').getAttribute('rel'), 'noopener noreferrer');
-  const work = 'Review this concrete evidence <img src=x onerror=alert(1)> with a held comparator.\nΔ → α';
-  await page.locator('#mission-reply').fill(work);
+  const work = '## Candidate work\\n\\nCheck&#x20;the scope with a held comparator.\\n\\n'
+    + '| Evidence | Decision |\\n| --- | --- |\\n| Δ &#x2192; α | &lt;img src=x onerror=alert(1)&gt; |';
+  const copied = '```json\n{"schema":"frontier/mission-route-result-v1","work":'
+    + JSON.stringify(work) + ',"route":}\n```';
+  await page.locator('#mission-reply').fill(copied);
   await page.locator('#mission-import-reply').click();
+  await page.locator('#mission-keep-unverified').waitFor({state:'visible'});
+  assert.equal(await page.locator('#frontier-mission-panel').getAttribute('data-state'), 'waiting');
+  await page.locator('#mission-keep-unverified').click();
   await page.waitForFunction(() => document.getElementById('frontier-mission-panel').dataset.state === 'review');
-  assert.equal(await page.locator('#mission-work').textContent(), work);
+  assert.equal(await page.locator('#frontier-mission-panel').getAttribute('data-route'), 'continuing');
+  assert.equal(await page.locator('#mission-work h5').textContent(), 'Candidate work');
+  assert.equal(await page.locator('#mission-work tbody td').first().textContent(), 'Δ → α');
+  assert.match(await page.locator('#mission-work').textContent(), /Check the scope/u);
   assert.equal(await page.locator('#mission-work img').count(), 0);
   assert.match(await page.locator('#mission-status').innerText(), /Verification pending|Vérification à venir/u);
-  await page.locator('#mission-prepare').click();
+  const originalDownload = page.waitForEvent('download');
+  await page.locator('#mission-work-download').click();
+  assert.equal(await readFile(await (await originalDownload).path(), 'utf8'), copied);
+  await page.locator('#mission-continue-assisted').click();
   await prompt.waitFor({state:'visible'});
+  assert.ok((await prompt.inputValue()).includes('Check the scope'));
+  assert.equal(await page.locator('#mission-share').isChecked(), false);
+  await page.locator('#mission-follow-up').fill('Use the comparator output as the next piece of evidence.');
+  await page.locator('#mission-follow-up-form button').click();
+  assert.equal(await page.locator('#mission-dialogue-list li').last().textContent(), 'Use the comparator output as the next piece of evidence.');
+  if (!await prompt.isVisible()) await page.locator('#mission-prepare').click();
+  await prompt.waitFor({state:'visible'});
+  assert.ok((await prompt.inputValue()).includes('Use the comparator output as the next piece of evidence.'));
   const fileText = 'A result to verify\n<script>throw new Error("inert")</script>\n';
   await page.locator('#mission-import-artifact').setInputFiles({name:'working-note.md',mimeType:'text/markdown', buffer:Buffer.from(fileText)});
   const artifact = page.locator('#mission-returned-files li');
@@ -613,14 +650,14 @@ async function ownerConnectionJourney(page, language, width) {
   assert.equal(await artifact.locator('summary').textContent(), 'working-note.md');
   assert.equal(await artifact.locator('pre').textContent(), fileText);
   assert.equal(await artifact.locator('script').count(), 0);
-  await page.locator('#mission-configure').click();
+  await destination(page, 'mv-results');
+  if (!await page.locator('#mission-keeper').evaluate(item => item.open)) await page.locator('#mission-keeper summary').click();
   const downloading = page.waitForEvent('download');
-  await page.locator('#mission-checkpoint').click();
+  await page.locator('#mission-export').click();
   const checkpoint = JSON.parse(await readFile(await (await downloading).path()));
   assert.equal(checkpoint.mission.originalAmbition, ambition);
-  assert.equal(checkpoint.mission.reports[0].work, work);
+  assert.equal(checkpoint.mission.reports[0].artifacts[0].content, copied);
   assert.equal(checkpoint.mission.reports[1].artifacts[0].sha256, createHash('sha256').update(fileText).digest('hex'));
-  await page.locator('#mission-restore').click();
   await page.locator('#mission-import').setInputFiles(content('frontier-mission.json', checkpoint));
   await artifact.waitFor({state:'visible'});
   assert.equal(await artifact.locator('pre').textContent(), fileText);
@@ -663,11 +700,14 @@ async function pairedRevisionJourney(browser, language) {
     const original = 'Build frontier AI LLM for Game Theory.';
     const revised = 'Evaluate a strategy using a public example.\nÉtablir un cas de vérification indépendant.';
     for (const ambition of [original, revised]) {
-      await page.locator('#goal-text').fill(ambition);
+      await (await ambitionInput(page)).fill(ambition);
       await page.locator('#goal-submit').click();
     }
     await page.locator('#mission-configure').click();
     await page.locator('[data-frontier-connection="api"]').click();
+    if (!await page.locator('#execution-manual-code').evaluate(node => node.open)) {
+      await page.locator('#execution-manual-code summary').click();
+    }
     await page.locator('#execution-code').fill('P'.repeat(43));
     await page.locator('#execution-code-form button').click();
     const link = page.locator('#intelligence-open-native');
@@ -688,6 +728,53 @@ async function pairedRevisionJourney(browser, language) {
     assert.equal(await page.locator('#mission-original').textContent(), original);
     assert.deepEqual((await observed()).map(row => row.action), ['pair','prepare-intelligence','cancel']);
     checks.push({kind:'paired-browser-fixture',language,exactOriginalAndRevision:true,scopedNativeLink:true,reviewCanceled:true});
+  } finally { await page.close(); }
+}
+
+async function revokedSourceRetry(browser, language) {
+  const page = await browser.newPage({viewport:dimensions(1440)});
+  try {
+    await page.addInitScript(fakeWallet);
+    await page.addInitScript(() => {
+      const fetchPublic = window.fetch.bind(window);
+      window.rehearsedSourceSubmissions = [];
+      window.fetch = async (url, options) => {
+        const endpoint = 'http://127.0.0.1:38463/api/frontier-missions/';
+        if (!String(url).startsWith(endpoint)) return fetchPublic(url, options);
+        const action = url.slice(endpoint.length);
+        const respond = value => new Response(JSON.stringify(value));
+        if (action === 'pair') return respond({session:'S'.repeat(43),command_scope:'0'.repeat(24),
+          scope:{model:'local-fixture'},intelligence:{selection:{mode:'local',ready:true,model_label:'Local fixture'}},
+          expires_at:'2080-01-01T00:00:00Z'});
+        if (action === 'submit') {
+          window.rehearsedSourceSubmissions.push(JSON.parse(options.body));
+          throw new TypeError('Isolated connector response loss');
+        }
+        if (action === 'release') return respond({released:true});
+        throw Error(`Unexpected local fixture operation ${action}`);
+      };
+    });
+    await page.goto(base + (language === 'fr' ? 'fr.html' : ''));
+    await page.locator('[data-connect="token"]').click();
+    await page.locator('#mission-files summary').click();
+    await page.locator('#mission-documents').setInputFiles({name:'revocable.txt',mimeType:'text/plain',buffer:Buffer.from('Private synthetic example')});
+    await page.locator('#mission-document-list li').waitFor({state:'visible'});
+    await page.locator('#mission-document-consent').check();
+    await page.locator('#goal-text').fill('Compare one declared private source with its local measurement.');
+    await page.locator('#goal-submit').click();
+    await page.locator('#mission-inline-intelligence [data-frontier-connection="local"]').click();
+    await page.locator('#execution-manual-code summary').click();
+    await page.locator('#execution-code').fill('P'.repeat(43));
+    await page.locator('#execution-code-form button').click();
+    const retry = page.locator('#execution-retry');
+    await retry.waitFor({state:'visible'});
+    assert.deepEqual(await page.evaluate(() => window.rehearsedSourceSubmissions.map(row=>row.documents)),
+      [[{name:'revocable.txt',text:'Private synthetic example'}]]);
+    await page.locator('#mission-documents-remove').click();
+    await retry.click();
+    assert.match(await page.locator('#execution-status').textContent(), /sources (changed|ont changé)/u);
+    assert.equal(await page.evaluate(() => window.rehearsedSourceSubmissions.length), 1);
+    checks.push({kind:'private-source-retry-fixture',language,stoppedAfterRevocation:true,transmissions:1});
   } finally { await page.close(); }
 }
 
@@ -712,6 +799,13 @@ async function universalMission(page, language, width) {
     const prompt = page.locator('#mission-prompt');
     await prompt.waitFor({state:'visible'});
     assert.match(await prompt.inputValue(), /Build Frontier AI for Game Theory\./u);
+    assert.doesNotMatch(await prompt.inputValue(), /frontier\/mission-route-result-v1|requestId/u);
+    const technical = page.locator('#mission-technical');
+    const revealTechnical = async () => {
+      if (!await technical.isVisible()) await technical.locator('xpath=ancestor::details[1]').locator(':scope > summary').click();
+      await technical.check();
+    };
+    await revealTechnical();
     assert.match(await prompt.inputValue(), language === 'fr' ? /Écrivez en français/u : /Write text in English/u);
     assert.match(await prompt.inputValue(), language === 'fr' ? /Identifiant de l’exécution en cours/u : /Current mission run reference/u);
     assert.match(await prompt.inputValue(), /NOAA GFS(?: historical)? f024/u);
@@ -731,11 +825,14 @@ async function universalMission(page, language, width) {
     assert.equal(saved.mission.request.requestId, requestId);
     await page.locator('#mission-import').setInputFiles(content('frontier-mission.json', saved));
     await panel.waitFor({state:'visible'});
+    await revealTechnical();
     assert.match(await prompt.inputValue(), new RegExp(requestId));
     assert.equal(await page.locator('#mission-share').isChecked(), false);
     await page.locator('#mission-reply').fill(JSON.stringify({...reply,requestId:'0'.repeat(64)}));
     await page.locator('#mission-import-reply').click();
-    await page.waitForFunction(lang => document.getElementById('mission-status').textContent.includes(lang === 'fr' ? 'ne correspond' : 'does not match'), language);
+    await page.waitForFunction(lang => document.getElementById('mission-handoff-status').textContent.includes(lang === 'fr' ? 'ne correspond' : 'does not match'), language);
+    assert.equal(await panel.getAttribute('data-state'), 'waiting');
+    assert.equal(await page.locator('#mission-keep-unverified').isVisible(), true);
     await page.locator('#mission-reply').fill(JSON.stringify(reply));
     await page.locator('#mission-import-reply').click();
     await page.waitForFunction(() => document.getElementById('frontier-mission-panel').dataset.state === 'review');
@@ -746,7 +843,7 @@ async function universalMission(page, language, width) {
     assert.deepEqual(initialRequests, []);
     await capture(page, language, width, 'universal-mission');
     const stranger = (language === 'fr' ? 'Construire une preuve de conformité temporelle.\n' : 'Create an interoperable time-series certificate.\n') + 'Δ → α\n'.repeat(105);
-    await page.locator('#goal-text').fill(stranger);
+    await (await ambitionInput(page)).fill(stranger);
     await page.locator('#goal-submit').click();
     assert.equal(await panel.locator('#mission-ambition').textContent(), stranger);
     assert.equal(await panel.locator('#mission-original').textContent(), original);
@@ -758,6 +855,46 @@ async function universalMission(page, language, width) {
     await page.locator('#mission-new').click();
     assert.equal(await panel.isVisible(), false);
     assert.equal(await page.locator('#goal-text').inputValue(), '');
+  } finally { page.off('request', observe); }
+}
+
+async function missionSourceRecovery(page, language) {
+  const contacts = [];
+  const observe = request => {
+    if (request.method() === 'POST') contacts.push(new URL(request.url()).origin);
+  };
+  page.on('request', observe);
+  try {
+    const ambition = language === 'fr' ? 'Évaluer des relevés de débit à chaque traversée.' : 'Evaluate flow records across repeated traversals.';
+    const source = {name:'flow-example.csv', text:'time,flow\n1,39\n2,41\n'};
+    await page.locator('#mission-files summary').click();
+    await page.locator('#mission-documents').setInputFiles({name:source.name, mimeType:'text/csv', buffer:Buffer.from(source.text)});
+    await page.locator('#mission-document-list li').waitFor({state:'visible'});
+    await page.locator('#goal-text').fill(ambition);
+    await page.locator('#goal-submit').click();
+    assert.equal(await page.locator('#mission-document-consent').isChecked(), false);
+    assert.equal(await page.locator('#mission-inline-files #mission-document-list li').textContent(), source.name);
+    await page.locator('#mission-prepare').click();
+    assert.equal(await page.locator('#mission-prompt').isVisible(), false);
+    assert.equal(await page.locator('#mission-assistant').isVisible(), false);
+    await page.locator('#mission-inline-intelligence [data-frontier-connection="api"]').click();
+    assert.equal(await page.locator('#intelligence-open-native').isVisible(), false);
+    await page.locator('#mission-document-consent').check();
+    await destination(page, 'mv-results');
+    if (!await page.locator('#mission-keeper').evaluate(item => item.open)) await page.locator('#mission-keeper summary').click();
+    const down = page.waitForEvent('download');
+    await page.locator('#mission-export').click();
+    const saved = JSON.parse(await readFile(await (await down).path()));
+    assert.equal(saved.mission.originalAmbition, ambition);
+    assert.deepEqual(saved.mission.documents, [source]);
+    await page.locator('#mission-import').setInputFiles(content('private-mission.json', saved));
+    await page.locator('#mission-ambition').waitFor({state:'visible'});
+    const files = page.locator('#mission-files');
+    if (!await files.evaluate(node => node.open)) await files.locator(':scope > summary').click();
+    assert.equal(await page.locator('#mission-document-list li').textContent(), source.name);
+    assert.equal(await page.locator('#mission-document-consent').isChecked(), false);
+    assert.deepEqual(contacts, []);
+    await page.locator('#mission-new').click();
   } finally { page.off('request', observe); }
 }
 
@@ -887,6 +1024,7 @@ async function guidedJourney(page, language, width, started) {
 
 async function rejectBrokenRun(page, language) {
   const fr = language === 'fr';
+  if (await page.locator('#frontier-mission-panel').isVisible()) await page.locator('#mission-new').click();
   // Fail only the final result-digest call inside this isolated browser fixture.
   await page.evaluate(() => {
     const original = crypto.subtle.digest.bind(crypto.subtle);
@@ -964,6 +1102,7 @@ async function walletPaths(browser, language, width) {
     await capture(page, language, width, 'arrival-token');
     await ownerConnectionJourney(page, language, width);
     await universalMission(page, language, width);
+    await missionSourceRecovery(page, language);
     const {scriptedMs, saved} = await guidedJourney(page, language, width, started);
     await rejectBrokenRun(page, language);
     await destination(page, 'mv-earlier');
@@ -1097,6 +1236,7 @@ async function walletPaths(browser, language, width) {
       factoryEvidenceAndDownloads:true,
       opportunityCapture:true,
       universalMission:true, ownerConnectionJourney:true, assistedMissionFixture:true, ordinaryAssistedWork:true,
+      verifiedOriginalAssistedDownload:true, conversationalFollowUp:true, privateDocumentRecovery:true,
       inertAssistedTextArtifact:true, missionRecovery:true,
       offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
@@ -1114,6 +1254,7 @@ async function walletPaths(browser, language, width) {
         await walletPaths(browser, language, width);
       }
       await pairedRevisionJourney(browser, language);
+      await revokedSourceRetry(browser, language);
     }
     process.stdout.write(JSON.stringify(checks, null, 2) + '\n');
   } finally {
