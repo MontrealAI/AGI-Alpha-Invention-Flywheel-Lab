@@ -1,0 +1,109 @@
+{
+  "startedAt": "2026-11-25T02:14:33.658Z",
+  "recordedAt": "2026-11-25T02:16:32.605Z",
+  "url": "http://127.0.0.1:9011/frontier-omega-alpha/",
+  "website": {
+    "files": {
+      "(index)": {
+        "sha256": "664b273442cf6862a44fad79993e8a6700d4f9b3ec5a1af7c04c7a7f63b1d289",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/"
+      },
+      "fr.html": {
+        "sha256": "b4353e6bd561f6df4c98c87dc3a829c64208e4c9f2d6dffbf04b2e19eefedcb5",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/fr.html"
+      },
+      "frontier-mission.mjs": {
+        "sha256": "ea6b3a0ec9547eb7d8d0f693fea0fa313aeb7a429255ae9ead515c0ca07a605a",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission.mjs"
+      },
+      "frontier-mission-ui.mjs": {
+        "sha256": "4169a7134873f70930d25211fb27e4778a683801b807d52a0296a9aff4883ad2",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission-ui.mjs"
+      },
+      "frontier-mission-router.mjs": {
+        "sha256": "c06071bc523ab8e710f76cee4f19bab7e5cf68e38b4b05f3ddca47265efd17ca",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission-router.mjs"
+      }
+    },
+    "sourceCommit": "4933586f2ef3c210d0be0536a5c2b684f5a2c05b",
+    "workflowRun": "424244",
+    "ledgerSha256": "68c7937d959f7eb10f1958db4d1473510f586f19c855647a5824ddfd4f6d3f17",
+    "artifactSha256": "5cf63237c4e41aece421d0330286e0521b572f4406e69915c01d66b104b11fcb"
+  },
+  "heldSha256": "1c5ac610775459bc23d57446373abdf3962decb0886254d76c3fb9ab8ed29116",
+  "scopeHeldSha256": null,
+  "syntheticWallet": true,
+  "enrolledWalletTested": false,
+  "configuredHttpsProxy": false,
+  "isolatedChromiumTrust": false,
+  "results": [
+    {
+      "id": "U02",
+      "language": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "ambitionSha256": "24e48b2365fe1558c41f035f7c7c156d497fc045a25ad38382f2ff4d91be4960",
+      "bytes": 366,
+      "intake": {
+        "activated": true,
+        "next": "Utilisez un outil disponible, connectez un modèle ou ouvrez une mission assistée."
+      },
+      "published": false,
+      "handoff": {
+        "prepared": true,
+        "exactAmbition": true,
+        "shareConfirmation": true,
+        "requestId": "e2c4a8888d35256ae3fa12dec76a9aad99fa7cb419471a5addca585dcba3da49",
+        "atlasLeadSupplied": true,
+        "promptSha256": "7bf57c8241ad63f4d67f6f01ed1bd3e02c2367dee85d6afddd48b73313d92253",
+        "capabilityIds": [
+          "endpoint-screen",
+          "noaa-archive",
+          "harness",
+          "scientific-evidence",
+          "opportunity-capture",
+          "successor-study",
+          "game-theory-verified-strategic-allocation"
+        ]
+      },
+      "local": {
+        "wallMs": 117625,
+        "state": "review",
+        "route": "capability",
+        "status": "Résultat du modèle local · qwen3-4b-instruct-2507-q4_k_m · Vérification à venir",
+        "objective": "Extraire un point de prévision GFS NOAA archivée pour le 29 novembre 2024 à 00 UTC, validé pour le centre de Montréal à midi UTC, en utilisant la capacité d'archive NOAA avec précision spatiale et temporelle.",
+        "next": "Exécuter l'extraktion du point de prévision GFS NOAA pour le 29 novembre 2024 à 00 UTC, validé à 12 UTC, au centre de Montréal (45.5°N, 73.6°W) via la capacité 'noaa-archive'.",
+        "work": "Utilisation de la capacité 'noaa-archive' pour extraire la température de l'air à 2 mètres en kelvin pour la grille de 0,25° correspondant au centre de Montréal le 29 novembre 2024 à 12 UTC, à partir de la prévision GFS f024 initialement validée à 00 UTC. La validité temporelle (24h entre initialisation et validité) est respectée.",
+        "capabilityLinks": [
+          {
+            "title": "Point d’archive NOAA",
+            "href": "http://127.0.0.1:9011/frontier-omega-alpha/fr.html#tool-archive"
+          }
+        ],
+        "requestOrigin": "http://127.0.0.1:9011",
+        "bearerOrCookies": false,
+        "observationMs": 360000,
+        "observedTimeout": false,
+        "transport": [
+          {
+            "url": "http://127.0.0.1:38461/v1/chat/completions",
+            "method": "POST",
+            "bodyBytes": 7162,
+            "privateAmbitionInBody": true
+          }
+        ],
+        "requestBodySha256": "e76e90205efdee47af82f7d45440abd94201203f349f78daaabc080a54806a81",
+        "responseHttpStatus": 200,
+        "responseBodySha256": "31eebf8043be8782ef54dc7b73cc845f52b00f5c0db933b40eb1ff32f7dd6027"
+      },
+      "pageErrors": []
+    }
+  ]
+}

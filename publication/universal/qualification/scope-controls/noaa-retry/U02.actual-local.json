@@ -1,0 +1,30 @@
+{
+  "wallMs": 117625,
+  "state": "review",
+  "route": "capability",
+  "status": "Résultat du modèle local · qwen3-4b-instruct-2507-q4_k_m · Vérification à venir",
+  "objective": "Extraire un point de prévision GFS NOAA archivée pour le 29 novembre 2024 à 00 UTC, validé pour le centre de Montréal à midi UTC, en utilisant la capacité d'archive NOAA avec précision spatiale et temporelle.",
+  "next": "Exécuter l'extraktion du point de prévision GFS NOAA pour le 29 novembre 2024 à 00 UTC, validé à 12 UTC, au centre de Montréal (45.5°N, 73.6°W) via la capacité 'noaa-archive'.",
+  "work": "Utilisation de la capacité 'noaa-archive' pour extraire la température de l'air à 2 mètres en kelvin pour la grille de 0,25° correspondant au centre de Montréal le 29 novembre 2024 à 12 UTC, à partir de la prévision GFS f024 initialement validée à 00 UTC. La validité temporelle (24h entre initialisation et validité) est respectée.",
+  "capabilityLinks": [
+    {
+      "title": "Point d’archive NOAA",
+      "href": "http://127.0.0.1:9011/frontier-omega-alpha/fr.html#tool-archive"
+    }
+  ],
+  "requestOrigin": "http://127.0.0.1:9011",
+  "bearerOrCookies": false,
+  "observationMs": 360000,
+  "observedTimeout": false,
+  "transport": [
+    {
+      "url": "http://127.0.0.1:38461/v1/chat/completions",
+      "method": "POST",
+      "bodyBytes": 7162,
+      "privateAmbitionInBody": true
+    }
+  ],
+  "requestBodySha256": "e76e90205efdee47af82f7d45440abd94201203f349f78daaabc080a54806a81",
+  "responseHttpStatus": 200,
+  "responseBodySha256": "31eebf8043be8782ef54dc7b73cc845f52b00f5c0db933b40eb1ff32f7dd6027"
+}
