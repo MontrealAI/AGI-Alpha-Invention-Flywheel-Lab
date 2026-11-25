@@ -45,7 +45,7 @@ def solve(d, reduced):
         col=len(costs); costs.append(q*k['artificial_arc_cost']); variables.append((i,-1))
         add(i*n+index[o],col,1); add(i*n+index[t],col,-1)
     A=coo_matrix((vals,(rows,cols)),shape=(len(lo),len(costs))).tocsc()
-    result=milp(np.asarray(costs,dtype=float),integrality=np.ones(len(costs)),bounds=Bounds(0,1),constraints=LinearConstraint(A,lo,hi),options={'time_limit':45.0,'mip_rel_gap':0.0})
+    result=milp(np.asarray(costs,dtype=float),integrality=np.ones(len(costs)),bounds=Bounds(0,1),constraints=LinearConstraint(A,lo,hi),options={'time_limit':45.0,'mip_rel_gap':0.0,'threads':1})
     if result.x is None:
         return {'status':int(result.status),'message':str(result.message),'variables':len(costs),'solution':None}
     assert np.max(np.abs(result.x-np.round(result.x)))<1e-5

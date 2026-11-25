@@ -1,0 +1,50 @@
+name: Public OR admission 282
+on:
+  push:
+    branches: [research/public-or-admission282-20261125]
+    paths: ['.github/workflows/public-or-admission282.yml']
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - name: Retrieve six registered public inputs without credentials
+        run: |
+          mkdir -p "$RUNNER_TEMP/or282-input" "$RUNNER_TEMP/or282-acquisition"
+          base=https://huggingface.co/datasets/frontieror/FrontierOR/resolve/805df12577ba64fae37a472dd5ce24393b7df5e0/tasks/barnhart2000/instance
+          for n in tiny_instance.json large_instance_{1..5}.json; do
+            if curl --fail --silent --show-error --location --max-time 90 --max-filesize 2000000 "$base/$n" -o "$RUNNER_TEMP/or282-input/$n.part"; then
+              mv "$RUNNER_TEMP/or282-input/$n.part" "$RUNNER_TEMP/or282-input/$n"
+              sha256sum "$RUNNER_TEMP/or282-input/$n" >> "$RUNNER_TEMP/or282-acquisition/INPUTS.sha256"
+            else
+              echo "$n acquisition failed" >> "$RUNNER_TEMP/or282-acquisition/FAILURES.txt"
+            fi
+          done
+      - name: Execute frozen comparison
+        run: python research/public_or_admission282/experiment.py "$RUNNER_TEMP/or282-input" "$RUNNER_TEMP/or282-results"
+      - name: Preserve all results including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: or282-evidence
+          path: |
+            ${{ runner.temp }}/or282-results/
+            ${{ runner.temp }}/or282-acquisition/
+          if-no-files-found: error
+          retention-days: 7
