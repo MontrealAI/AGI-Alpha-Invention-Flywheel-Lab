@@ -1,0 +1,60 @@
+{
+  "source_commit": "b485dc5f2df521072424c5e30e174fb5db62061e",
+  "source_blob": "f256056979db6630839257297733bb52a0b1c1ce",
+  "input_commit": "3858992ca41bf92082e6d6522ddf0bebd14e838b",
+  "input_blob": "bd82505791c723c5b11486ef457fb338529912c0",
+  "input_characters": 575468,
+  "execution": "exact fetched JavaScript analyze function in included V8 execution; connector blob identity checked, standalone Node CLI not executed",
+  "compute_wall_ms": 10131,
+  "batch_wall_ms": 10905,
+  "cpu_seconds": null,
+  "actual_billing": null,
+  "result": {
+    "rows": 8152,
+    "qos": {
+      "LS": 4647,
+      "Burstable": 100,
+      "BE": 3398,
+      "Guaranteed": 7
+    },
+    "phase": {
+      "Running": 5193,
+      "Succeeded": 192,
+      "Failed": 1870,
+      "Pending": 897
+    },
+    "excluded": {
+      "cpu_only": 1052,
+      "invalid_or_nonpositive_interval": 897
+    },
+    "eligible": 6203,
+    "start": 0,
+    "end": 12902960,
+    "scopes": {
+      "all": {
+        "jobs": 6203,
+        "peak_milli_gpu": 65590,
+        "peak_t": 12523649,
+        "requested_milli_gpu_seconds": 185294426970,
+        "mean_milli_gpu": 14360.613918821728,
+        "direct_checks": 12078
+      },
+      "non_BE": {
+        "jobs": 3693,
+        "peak_milli_gpu": 61220,
+        "peak_t": 12523649,
+        "requested_milli_gpu_seconds": 180572538090,
+        "mean_milli_gpu": 13994.659991970835,
+        "direct_checks": 7167
+      },
+      "LS_only": {
+        "jobs": 3590,
+        "peak_milli_gpu": 45680,
+        "peak_t": 11857967,
+        "requested_milli_gpu_seconds": 149088096090,
+        "mean_milli_gpu": 11554.565471023703,
+        "direct_checks": 6966
+      }
+    }
+  }
+}
