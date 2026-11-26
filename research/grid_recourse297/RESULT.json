@@ -1,0 +1,524 @@
+{
+  "source_commit": "005f861f92d6d3ba44c550f65e5c4e96192b070a",
+  "source_blob": "2c3ca373c8635d4c2ed782d70fedd81680f15fb6",
+  "execution_ms": 476,
+  "retrieval_plus_execution_ms": 1140,
+  "actual_billing": null,
+  "results": [
+    {
+      "path": "pglib_opf_case3_lmbd.m",
+      "blob": "b52e7555cac2692ce31e0578cdca813a4c780ef8",
+      "source_buses": [
+        1,
+        2
+      ],
+      "source_caps": [
+        2000,
+        2000
+      ],
+      "sink": 3,
+      "lines": 3,
+      "scenarios": [
+        {
+          "outage_index": -1,
+          "edge": null,
+          "equal_MW": 106.07476635514021,
+          "adaptive": {
+            "sum": 134.45141541908046,
+            "x": 100.96239048555807,
+            "y": 33.48902493352239
+          },
+          "reference_MW": 134.45141541912008
+        },
+        {
+          "outage_index": 0,
+          "edge": [
+            1,
+            3
+          ],
+          "equal_MW": 50,
+          "adaptive": {
+            "sum": 50.00000000000001,
+            "x": 0,
+            "y": 50.00000000000001
+          },
+          "reference_MW": 50.0000000001
+        },
+        {
+          "outage_index": 1,
+          "edge": [
+            3,
+            2
+          ],
+          "equal_MW": 84.45141541908043,
+          "adaptive": {
+            "sum": 84.45141541908043,
+            "x": 84.45141541908043,
+            "y": 0
+          },
+          "reference_MW": 84.45141541918042
+        },
+        {
+          "outage_index": 2,
+          "edge": [
+            1,
+            2
+          ],
+          "equal_MW": 100,
+          "adaptive": {
+            "sum": 134.45141541908043,
+            "x": 84.45141541908043,
+            "y": 50
+          },
+          "reference_MW": 134.45141541918042
+        }
+      ],
+      "robust_equal_MW": 50,
+      "robust_fixed": {
+        "sum": 50.00000000000001,
+        "x": 0,
+        "y": 50.00000000000001
+      },
+      "robust_adaptive_MW": 50.00000000000001,
+      "robust_fixed_reference_MW": 50.0000000001
+    },
+    {
+      "path": "pglib_opf_case5_pjm.m",
+      "blob": "6f84496ed619a2803243e4b55b4b28dbe0ec755d",
+      "source_buses": [
+        1,
+        3
+      ],
+      "source_caps": [
+        210,
+        520
+      ],
+      "sink": 4,
+      "lines": 6,
+      "scenarios": [
+        {
+          "outage_index": -1,
+          "edge": null,
+          "equal_MW": 420,
+          "adaptive": {
+            "sum": 730,
+            "x": 210,
+            "y": 520
+          },
+          "reference_MW": 730
+        },
+        {
+          "outage_index": 0,
+          "edge": [
+            1,
+            2
+          ],
+          "equal_MW": 420,
+          "adaptive": {
+            "sum": 635.9999999999999,
+            "x": 210,
+            "y": 425.9999999999999
+          },
+          "reference_MW": 636.0000000000999
+        },
+        {
+          "outage_index": 1,
+          "edge": [
+            1,
+            4
+          ],
+          "equal_MW": 420,
+          "adaptive": {
+            "sum": 661.1661807580173,
+            "x": 141.1661807580173,
+            "y": 520
+          },
+          "reference_MW": 661.1661807580739
+        },
+        {
+          "outage_index": 2,
+          "edge": [
+            1,
+            5
+          ],
+          "equal_MW": 420,
+          "adaptive": {
+            "sum": 726.4502164502164,
+            "x": 209.99999999999997,
+            "y": 516.4502164502164
+          },
+          "reference_MW": 726.4502164502725
+        },
+        {
+          "outage_index": 3,
+          "edge": [
+            2,
+            3
+          ],
+          "equal_MW": 420,
+          "adaptive": {
+            "sum": 636,
+            "x": 210,
+            "y": 426
+          },
+          "reference_MW": 636.0000000000999
+        },
+        {
+          "outage_index": 4,
+          "edge": [
+            3,
+            4
+          ],
+          "equal_MW": 420,
+          "adaptive": {
+            "sum": 524.9999999999997,
+            "x": 210.00000000000003,
+            "y": 314.99999999999966
+          },
+          "reference_MW": 525.0000000002183
+        },
+        {
+          "outage_index": 5,
+          "edge": [
+            4,
+            5
+          ],
+          "equal_MW": 420,
+          "adaptive": {
+            "sum": 726.4502164502164,
+            "x": 209.99999999999997,
+            "y": 516.4502164502164
+          },
+          "reference_MW": 726.4502164502725
+        }
+      ],
+      "robust_equal_MW": 420,
+      "robust_fixed": {
+        "sum": 524.9999999999997,
+        "x": 210.00000000000003,
+        "y": 314.99999999999966
+      },
+      "robust_adaptive_MW": 524.9999999999997,
+      "robust_fixed_reference_MW": 525.0000000002183
+    },
+    {
+      "path": "pglib_opf_case14_ieee.m",
+      "blob": "2c8260fff0311c902c3d36dcabcbe861576fc97c",
+      "source_buses": [
+        1,
+        2
+      ],
+      "source_caps": [
+        340,
+        59
+      ],
+      "sink": 3,
+      "lines": 20,
+      "scenarios": [
+        {
+          "outage_index": -1,
+          "edge": null,
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.55242401954297,
+            "x": 272.55242401954297,
+            "y": 0
+          },
+          "reference_MW": 272.5524240195481
+        },
+        {
+          "outage_index": 0,
+          "edge": [
+            1,
+            2
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 186.99999999999997,
+            "x": 127.99999999999997,
+            "y": 59
+          },
+          "reference_MW": 187.00000000009996
+        },
+        {
+          "outage_index": 1,
+          "edge": [
+            1,
+            5
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 252.2580207484613,
+            "x": 193.2580207484613,
+            "y": 58.99999999999999
+          },
+          "reference_MW": 252.2580207486353
+        },
+        {
+          "outage_index": 2,
+          "edge": [
+            2,
+            3
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 160.0000000000005,
+            "x": 160.0000000000005,
+            "y": 0
+          },
+          "reference_MW": 160.00000000010044
+        },
+        {
+          "outage_index": 3,
+          "edge": [
+            2,
+            4
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 253.08568008819717,
+            "x": 253.08568008819717,
+            "y": 0
+          },
+          "reference_MW": 253.08568008820478
+        },
+        {
+          "outage_index": 4,
+          "edge": [
+            2,
+            5
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 265.22099643440185,
+            "x": 265.22099643440185,
+            "y": 0
+          },
+          "reference_MW": 265.22099643440976
+        },
+        {
+          "outage_index": 5,
+          "edge": [
+            3,
+            4
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 144.99999999999966,
+            "x": 144.99999999999966,
+            "y": 0
+          },
+          "reference_MW": 145.0000000000997
+        },
+        {
+          "outage_index": 6,
+          "edge": [
+            4,
+            5
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 238.7225598054408,
+            "x": 238.7225598054408,
+            "y": 0
+          },
+          "reference_MW": 238.72255980544202
+        },
+        {
+          "outage_index": 7,
+          "edge": [
+            4,
+            7
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.4080053871758,
+            "x": 272.4080053871758,
+            "y": 0
+          },
+          "reference_MW": 272.4080053871809
+        },
+        {
+          "outage_index": 8,
+          "edge": [
+            4,
+            9
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.4905466516808,
+            "x": 272.4905466516808,
+            "y": 0
+          },
+          "reference_MW": 272.49054665168586
+        },
+        {
+          "outage_index": 9,
+          "edge": [
+            5,
+            6
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.0880200562639,
+            "x": 272.0880200562639,
+            "y": 0
+          },
+          "reference_MW": 272.08802005626893
+        },
+        {
+          "outage_index": 10,
+          "edge": [
+            6,
+            11
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.3829256531494,
+            "x": 272.3829256531494,
+            "y": 0
+          },
+          "reference_MW": 272.3829256531545
+        },
+        {
+          "outage_index": 11,
+          "edge": [
+            6,
+            12
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.54968414094935,
+            "x": 272.54968414094935,
+            "y": 0
+          },
+          "reference_MW": 272.54968414095447
+        },
+        {
+          "outage_index": 12,
+          "edge": [
+            6,
+            13
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.5272271033501,
+            "x": 272.5272271033501,
+            "y": 0
+          },
+          "reference_MW": 272.52722710335524
+        },
+        {
+          "outage_index": 13,
+          "edge": [
+            7,
+            8
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.55242401954297,
+            "x": 272.55242401954297,
+            "y": 0
+          },
+          "reference_MW": 272.5524240195481
+        },
+        {
+          "outage_index": 14,
+          "edge": [
+            7,
+            9
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.4080053871756,
+            "x": 272.4080053871756,
+            "y": 0
+          },
+          "reference_MW": 272.40800538718065
+        },
+        {
+          "outage_index": 15,
+          "edge": [
+            9,
+            10
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.38292565314936,
+            "x": 272.38292565314936,
+            "y": 0
+          },
+          "reference_MW": 272.3829256531545
+        },
+        {
+          "outage_index": 16,
+          "edge": [
+            9,
+            14
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.4592905301007,
+            "x": 272.4592905301007,
+            "y": 0
+          },
+          "reference_MW": 272.4592905301058
+        },
+        {
+          "outage_index": 17,
+          "edge": [
+            10,
+            11
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.3829256531493,
+            "x": 272.3829256531493,
+            "y": 0
+          },
+          "reference_MW": 272.3829256531544
+        },
+        {
+          "outage_index": 18,
+          "edge": [
+            12,
+            13
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.54968414094947,
+            "x": 272.54968414094947,
+            "y": 0
+          },
+          "reference_MW": 272.5496841409546
+        },
+        {
+          "outage_index": 19,
+          "edge": [
+            13,
+            14
+          ],
+          "equal_MW": 118,
+          "adaptive": {
+            "sum": 272.45929053010076,
+            "x": 272.45929053010076,
+            "y": 0
+          },
+          "reference_MW": 272.4592905301059
+        }
+      ],
+      "robust_equal_MW": 118,
+      "robust_fixed": {
+        "sum": 144.99999999999966,
+        "x": 85.99999999999967,
+        "y": 59
+      },
+      "robust_adaptive_MW": 144.99999999999966,
+      "robust_fixed_reference_MW": 145.0000000000997
+    }
+  ],
+  "checks": 718,
+  "failures": [],
+  "accepted": true,
+  "scope": "authored zero-background DC proxy; no actual transfer rights, demand or money"
+}
