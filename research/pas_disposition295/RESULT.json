@@ -1,0 +1,368 @@
+{
+  "requestName": "ReferralAuthorizationExample",
+  "requested": [
+    1
+  ],
+  "rows": [
+    {
+      "name": "ErrorResponseExample",
+      "role": "exposed_official_example",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "error",
+        "items": [],
+        "adds": []
+      },
+      "expected": "PROCESSING_ERROR",
+      "observed": "PROCESSING_ERROR",
+      "outcome_only": "error",
+      "match": true
+    },
+    {
+      "name": "RejectionResponseExample",
+      "role": "exposed_official_example",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A3"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "REQUEST_1_A3",
+      "observed": "REQUEST_1_A3",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "PractitionerRequestorResponseExample",
+      "role": "exposed_official_example",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A1"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "REQUEST_1_A1",
+      "observed": "REQUEST_1_A1",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "PractitionerRequestorAdditionalContentResponseExample",
+      "role": "exposed_official_example",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A1"
+          ]
+        ],
+        "adds": [
+          [
+            2,
+            "A1"
+          ]
+        ]
+      },
+      "expected": "REQUEST_1_A1|NEW_2_A1",
+      "observed": "REQUEST_1_A1|NEW_2_A1",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "PractitionerRequestorPendingResponseExample",
+      "role": "exposed_official_example",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A4"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "REQUEST_1_A4",
+      "observed": "REQUEST_1_A4",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "wrong_request",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "AnotherClaim",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A1"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "duplicate_item",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A1"
+          ],
+          [
+            1,
+            "A3"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "missing_item",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [],
+        "adds": []
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "unknown_code",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A99"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "wrong_item",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            2,
+            "A1"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "error_conflict",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "error",
+        "items": [
+          [
+            1,
+            "A1"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "error",
+      "match": true
+    },
+    {
+      "name": "modified_without_link",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A6"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "modified_with_link",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A6"
+          ]
+        ],
+        "adds": [
+          [
+            1,
+            "A1"
+          ]
+        ]
+      },
+      "expected": "REQUEST_1_A6|MODIFIED_LINK_1_A1",
+      "observed": "REQUEST_1_A6|MODIFIED_LINK_1_A1",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "new_unrequested_item",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A1"
+          ]
+        ],
+        "adds": [
+          [
+            2,
+            "A1"
+          ]
+        ]
+      },
+      "expected": "REQUEST_1_A1|NEW_2_A1",
+      "observed": "REQUEST_1_A1|NEW_2_A1",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "unexplained_addition",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A1"
+          ]
+        ],
+        "adds": [
+          [
+            1,
+            "A1"
+          ]
+        ]
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "duplicate_added_item",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "complete",
+        "items": [
+          [
+            1,
+            "A1"
+          ]
+        ],
+        "adds": [
+          [
+            2,
+            "A1"
+          ],
+          [
+            2,
+            "A1"
+          ]
+        ]
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "COMPLETE_UNDIFFERENTIATED",
+      "match": true
+    },
+    {
+      "name": "unsupported_processing_outcome",
+      "role": "authored_adversarial",
+      "input": {
+        "reference": "ReferralAuthorizationExample",
+        "outcome": "partial",
+        "items": [
+          [
+            1,
+            "A1"
+          ]
+        ],
+        "adds": []
+      },
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "outcome_only": "partial",
+      "match": true
+    }
+  ],
+  "scope": "Administrative syntax witness on one public example family; no approval, clinical decision, real claim, or full FHIR conformance.",
+  "passed": 17,
+  "total": 17,
+  "execution_error": null,
+  "source_blob": "0d3249f4c90c4a1c9535406655a65c469ee39442",
+  "frozen_code_blob": "2dd00db511b31838b7186b68f26465643511eec1",
+  "frozen_commit": "d139c2bdf00cd81233d69aa256ce110e41829dc4",
+  "execution_ms": 3,
+  "retrieval_and_execution_ms": 309,
+  "cpu_seconds": null,
+  "actual_billing": null,
+  "native_account_used": false,
+  "actual_commerce_usd": 0,
+  "commercial_verdict": "NO_ENTRY_NO_DEPLOY"
+}
