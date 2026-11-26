@@ -58,6 +58,14 @@ The scoped original-source follow-through recovered both previously withheld bat
 | Feasibility-preserving dispatch | **FAIL at the registered adoption gate.** Unchanged independent acceptance passed all 48 plans. The bounded ordering improved two of six held days in both repeats and added measured elapsed time. Preserve the ordinary control and the scoped researcher result. [Held trial](research-activation/positive-advancement/rolling-dispatch/README.md) |
 | Productive value and opportunity selection | **PARTIAL for observed transfer reduction, ABSTAIN for commercial admission.** The five opportunities include their incumbents and next operating gate. End-user adoption, financial returns, and standing execution still need actual receipts. [Five opportunities](research-activation/positive-advancement/OPPORTUNITIES.md) |
 
+## Break the Binding Constraint
+
+| Gate | Current evidence |
+| --- | --- |
+| Meaningful need and useful work | **PROVEN for the public documentary gap and released index.** The November 18 consultation identified difficulty finding assessment links. An independently reviewed snapshot supplies 24 direct published links with exact source identity. The Canadian federal collection remains the authority for its assessments. [Operating guide and resource verifier](binding-constraint/assessment-links/README.md) |
+| Comparison and broader adoption | **FAIL for superiority over strong direct review.** During evaluation the candidate found seven of eight supported cases, and direct review found eight. All arms withheld eight unsupported cases. The broader government governance challenge needs separately demonstrated native evaluation, reassessment and buyer-accessible testing. Complete costs, customer acceptance and net economic benefit remain open. [Frozen evidence](binding-constraint/EVALUATION.json) |
+| Historical assessment reproducibility | **PROVEN for three published cases.** Two legacy records scored five mitigation points below their published results when replayed through the current application components. An independent Chromium replay of captured official assets confirmed the discrepancy and observed a changed version label on the two legacy downloads. The version-matched tool and archived official scoring rules reproduce the published scores. Impact levels were unchanged. Deployment assurance and operating economics remain open. [Version-matched replay](binding-constraint/assessment-versions/README.md) |
+
 ## External outcomes
 
 | Gate | Existing route and smallest unresolved action |

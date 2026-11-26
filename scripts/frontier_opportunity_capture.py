@@ -157,13 +157,16 @@ def render(study, language, revision):
     method = 'Méthode et comparaison' if fr else 'Method and comparison'
     restore_label = 'Récupérer les preuves vérifiées' if fr else 'Restore verified evidence'
     restore_report = report_url(revision, 'publication/prove-advantage/research-activation/positive-advancement/README.md')
+    assessments_label = 'Consulter les évaluations algorithmiques publiques' if fr else 'Find public AI impact assessments'
+    assessments_report = report_url(revision, 'publication/prove-advantage/binding-constraint/assessment-links/README.md')
     all_checks = 'Autres possibilités examinées' if fr else 'More reviewed opportunities'
     return (f'<p>{intro}</p><div class="mv-grid factory-findings">{"".join(case_cards[:3])}</div>'
             f'<details><summary>{all_checks}</summary><div class="mv-grid factory-findings">'
             f'{"".join(case_cards[3:])}</div></details>'
             f'<p class="mv-links"><a href="{ASSET}" download>{label}</a> '
             f'<a href="{report_url(revision)}">{method}</a> '
-            f'<a href="{restore_report}">{restore_label}</a></p>')
+            f'<a href="{restore_report}">{restore_label}</a> '
+            f'<a href="{assessments_report}">{assessments_label}</a></p>')
 
 
 def main():

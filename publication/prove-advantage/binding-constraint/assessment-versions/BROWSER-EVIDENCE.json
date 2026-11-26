@@ -1,0 +1,61 @@
+{
+  "schema": "frontier/public-aia-browser-replay-v1",
+  "observed_at_date": "2026-11-26",
+  "browser": "Chrome for Testing 145.0.7632.6",
+  "official_page": "https://open.canada.ca/aia-eia-js/?lang=en",
+  "scope": "Real Chromium, no DOM or FileReader replacements. Response routing fulfills only captured official assets and denies other page requests. Fresh context per public questionnaire. The built-in download fallback was exercised in a separate pass.",
+  "official_application_sha256": "082df0a7d58247fe7969503613b224969aeb24868fcbc56391e23530bbc26810",
+  "official_vendor_sha256": "6f7dafcdaa9667a27c84b5b96bd07636891800f86b9f4b88812197dc9579093d",
+  "independent_receipt_sha256": {
+    "BROWSER-IMPORT.json": "d554ae8cb6cdd38cc56c81120489e707873f5fd27ad7762995f0b4c60b11bf1b",
+    "BROWSER-DOWNLOAD.json": "5b2f3e9f3b62b03dbeac2c44477ae0e7d7ee1c1ff6b5c062aaedab27b452ff5a",
+    "ARITHMETIC.json": "2f7c562710389cc2c70e80beda1fd4687d46c9263d093bb18f738ec801e44a97"
+  },
+  "cases": [
+    {
+      "case": "monitoring",
+      "input_form_version": "v0.10.0",
+      "input_sha256": "d88c9d236a2fc0bc72e6012eb2bfdccc4a998d79befc6598f5e19cb1463d909b",
+      "displayed_results": {
+        "raw_impact": 30,
+        "mitigation": 26,
+        "current": 30,
+        "level": 1
+      },
+      "saved_form_version": "v1.0.1",
+      "saved_sha256": "fdbdea61fec753e2bf3fe840b689fc44ebdf7fdda2c339e5e4e5725aff7296f2",
+      "preserved_answer_fields": 105,
+      "saved_bytes_equal_to_input": false
+    },
+    {
+      "case": "licensing",
+      "input_form_version": "v0.10.0",
+      "input_sha256": "a7d15df2479dd7a126e372a8d44a22fdd053f79988ca7f8435cc4ed549e122d4",
+      "displayed_results": {
+        "raw_impact": 25,
+        "mitigation": 29,
+        "current": 25,
+        "level": 1
+      },
+      "saved_form_version": "v1.0.1",
+      "saved_sha256": "4f02901e03c8c3964254373e60bb3bff8b7f3c74592cdf82c60228aaa929e738",
+      "preserved_answer_fields": 96,
+      "saved_bytes_equal_to_input": false
+    },
+    {
+      "case": "prairies",
+      "input_form_version": "v1.0.1",
+      "input_sha256": "32bbabf70dd07ca5274827f519d45e70b8abe023934821ccd566baa10d727268",
+      "displayed_results": {
+        "raw_impact": 63,
+        "mitigation": 51,
+        "current": 63,
+        "level": 2
+      },
+      "saved_form_version": "v1.0.1",
+      "saved_sha256": "32bbabf70dd07ca5274827f519d45e70b8abe023934821ccd566baa10d727268",
+      "preserved_answer_fields": 168,
+      "saved_bytes_equal_to_input": true
+    }
+  ]
+}
