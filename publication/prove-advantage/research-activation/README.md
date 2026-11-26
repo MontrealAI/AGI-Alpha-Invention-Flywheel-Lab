@@ -60,6 +60,8 @@ The work used published cohorts and a local operator-run process. The routing co
 
 The subsequent Possible Now alert led to an actual CPU runtime and model-admission decision on two live documentation needs. [From alert to achievement](alert-achievement/REPORT.md)
 
+Two live release evidence packets passed exact recovery and independent replay with two reads per packet. The indexed option is available as `--research restore-packet`. [Operator instructions and comparisons](positive-advancement/README.md)
+
 ## Mode d’emploi
 
 À la racine du dépôt, avec Python 3.11 ou une version ultérieure, lancez les commandes suivantes.

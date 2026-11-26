@@ -46,6 +46,18 @@ The scoped original-source follow-through recovered both previously withheld bat
 
 [Work product, lineage and observed costs](research-activation/alert-achievement/REPORT.md) · [Reproduction](research-activation/alert-achievement/REPRODUCE.md)
 
+## Advance the Attainable Frontier
+
+| Gate | Current evidence |
+| --- | --- |
+| Useful construction and repeat use | **PROVEN for exact selective evidence recovery.** The operator command recovered two distinct live release packets in two reads each. Re-execution matched nine Activation decisions and 27 Inventor checks. Five independent Git file digests bound the exact member bytes. [Protocol and evidence](research-activation/positive-advancement/README.md) |
+| Positive productive capability | **PROVEN for lower response-body bytes versus full archives in the indexed scope.** The exact ordinary interval control ties. Direct Git ties one packet's payload and beats the other with three reads. Full downloads were slightly faster in the final parallel comparison. Complete cost, revenue, and distinctive FRONTIER Ω advantage remain unestablished. |
+| Research capture and prospectivity | **PARTIAL.** The selected source-bound qualification lead completed before this mandate's prospective cutoff and was handled as backlog. The existing capture accepted it as a new durable run record. The result is an actual two-case use of a retrospective lead. Prospective-only results require a distinct later eligible finding. |
+| Powerful local intelligence | **BLOCKED on the owner's GPU receipt.** Included Codex and exact controls completed the packet construction and review. Historical 1.5B outputs are retained. The French task exhausted the 512-output envelope, while all three English outputs stopped below it and still omitted or misstated critical facts. The failure is broader than output length or quantization alone. No compact model was promoted. |
+| Mathematical and inventive transfer | **PROVEN for the finite PatternMiner reproduction, EXPERIMENTAL for transfer and NOT TESTED for better inventors.** Exact conventional mathematics reproduced the counterexample and the two application bounds. Original dispatch identity and missing travel data remain unverified. No recursively improved inventor is claimed. [Mathematical replay](research-activation/positive-advancement/PATTERN-RESULT.json) |
+| Feasibility-preserving dispatch | **FAIL at the registered adoption gate.** Unchanged independent acceptance passed all 48 plans. The bounded ordering improved two of six held days in both repeats and added measured elapsed time. Preserve the ordinary control and the scoped researcher result. [Held trial](research-activation/positive-advancement/rolling-dispatch/README.md) |
+| Productive value and opportunity selection | **PARTIAL for observed transfer reduction, ABSTAIN for commercial admission.** The five opportunities include their incumbents and next operating gate. End-user adoption, financial returns, and standing execution still need actual receipts. [Five opportunities](research-activation/positive-advancement/OPPORTUNITIES.md) |
+
 ## External outcomes
 
 | Gate | Existing route and smallest unresolved action |

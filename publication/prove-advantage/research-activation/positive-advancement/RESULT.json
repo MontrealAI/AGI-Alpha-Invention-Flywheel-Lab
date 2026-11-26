@@ -1,0 +1,256 @@
+{
+  "schema": "frontier/evidence-recovery-positive-advancement-v1",
+  "summarized_at": "2026-11-26T15:55:32+00:00",
+  "registration_sha256": "305faeeff7a6a59c4ea22102bfdac2e9fae6d9fe563b81f53568b2312e147fbf",
+  "primary_status": "PROVEN_SCOPED_INDEXED_BODY_BYTES_VS_FULL_ARCHIVE",
+  "ordinary_exact_control": "TIE_ON_ACCEPTANCE_AND_MINIMUM_BODY_BYTES",
+  "economics": "UNESTABLISHED",
+  "product_source_sha256": "12a9d3f8c51cb54af04bb909fabfe6fcafb424e6f26197b99f08b3315d7837ac",
+  "index_sha256": "fc844229adc3198ad53b4bb575e0154e2b139d3b5795d2472235cc6564570870",
+  "historical_research": {
+    "selected_primary": "https://arxiv.org/abs/2611.28704v1",
+    "scout_completed_at": "2026-11-26T15:33:07.652449Z",
+    "observed_at": "2026-11-26T15:39:27.798Z",
+    "prospective_cutoff": "2026-11-26T15:38:22.315399Z",
+    "disposition": "PRE_CUTOFF_COMPLETED_BACKLOG"
+  },
+  "one_time_setup": {
+    "release_source": "f0c8db6c7a1110dc614ab8a02c7a0bd5f79260de",
+    "workflow_run": "45846458825",
+    "release_sha256": "09de46889f9c3db371e743a114e3f4fa4adb9588f512f0c7e8a65157223c0e39",
+    "shared_manifest_requests": 2,
+    "shared_manifest_bytes": 11350,
+    "case_setup_all_in": {
+      "ACT15": {
+        "requests": 3,
+        "response_body_bytes": 1847106,
+        "wall_seconds": 6.066446,
+        "cpu_seconds": 0.016275
+      },
+      "INV10": {
+        "requests": 4,
+        "response_body_bytes": 464882,
+        "wall_seconds": 5.302408,
+        "cpu_seconds": 0.030041
+      }
+    },
+    "wall_seconds": 20.591885,
+    "cpu_seconds": 0.057266
+  },
+  "review_scope": "Independent workstreams in the same workspace administration.",
+  "independent_control_sha256": "7d4cc6c116f23a566ce27ec9262ef57c6d5c0354bc8c4ac8b998b333de8c0319",
+  "verification_cases": {
+    "ACT15": {
+      "arms": {
+        "range": {
+          "archive": "frontier-activation-1.5.0.zip",
+          "indexed_archive_sha256": "5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791",
+          "source": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/frontier-activation-1.5.0.zip",
+          "archive_bytes": 1805184,
+          "range_requests": 2,
+          "response_body_bytes": 41922,
+          "verified_files": {
+            "evidence_control.py": "dc0392e6ff2423c120873630347b33d0bf184b3bd7435dc6f8af2651ab3313e5",
+            "study/factory/EVIDENCE.json": "62bdbfd8998a4b099534db8423ffd9b7aaf22ef4a08de35702d0aa378207f033"
+          },
+          "ranges": [
+            [
+              198073,
+              208547
+            ],
+            [
+              1008957,
+              1040405
+            ]
+          ],
+          "etag": "\"6b084c5b-1b8b80\"",
+          "wall_seconds": 2.891967,
+          "cpu_seconds": 0.033963,
+          "output": {
+            "documentary_cutoffs": [
+              "bambu_software",
+              "prusa_offer"
+            ],
+            "withheld": 7,
+            "checks": 9
+          },
+          "replay_wall_seconds": 0.050052,
+          "acquisition_to_decision_wall_seconds": 2.942995
+        },
+        "full_archive": {
+          "archive": "frontier-activation-1.5.0.zip",
+          "requests": 1,
+          "response_body_bytes": 1805184,
+          "wall_seconds": 2.82714,
+          "cpu_seconds": 0.03416,
+          "verified_files": {
+            "evidence_control.py": "dc0392e6ff2423c120873630347b33d0bf184b3bd7435dc6f8af2651ab3313e5",
+            "study/factory/EVIDENCE.json": "62bdbfd8998a4b099534db8423ffd9b7aaf22ef4a08de35702d0aa378207f033"
+          },
+          "output": {
+            "documentary_cutoffs": [
+              "bambu_software",
+              "prusa_offer"
+            ],
+            "withheld": 7,
+            "checks": 9
+          },
+          "replay_wall_seconds": 0.039484,
+          "acquisition_to_decision_wall_seconds": 2.867186
+        },
+        "direct_git": {
+          "requests": 2,
+          "response_body_bytes": 41922,
+          "wall_seconds": 3.277222,
+          "cpu_seconds": 0.012008,
+          "output": {
+            "documentary_cutoffs": [
+              "bambu_software",
+              "prusa_offer"
+            ],
+            "withheld": 7,
+            "checks": 9
+          },
+          "replay_wall_seconds": 0.033324,
+          "acquisition_to_decision_wall_seconds": 3.310887
+        }
+      },
+      "gate_at_most_half_bytes_and_two_reads": true,
+      "paid_model_calls": 0,
+      "complete_economic_cost": null
+    },
+    "INV10": {
+      "arms": {
+        "direct_git": {
+          "requests": 3,
+          "response_body_bytes": 93071,
+          "wall_seconds": 3.209715,
+          "cpu_seconds": 0.026768,
+          "output": {
+            "editions-conventional": 9,
+            "endpoint-conventional": 9,
+            "impact-conventional": 9
+          },
+          "replay_wall_seconds": 0.059635,
+          "acquisition_to_decision_wall_seconds": 3.270243
+        },
+        "full_archive": {
+          "archive": "frontier-inventor-1.0.0.zip",
+          "requests": 1,
+          "response_body_bytes": 371811,
+          "wall_seconds": 2.688843,
+          "cpu_seconds": 0.017949,
+          "verified_files": {
+            "relational.py": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "study/reproduction.json": "37cae3850b058f44917503a6ab63b8832e6e123ca6ef627e70db5be0a06fa88b",
+            "study/evidence.json": "fdac418e43ee6495c4f230564bbd547eba762c22d61556254a1158ba3c48fb1b"
+          },
+          "output": {
+            "editions-conventional": 9,
+            "endpoint-conventional": 9,
+            "impact-conventional": 9
+          },
+          "replay_wall_seconds": 0.046212,
+          "acquisition_to_decision_wall_seconds": 2.735503
+        },
+        "range": {
+          "archive": "frontier-inventor-1.0.0.zip",
+          "indexed_archive_sha256": "7eb4759ffb168b6cc46504c92aa3dcc7c4d40914cb122d6b3ba36327aa90534d",
+          "source": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/frontier-inventor-1.0.0.zip",
+          "archive_bytes": 371811,
+          "range_requests": 2,
+          "response_body_bytes": 156203,
+          "verified_files": {
+            "relational.py": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "study/reproduction.json": "37cae3850b058f44917503a6ab63b8832e6e123ca6ef627e70db5be0a06fa88b",
+            "study/evidence.json": "fdac418e43ee6495c4f230564bbd547eba762c22d61556254a1158ba3c48fb1b"
+          },
+          "ranges": [
+            [
+              132193,
+              137686
+            ],
+            [
+              214633,
+              365343
+            ]
+          ],
+          "etag": "\"6b084c5b-5ac63\"",
+          "wall_seconds": 2.880439,
+          "cpu_seconds": 0.0215,
+          "output": {
+            "editions-conventional": 9,
+            "endpoint-conventional": 9,
+            "impact-conventional": 9
+          },
+          "replay_wall_seconds": 0.070488,
+          "acquisition_to_decision_wall_seconds": 2.951355
+        }
+      },
+      "gate_at_most_half_bytes_and_two_reads": true,
+      "paid_model_calls": 0,
+      "complete_economic_cost": null
+    }
+  },
+  "operator_uses": {
+    "ACT15": {
+      "archive": "frontier-activation-1.5.0.zip",
+      "indexed_archive_sha256": "5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791",
+      "source": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/frontier-activation-1.5.0.zip",
+      "archive_bytes": 1805184,
+      "range_requests": 2,
+      "response_body_bytes": 41922,
+      "verified_files": {
+        "evidence_control.py": "dc0392e6ff2423c120873630347b33d0bf184b3bd7435dc6f8af2651ab3313e5",
+        "study/factory/EVIDENCE.json": "62bdbfd8998a4b099534db8423ffd9b7aaf22ef4a08de35702d0aa378207f033"
+      },
+      "ranges": [
+        [
+          198073,
+          208547
+        ],
+        [
+          1008957,
+          1040405
+        ]
+      ],
+      "etag": "\"6b084c5b-1b8b80\"",
+      "wall_seconds": 4.937907,
+      "cpu_seconds": 0.043662
+    },
+    "INV10": {
+      "archive": "frontier-inventor-1.0.0.zip",
+      "indexed_archive_sha256": "7eb4759ffb168b6cc46504c92aa3dcc7c4d40914cb122d6b3ba36327aa90534d",
+      "source": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/frontier-inventor-1.0.0.zip",
+      "archive_bytes": 371811,
+      "range_requests": 2,
+      "response_body_bytes": 156203,
+      "verified_files": {
+        "relational.py": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "study/reproduction.json": "37cae3850b058f44917503a6ab63b8832e6e123ca6ef627e70db5be0a06fa88b",
+        "study/evidence.json": "fdac418e43ee6495c4f230564bbd547eba762c22d61556254a1158ba3c48fb1b"
+      },
+      "ranges": [
+        [
+          132193,
+          137686
+        ],
+        [
+          214633,
+          365343
+        ]
+      ],
+      "etag": "\"6b084c5b-5ac63\"",
+      "wall_seconds": 2.921335,
+      "cpu_seconds": 0.024188
+    }
+  },
+  "unknown_complete_costs": [
+    "authoring and design effort",
+    "reviewer human attention",
+    "actual network charges",
+    "maintenance and future requalification",
+    "energy",
+    "commercial adoption"
+  ]
+}
