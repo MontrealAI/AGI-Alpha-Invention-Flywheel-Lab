@@ -525,6 +525,23 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 #execution-code-form input { width: min(100%,32rem); margin: .35rem .4rem .35rem 0; }
 #mission-import-artifact { display: block; max-width: 100%; color: var(--ink); }
 .mission-returned-files { padding-inline-start: 1.35rem; overflow-wrap: anywhere; }
+.mission-native-result {
+  padding: clamp(1rem,2.5vw,1.5rem);
+  margin-block: 1rem;
+  background: linear-gradient(120deg,#311f43,#21172c);
+  border-inline-start: 3px solid #eac17e;
+  border-radius: .35rem;
+  overflow-wrap: anywhere;
+  scroll-margin-block-start: calc(var(--member-scroll-offset) + .8rem);
+}
+.mission-native-result h4 { color: #ffe0a8; margin-block: 0 .55rem; }
+.mission-native-result ul { margin-block: .55rem; padding-inline-start: 1.25rem; }
+.mission-native-result li p { margin-block: .25rem .55rem; color: #f0d8af; font-variant-numeric: tabular-nums; }
+.mission-native-result .entry-button { min-height: 44px; white-space: normal; }
+.mission-reading a { color: #ffe1aa; text-underline-offset: .18em; }
+.mission-plan { color: #f0d8af; border-inline-start: 2px solid #b78d63; padding-inline-start: .75rem; }
+.mission-history-preview { max-block-size: 18rem; overflow: auto; white-space: pre-wrap; }
+
 #mission-work-panel { scroll-margin-block-start: calc(var(--member-scroll-offset) + 1.25rem); }
 .mission-reading { color: var(--ink); max-width: 76ch; overflow-wrap: anywhere; line-height: 1.65; }
 .mission-reading p { white-space: pre-wrap; }

@@ -63,6 +63,7 @@
         <div><h5>Ambition</h5><p id="mission-ambition"></p></div>
         <div><h5>Next useful action</h5><p id="mission-next"></p></div>
       </div>
+      <p id="mission-plan" class="mission-plan" hidden></p>
       <details id="mission-history" hidden><summary>Original ambition</summary><p id="mission-original"></p></details>
       <details class="mission-handoff" id="mission-handoff" hidden>
         <summary>Work with ChatGPT or another AI</summary>
@@ -76,6 +77,11 @@
               <p id="mission-context-status" role="status"></p>
               <ul id="mission-context-items" class="mission-returned-files"></ul>
               <button id="mission-context-download" type="button" class="quiet" hidden>Download reviewed mission package</button>
+            </details>
+            <details id="mission-history-share" hidden>
+              <summary>Review and include prior work</summary>
+              <pre id="mission-history-preview" class="mission-history-preview"></pre>
+              <label class="mv-check"><input type="checkbox" id="mission-include-history"> Include this material with the brief</label>
             </details>
             <div class="mv-actions">
               <button id="mission-copy" type="button" class="entry-button" disabled>Copy brief</button>
@@ -104,6 +110,12 @@
           </div>
         </div>
       </details>
+      <section id="mission-native-result" aria-labelledby="mission-native-title" class="mission-native-result" tabindex="-1" hidden>
+        <h4 id="mission-native-title"></h4>
+        <ul id="mission-native-list" aria-live="polite"></ul>
+        <p id="mission-native-scope"></p>
+        <button id="mission-native-download" type="button" class="entry-button">Download calculation and source record</button>
+      </section>
       <div id="mission-understanding" hidden>
         <dl class="goal-evidence">
           <div><dt>Approach</dt><dd id="mission-route"></dd></div>
@@ -113,11 +125,11 @@
         <details id="mission-work-panel">
           <summary>Work returned for review</summary>
           <div id="mission-work" class="mission-reading"></div>
-          <div class="mv-actions">
-            <button id="mission-continue-assisted" type="button" class="entry-button" hidden>Continue with ChatGPT</button>
-            <button id="mission-work-download" type="button" class="quiet">Download original work</button>
-          </div>
         </details>
+        <div class="mv-actions">
+          <button id="mission-continue-assisted" type="button" class="entry-button" hidden>Continue with ChatGPT</button>
+          <button id="mission-work-download" type="button" class="quiet">Download original work</button>
+        </div>
         <ul class="mission-returned-files" id="mission-returned-files" hidden></ul>
         <button id="mission-use-returned" class="quiet" type="button" hidden>Use this work with my private companion</button>
         <ul class="mv-links mission-capabilities" id="mission-capabilities"></ul>
@@ -126,9 +138,9 @@
         <summary>Result files and checks</summary>
         <p id="mission-deliverable-status" role="status"></p>
         <div class="mv-actions">
-          <label for="mission-deliverable-import">Add actual files<input id="mission-deliverable-import" type="file" accept=".txt,.md,.csv,.tsv,.json,.ipynb,.py,.js,.mjs,.ts,.sql,.yaml,.yml" multiple></label>
+          <label for="mission-deliverable-import">Add actual files<input id="mission-deliverable-import" type="file" accept=".txt,.md,.csv,.tsv,.json,.ipynb,.py,.js,.mjs,.ts,.sql,.yaml,.yml,.zip" multiple></label>
         </div>
-        <p>Source, data, notebook and text files · up to 256 KiB total. Download or remove old files to make room.</p>
+        <p>Source, data, notebooks and simple ZIP packages · up to 256 KiB total, including extracted contents. Download or remove old files to make room.</p>
         <p id="mission-deliverable-feedback" role="status"></p>
         <ul id="mission-deliverable-list" class="mission-returned-files"></ul>
       </details>

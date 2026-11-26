@@ -609,6 +609,7 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/frontier-mission.mjs', 'frontier-omega-alpha/frontier-mission-router.mjs',
              'frontier-omega-alpha/frontier-mission-ui.mjs', 'frontier-omega-alpha/frontier-execution.mjs',
              'frontier-omega-alpha/frontier-mission-context.mjs', 'frontier-omega-alpha/frontier-artifact-exchange.mjs',
+             'frontier-omega-alpha/frontier-native-work.mjs',
              'frontier-omega-alpha/dpp-source-review.mjs', 'frontier-omega-alpha/frontier-battery-source-example.json',
              'frontier-omega-alpha/companion-start.html', 'frontier-omega-alpha/frontier-companion-link.mjs',
              'frontier-omega-alpha/frontier-assisted-work.mjs',

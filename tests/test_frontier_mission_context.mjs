@@ -58,13 +58,13 @@ test('exact ambition uses public observed limits, conventional baseline, and a d
   for (const [ambition, language] of [['CAPTURE THE EXPONENTIAL','en'], ['Capter le progrès exponentiel','fr']]) {
     const context = choose(ambition, {language});
     assert.equal(context.gap, null);
-    assert.deepEqual(context.items.map(item => item.id), ['test-radar','opportunity-comparison','shift-repofactory']);
+    assert.deepEqual(context.items.map(item => item.id), ['test-radar','shift-repofactory','opportunity-comparison']);
     assert.equal(context.items[0].kind, 'result');
     assert.match(context.items[0].recordURL, /\/discovery\/RADAR-CONTROL\.json$/u);
     assert.equal(context.items[0].recordSha256, 'e'.repeat(64));
-    assert.match(context.items[1].fact, /4\/4.*137[.,]1.*4\/4.*265[.,]2/u);
-    assert.equal(context.items[2].kind, 'lead');
-    assert.deepEqual(context.items[2].source, {date:'2026-11-17', dateBasis:'sourceDate', url:sourceUrl,
+    assert.match(context.items[2].fact, /4\/4.*137[.,]1.*4\/4.*265[.,]2/u);
+    assert.equal(context.items[1].kind, 'lead');
+    assert.deepEqual(context.items[1].source, {date:'2026-11-17', dateBasis:'sourceDate', url:sourceUrl,
       primaryMetadataSha256:'f'.repeat(64)});
     assert.ok(missionContextLines(context).every(line => Buffer.byteLength(line) <= 2048));
   }
@@ -121,7 +121,7 @@ test('sharing selection and package projection exclude unselected entries and pr
   assert.deepEqual(Object.keys(output), ['schema','language','brief','context']);
   assert.equal(output.brief, 'Reviewed text');
   output.context[0].source.url = 'invalid';
-  assert.equal(context.items[2].source.url, sourceUrl);
+  assert.equal(context.items[1].source.url, sourceUrl);
 });
 
 test('battery source review requires both released artifacts and omits inapplicable filing requests', () => {
@@ -132,5 +132,22 @@ test('battery source review requires both released artifacts and omits inapplica
   assert.equal(search(inputs, release).length, 0);
   assert.equal(search(inputs, manifest)[0].artifact.sha256, 'e'.repeat(64));
   assert.equal(search('Submit a battery passport', manifest).length, 0);
-  assert.equal(search('CAPTURE THE EXPONENTIAL', manifest)[0].id, 'battery-source-review');
+  assert.equal(search('CAPTURE THE EXPONENTIAL', manifest).length, 0);
+});
+
+
+test('open-ended technology activation finds applicable research while grounded work does not force a domain', () => {
+  for (const [ambition, language] of [
+    ['Activate Frontier AI','en'], ['Build a frontier capability.','en'], ['Capture the exponential of AI progrees.','en'],
+    ['Put cutting-edge intelligence to work','en'], ['Mobiliser l’IA de pointe','fr'], ['Concevoir une capacité de pointe','fr'],
+  ]) {
+    const found = choose(ambition,{language});
+    assert.ok(found.items.some(item => item.id === 'test-radar'), ambition);
+    assert.ok(!found.items.some(item => item.id === 'battery-source-review'), ambition);
+  }
+  for (const ambition of ['Activate the Frontier mailbox', 'Find the exponential function',
+    'Find exponential decay of a sample', 'Build frontier intelligence to calibrate NIRSpec wavelength',
+    'Vérifier les précipitations mesurées et calculer le cumul quotidien']) {
+    assert.deepEqual(choose(ambition).items, [], ambition);
+  }
 });
