@@ -63,6 +63,7 @@
         <div><h5>Ambition</h5><p id="mission-ambition"></p></div>
         <div><h5>Prochaine action utile</h5><p id="mission-next"></p></div>
       </div>
+      <p id="mission-plan" class="mission-plan" hidden></p>
       <details id="mission-history" hidden><summary>Ambition initiale</summary><p id="mission-original"></p></details>
       <details class="mission-handoff" id="mission-handoff" hidden>
         <summary>Travailler avec ChatGPT ou une autre IA</summary>
@@ -76,6 +77,11 @@
               <p id="mission-context-status" role="status"></p>
               <ul id="mission-context-items" class="mission-returned-files"></ul>
               <button id="mission-context-download" type="button" class="quiet" hidden>Télécharger le dossier de mission relu</button>
+            </details>
+            <details id="mission-history-share" hidden>
+              <summary>Relire et inclure le travail précédent</summary>
+              <pre id="mission-history-preview" class="mission-history-preview"></pre>
+              <label class="mv-check"><input type="checkbox" id="mission-include-history"> Inclure ce contenu dans la consigne</label>
             </details>
             <div class="mv-actions">
               <button id="mission-copy" type="button" class="entry-button" disabled>Copier le résumé</button>
@@ -104,6 +110,12 @@
           </div>
         </div>
       </details>
+      <section id="mission-native-result" aria-labelledby="mission-native-title" class="mission-native-result" tabindex="-1" hidden>
+        <h4 id="mission-native-title"></h4>
+        <ul id="mission-native-list" aria-live="polite"></ul>
+        <p id="mission-native-scope"></p>
+        <button id="mission-native-download" type="button" class="entry-button">Télécharger le calcul et les sources</button>
+      </section>
       <div id="mission-understanding" hidden>
         <dl class="goal-evidence">
           <div><dt>Approche</dt><dd id="mission-route"></dd></div>
@@ -113,11 +125,11 @@
         <details id="mission-work-panel">
           <summary>Travail à examiner</summary>
           <div id="mission-work" class="mission-reading"></div>
-          <div class="mv-actions">
-            <button id="mission-continue-assisted" type="button" class="entry-button" hidden>Poursuivre avec ChatGPT</button>
-            <button id="mission-work-download" type="button" class="quiet">Télécharger le travail original</button>
-          </div>
         </details>
+        <div class="mv-actions">
+          <button id="mission-continue-assisted" type="button" class="entry-button" hidden>Poursuivre avec ChatGPT</button>
+          <button id="mission-work-download" type="button" class="quiet">Télécharger le travail original</button>
+        </div>
         <ul class="mission-returned-files" id="mission-returned-files" hidden></ul>
         <button id="mission-use-returned" class="quiet" type="button" hidden>Utiliser ce travail avec mon compagnon privé</button>
         <ul class="mv-links mission-capabilities" id="mission-capabilities"></ul>
@@ -126,9 +138,9 @@
         <summary>Fichiers livrés et vérifications</summary>
         <p id="mission-deliverable-status" role="status"></p>
         <div class="mv-actions">
-          <label for="mission-deliverable-import">Ajouter les fichiers reçus<input id="mission-deliverable-import" type="file" accept=".txt,.md,.csv,.tsv,.json,.ipynb,.py,.js,.mjs,.ts,.sql,.yaml,.yml" multiple></label>
+          <label for="mission-deliverable-import">Ajouter les fichiers reçus<input id="mission-deliverable-import" type="file" accept=".txt,.md,.csv,.tsv,.json,.ipynb,.py,.js,.mjs,.ts,.sql,.yaml,.yml,.zip" multiple></label>
         </div>
-        <p>Code source, données, carnets et fichiers texte · jusqu’à 256 Kio au total. Téléchargez ou retirez d’anciens fichiers pour libérer de l’espace.</p>
+        <p>Code source, données, carnets et archives ZIP simples · jusqu’à 256 Kio au total, contenu extrait compris. Téléchargez ou retirez d’anciens fichiers pour libérer de l’espace.</p>
         <p id="mission-deliverable-feedback" role="status"></p>
         <ul id="mission-deliverable-list" class="mission-returned-files"></ul>
       </details>

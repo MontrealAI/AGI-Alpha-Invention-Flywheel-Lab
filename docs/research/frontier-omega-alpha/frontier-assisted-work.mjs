@@ -160,13 +160,33 @@ function tableCells(line) {
 
 function addInline(parent, value) {
   const doc = parent.ownerDocument;
+  // Linked icons carry no evidence. Preserve the surrounding source label.
+  value = value.replace(/!\[[^\]\n]*\]\([^\s)\n]+(?:[ \t]+"[^"\n]*")?\)/gu, '');
+  const inline = /\x60([^\x60\n]+)\x60|\[([^\]\n]*)\]\(([^\s)]+)(?:[ \t]+"[^"\n]*")?\)|\*\*([^*\n]+)\*\*|\*([^*\n]+)\*|https:\/\/[^\s<>"'\])]+/gu;
   let end = 0;
-  for (const match of value.matchAll(/\*\*([^*\n]+)\*\*|\x60([^\x60\n]+)\x60/gu)) {
+  for (const match of value.matchAll(inline)) {
     parent.append(value.slice(end, match.index));
-    const item = doc.createElement(match[1] ? 'strong' : 'code');
-    item.textContent = match[1] ?? match[2];
-    parent.append(item);
     end = match.index + match[0].length;
+    if (match[3] || match[0].startsWith('https://')) {
+      const candidate = match[3] ?? match[0].replace(/[.,;:!?]+$/u,'');
+      let url;
+      try { url = new URL(candidate); } catch { /* Keep the accompanying label as text. */ }
+      const label = match[2]?.trim() || (url?.protocol === 'https:' ? url.hostname : '');
+      if (url?.protocol === 'https:' && candidate.startsWith('https://') && !url.username && !url.password) {
+        const link = doc.createElement('a');
+        link.href = url.href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.referrerPolicy = 'no-referrer';
+        link.textContent = label;
+        parent.append(link);
+        if (!match[3]) parent.append(match[0].slice(candidate.length));
+      } else parent.append(label);
+    } else {
+      const item = doc.createElement(match[1] ? 'code' : match[4] ? 'strong' : 'em');
+      item.textContent = match[1] ?? match[4] ?? match[5];
+      parent.append(item);
+    }
   }
   parent.append(value.slice(end));
 }
@@ -197,8 +217,7 @@ const unorderedItem = /^[ \t]*[-+*][ \t]+(.+)$/u;
 const heading = /^#{1,6}[ \t]+(.+)$/u;
 const codeFence = /^[ \t]*(\x60{3,}|~{3,})[^\n]*$/u;
 
-// A small Markdown reading view. All returned strings become text nodes. There is no HTML parser,
-// script, navigation, embedded media, network resource, or executable artifact handling here.
+// Keep imported material as text. Only deliberate clicks on validated HTTPS links navigate.
 export function renderAssistedWork(target, value = '') {
   target.replaceChildren();
   const doc = target.ownerDocument;

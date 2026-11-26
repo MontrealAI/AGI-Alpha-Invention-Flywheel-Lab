@@ -11,8 +11,9 @@ import {
   createMissionRequest, createMissionPrompt, runLocalMission, validateLocalMissionConfig,
 } from './frontier-mission-router.mjs';
 import {createAssistedBrief, maximumReturnedBytes, readAssistedReply, renderAssistedWork, workPreview} from './frontier-assisted-work.mjs';
-import {inspectReturnedWork, readMissionArtifact, maximumArtifacts, maximumArtifactBytes} from './frontier-artifact-exchange.mjs';
-import {selectMissionContext, missionContextLines, missionIntelligencePackage} from './frontier-mission-context.mjs';
+import {inspectReturnedWork, readMissionArtifact, importMissionArtifacts, missionArtifactBytes, maximumArtifacts, maximumArtifactBytes} from './frontier-artifact-exchange.mjs';
+import {evaluateMissionFiles} from './frontier-native-work.mjs';
+import {selectMissionContext, missionContextLines, missionIntelligencePackage, missionWorkPlan} from './frontier-mission-context.mjs';
 import {reviewBatterySources, sourceReviewSchema} from './dpp-source-review.mjs';
 
 const messages = {
@@ -51,7 +52,8 @@ const messages = {
     publicReport: 'Read the completed study', publicArtifact: 'Download the verified research tool',
     contextRun: 'Current mission run reference', contextAtlas: 'Public Atlas lead with unverified applicability',
     contextObjective: 'Previous unverified objective', contextAction: 'Previous unverified next action',
-    contextWork: 'Excerpt from previous unverified work',
+    contextWork: 'Previous work to review', evidencePlan:'First useful operation',
+    priorOriginal:'Original returned material for this mission', priorFiles:'Files held in this mission',
     contextInstruction: 'Member’s latest instruction',
     nextInstruction: 'Choose how to continue with this instruction.',
     invalidInstruction: 'Enter an instruction of up to 2 KiB.',
@@ -61,7 +63,6 @@ const messages = {
     fileChanged: 'Continue the mission to use your updated sources.',
     restoreFiles: 'The companion holds these source files for this mission.',
     continueBusy: 'The current operation is still being stopped. Try again after it settles.',
-    evidenceAppend: 'Selected public evidence is included when you copy or download the ordinary brief.',
     evidenceGap: 'No public evidence matched this mission’s scope. You can use the brief directly.',
     evidenceUnavailable: 'Public evidence is temporarily unavailable. You can use the brief directly.',
     evidenceHeading: 'Selected public evidence and tools to review',
@@ -71,7 +72,17 @@ const messages = {
     deliverablesRetained: count => `${count} file${count === 1 ? '' : 's'} retained for review.`,
     deliverablesSnippet: 'The reply contains a code example. Add the actual source file for review or an authorized test.',
     deliverablesReady: 'Add the actual files your assistant produced, or bring them back later.',
-    deliverablesInvalid: 'Choose up to eight supported UTF-8 files, with a combined limit of 256 KiB.',
+    deliverablesInvalid: 'Use supported files or a simple ZIP of supported files. The original and unpacked contents must fit within 256 KiB.',
+    archiveInspected:'Archive inspected · exact original retained',
+    downloadExact:'Download exact file', nextFromReply:'Proposed by your assistant',
+    auditDone:'Verified calculation', auditScope:'FRONTIER Ω performed this calculation locally on the retained input. Its proof does not validate the source’s real-world claims.',
+    auditBoundary: (count, total, maxima) => `Recomputed all ${total} shared scores. ${count} change level between maxima ${maxima.join(' and ')}.`,
+    auditConcentration: (n, missing, value, total, share) => `Checked ${n} measured days and ${missing} missing days. The highest complete window totals ${value ?? 'unavailable'}${share === null ? '.' : `, ${share}% of the measured total of ${total}.`}`,
+    auditChanges: (results,format) => results.map(r=>`${r.series} · ${r.publishedDates.length} quoted days · ${r.unquotedDates.length} without a quote · largest absolute change ${format(r.largestAbsoluteChange,r.series) ?? 'unavailable'}`).join(' · '),
+    auditWithheld:'Calculation withheld. Check the format, completeness and source identity shown in the receipt.',
+    auditNeedSource:'Add the exact source file named by the calculation request.',
+    auditNext:'Download the calculation and source record to reuse or independently check the result.',
+    supplySource:'Add the data behind the table or the actual result file to make it possible to check this claim.',
     duplicateReply: 'That exact reply is already in this mission. Bring back a new finding, test or file.',
     useFile: 'Stage for private companion review',
     artifactUnverified: 'Imported file · verification pending',
@@ -123,7 +134,8 @@ const messages = {
     publicReport: 'Lire l’étude terminée', publicArtifact: 'Télécharger l’outil de recherche vérifié',
     contextRun: 'Identifiant de l’exécution en cours', contextAtlas: 'Piste publique de l’Atlas dont l’applicabilité reste à vérifier',
     contextObjective: 'Objectif précédent à vérifier', contextAction: 'Prochaine action précédente à vérifier',
-    contextWork: 'Extrait du travail précédent à vérifier',
+    contextWork: 'Travail précédent à examiner', evidencePlan:'Première opération utile',
+    priorOriginal:'Travail original rapporté dans cette mission', priorFiles:'Fichiers conservés dans cette mission',
     contextInstruction: 'Dernière consigne du membre',
     nextInstruction: 'Choisissez comment poursuivre avec cette consigne.',
     invalidInstruction: 'Saisissez une consigne d’au plus 2 Kio.',
@@ -133,7 +145,6 @@ const messages = {
     fileChanged: 'Poursuivez la mission pour utiliser les sources mises à jour.',
     restoreFiles: 'Le compagnon conserve ces fichiers sources pour la mission.',
     continueBusy: 'L’opération en cours s’arrête. Réessayez une fois l’arrêt confirmé.',
-    evidenceAppend: 'Les éléments publics sélectionnés accompagnent le résumé ordinaire lorsque vous le copiez ou le téléchargez.',
     evidenceGap: 'Aucune donnée publique trouvée ne correspond à la portée de la mission. Vous pouvez utiliser le résumé directement.',
     evidenceUnavailable: 'Les données probantes publiques sont temporairement indisponibles. Vous pouvez utiliser le résumé directement.',
     evidenceHeading: 'Données publiques et outils sélectionnés à examiner',
@@ -143,7 +154,17 @@ const messages = {
     deliverablesRetained: count => `${count} fichier${count === 1 ? '' : 's'} à examiner.`,
     deliverablesSnippet: 'La réponse contient un exemple de code. Ajoutez le fichier source pour l’examiner ou réaliser un essai autorisé.',
     deliverablesReady: 'Ajoutez les fichiers produits par votre assistant maintenant ou plus tard.',
-    deliverablesInvalid: 'Choisissez au plus huit fichiers UTF-8 pris en charge, pour un total maximal de 256 Kio.',
+    deliverablesInvalid: 'Utilisez des fichiers pris en charge ou une archive ZIP simple. L’original et son contenu extrait doivent tenir dans 256 Kio.',
+    archiveInspected:'Archive examinée · original exact conservé',
+    downloadExact:'Télécharger le fichier exact', nextFromReply:'Proposition de votre assistant',
+    auditDone:'Calcul vérifié', auditScope:'FRONTIER Ω a effectué ce calcul localement à partir des données conservées. La preuve ne valide pas les affirmations de la source sur le monde réel.',
+    auditBoundary: (count, total, maxima) => `Les ${total} scores communs ont été recalculés. ${count} changent de niveau entre les maximums ${maxima.join(' et ')}.`,
+    auditConcentration: (n, missing, value, total, share) => `${n} jours mesurés et ${missing} jours manquants. Le cumul maximal sur une période complète est de ${value ?? 'non disponible'}${share === null ? '.' : `, soit ${share} % du cumul mesuré de ${total}.`}`,
+    auditChanges: (results,format) => results.map(r=>`${r.series} · ${r.publishedDates.length} jours avec taux · ${r.unquotedDates.length} sans taux · variation maximale en valeur absolue ${format(r.largestAbsoluteChange,r.series) ?? 'non disponible'}`).join(' · '),
+    auditWithheld:'Calcul suspendu. Vérifiez le format, l’exhaustivité et l’identité de la source indiqués dans le relevé.',
+    auditNeedSource:'Ajoutez le fichier source exact indiqué dans la demande de calcul.',
+    auditNext:'Téléchargez le calcul et les sources pour réutiliser le résultat ou le vérifier indépendamment.',
+    supplySource:'Ajoutez les données du tableau ou le fichier de résultats pour pouvoir vérifier cette affirmation.',
     duplicateReply: 'Cette réponse exacte figure déjà dans la mission. Rapportez un nouveau résultat, un essai ou un fichier.',
     useFile: 'Préparer l’examen dans le compagnon privé',
     artifactUnverified: 'Fichier ajouté · vérification à venir',
@@ -227,7 +248,7 @@ export function setupMissionConsole(member, shell) {
   let mission, request, connection, activeRequest, atlas, unmatchedWork, serial = 0;
   let entryDocuments, recoveredDocuments, fileSerial = 0, editingAmbition = false;
   let evidenceContext, selectedEvidence, assistedDraft;
-  let artifactSerial = 0;
+  let artifactSerial = 0, nativeKey = '', nativeResults = [];
   let browserCheck = 0;
   const active = () => !member.hidden;
   const files = () => mission ? mission.documents ?? recoveredDocuments ?? [] : entryDocuments ?? [];
@@ -300,6 +321,64 @@ export function setupMissionConsole(member, shell) {
     return inspectReturnedWork(original?.content ?? report?.work, resultFiles());
   }
 
+  function nativeChecks() {
+    const inputs = resultFiles();
+    const key = JSON.stringify([mission?.id,mission?.revision,inputs.map(file=>[file.name,file.kind,file.sha256])]);
+    if (key !== nativeKey) {
+      nativeKey = key;
+      nativeResults = evaluateMissionFiles(inputs);
+    }
+    return nativeResults;
+  }
+
+  function amount(value, unit) {
+    return value === null ? null : [i ? value.replace('.', ',') : value,unit].filter(Boolean).join(' ');
+  }
+
+  function auditSummary(result) {
+    if (result.disposition !== 'VERIFIED_CALCULATION') return result.reason === 'SOURCE_MISSING' ? words.auditNeedSource : words.auditWithheld;
+    if (result.operation === 'decision-boundaries') return words.auditBoundary(result.differingScores,result.comparedScores,result.maxima);
+    if (result.operation === 'concentration') {
+      const {measuredDays,missingDays,windowTotal,total,percentageOfMeasuredTotal} = result.output;
+      const unit = Object.values(result.units ?? {})[0];
+      return words.auditConcentration(measuredDays,missingDays,amount(windowTotal,unit),amount(total,unit),amount(percentageOfMeasuredTotal));
+    }
+    return words.auditChanges(result.output,(value,series)=>amount(value,result.units?.[series]));
+  }
+
+  function renderNativeResults() {
+    const results = mission ? nativeChecks() : [];
+    show('mission-native-result', results.length > 0);
+    const verified = results.some(result => result.disposition === 'VERIFIED_CALCULATION');
+    text('mission-native-title', verified ? words.auditDone : words.auditWithheld);
+    text('mission-native-scope', verified ? words.auditScope : '');
+    node('mission-native-list').replaceChildren(...results.map(result => {
+      const row = document.createElement('li');
+      row.textContent = auditSummary(result);
+      if (result.operation === 'decision-boundaries') {
+        const scores = result.ranges.map(([start,end])=>start === end ? start : `${start}–${end}`);
+        const detail = document.createElement('p');
+        detail.textContent = scores.join(', ');
+        row.append(detail);
+      } else if (result.operation === 'concentration') {
+        const detail = document.createElement('p');
+        detail.textContent = result.output.maximumWindows.map(dates=>dates.join(' → ')).join(' · ');
+        row.append(detail);
+      } else if (result.operation === 'successive-changes') {
+        const detail = document.createElement('p');
+        detail.textContent = result.output.flatMap(series=>series.largestSteps.map(step=>`${series.series} · ${step.from} → ${step.to} · ${amount(step.amount,result.units?.[series.series])}`)).join(' | ');
+        row.append(detail);
+      }
+      return row;
+    }));
+  }
+
+  node('mission-native-download').addEventListener('click', () => {
+    if (!active() || !mission || !nativeChecks().length) return;
+    const inputs = resultFiles().map(({name,sha256,bytes}) => ({name,sha256,bytes}));
+    downloadJSON({mission:mission.originalAmbition, inputs, calculations:nativeChecks()}, 'frontier-calculation-receipt.json');
+  });
+
   function evidenceBundle(file) {
     if (!/\.json$/iu.test(file.name)) return null;
     const value = JSON.parse(file.content.replace(/^\ufeff/u, ''));
@@ -370,6 +449,7 @@ export function setupMissionConsole(member, shell) {
   }
 
   function stageArtifact(file) {
+    if (file.kind === 'archive') return;
     const name = /\.(txt|md|csv|tsv|json)$/iu.test(file.name) ? file.name : file.name + '.txt';
     try {
       const existing = files().find(source => source.name === name);
@@ -398,21 +478,22 @@ export function setupMissionConsole(member, shell) {
       const caption = document.createElement('summary');
       caption.textContent = file.name;
       const status = document.createElement('p');
-      status.textContent = `${words.artifactUnverified} · ${file.bytes} B`;
+      status.textContent = `${file.kind === 'archive' ? words.archiveInspected : words.artifactUnverified} · ${file.bytes} B`;
       const preview = document.createElement('pre');
-      preview.textContent = workPreview(file.content);
+      preview.hidden = file.kind === 'archive';
+      if (!preview.hidden) preview.textContent = workPreview(file.content);
       const hash = document.createElement('p');
       hash.textContent = 'SHA-256 ' + file.sha256;
       const download = document.createElement('button');
       download.type = 'button';
       download.className = 'quiet';
-      download.textContent = words.fileDownload;
+      download.textContent = words.downloadExact;
       download.addEventListener('click', () => {
-        if (active()) downloadText(file.content, file.name, 'application/octet-stream');
+        if (active()) downloadText(missionArtifactBytes(file), file.name, 'application/octet-stream');
       });
       record.append(caption, status, preview, hash, download);
       claimReviewControls(file, record);
-      if (file.bytes <= maxDocumentBytes && !['running','canceled'].includes(mission.status)) {
+      if (file.kind !== 'archive' && file.bytes <= maxDocumentBytes && !['running','canceled'].includes(mission.status)) {
         const stage = document.createElement('button');
         stage.type = 'button';
         stage.className = 'quiet';
@@ -451,12 +532,16 @@ export function setupMissionConsole(member, shell) {
       && !['running','canceled'].includes(mission.status);
     try {
       if (selected.length > maximumArtifacts || selected.reduce((sum, file) => sum + file.size, 0) > maximumArtifactBytes) throw Error('ARTIFACT_LIMIT');
-      const imported = await Promise.all(selected.map(file => readMissionArtifact(file, revision)));
+      const imported = (await Promise.all(selected.map(file => importMissionArtifacts(file, revision)))).flat();
       if (!sameRevision()) return;
       mission = addMissionArtifacts(mission, imported);
       node('mission-deliverables').open = true;
       text('mission-deliverable-feedback', '');
       render();
+      if (nativeChecks().length) {
+        node('mission-native-result').focus({preventScroll:true});
+        node('mission-native-result').scrollIntoView({block:'nearest'});
+      }
     } catch { if (sameRevision()) text('mission-deliverable-feedback', words.deliverablesInvalid); }
   });
 
@@ -544,10 +629,13 @@ export function setupMissionConsole(member, shell) {
   }
 
   function resetHandoff() {
+    artifactSerial++;
     request = undefined;
     evidenceContext = selectedEvidence = assistedDraft = undefined;
     for (const id of ['mission-prompt','mission-reply','mission-import-artifact']) node(id).value = '';
     node('mission-technical').checked = false;
+    node('mission-include-history').checked = false;
+    text('mission-history-preview', '');
     text('mission-copy-status', '');
     clearCopyFallback();
     resetAssistedImport();
@@ -576,10 +664,15 @@ export function setupMissionConsole(member, shell) {
       : browserReport ? words.browserSource : observed ? words.localSource : words.restoredSource;
     const labels = [source, observed && !browserReport ? report.model : null, words.unpublished].filter(Boolean);
     const running = state === 'running' && mission.run.model === browserModelId;
+    const plan = state === 'waiting' && evidenceContext?.items.length ? missionWorkPlan(evidenceContext, [...selectedEvidence]) : '';
+    text('mission-plan', plan);
+    show('mission-plan', Boolean(plan));
     text('mission-status', message ?? native?.status
-      ?? (report && state === 'review' ? labels.join(' · ') : running ? words.browserRunning : words[state]));
+      ?? (nativeChecks().some(result => result.disposition === 'VERIFIED_CALCULATION') ? words.auditDone
+        : report && state === 'review' ? labels.join(' · ') : running ? words.browserRunning : words[state]));
     const missing = state === 'review' ? workInspection(report).missing : [];
-    text('mission-next', native?.nextAction ?? (missing.length ? words.deliverablesMissing(missing)
+    const check = nativeChecks().find(result => result.disposition === 'VERIFIED_CALCULATION');
+    text('mission-next', native?.nextAction ?? (check ? words.auditNext : missing.length ? words.deliverablesMissing(missing)
       : state === 'canceled' ? words.canceledNext : state === 'paused' ? words.pausedNext
       : state === 'waiting' ? words.assisted : state === 'running' ? words.localNext
       : state === 'ready' && missionPacket(mission).instruction ? words.nextInstruction : report?.nextAction ?? words.choose));
@@ -589,6 +682,8 @@ export function setupMissionConsole(member, shell) {
     const panel = node('frontier-mission-panel');
     panel.hidden = !mission;
     node('mission-export').disabled = !mission;
+    renderNativeResults();
+    refreshHistoryPreview();
     show('mission-return', Boolean(mission));
     show('mission-reopen-current', Boolean(mission));
     show('mission-checkpoint', Boolean(mission));
@@ -749,11 +844,11 @@ export function setupMissionConsole(member, shell) {
     const packet = missionPacket(mission);
     const context = [`${words.contextRun}: ${packet.runId}`];
     if (atlas) context.push(`${words.contextAtlas}: ${atlas.title} · ${atlas.evidence} · ${atlas.url}`);
-    if (packet.previousReport) {
+    if (packet.previousReport && mission.run?.provider !== 'assisted') {
       const previous = packet.previousReport;
-      context.push(`${words.contextObjective}: ${previous.objective.slice(0,450)}`);
-      context.push(`${words.contextAction}: ${previous.nextAction.slice(0,450)}`);
-      if (previous.work) context.push(`${words.contextWork}: ${previous.work.slice(0,450)}`);
+      context.push(`${words.contextObjective}: ${workPreview(previous.objective,1700)}`);
+      context.push(`${words.contextAction}: ${workPreview(previous.nextAction,1700)}`);
+      if (previous.work) context.push(`${words.contextWork}: ${workPreview(previous.work,1700)}`);
       const missing = workInspection(previous).missing;
       if (missing.length) context.push(words.deliverablesMissing(missing.slice(0,4)));
     }
@@ -769,7 +864,7 @@ export function setupMissionConsole(member, shell) {
       ...(assumptions && {assumptions}), ...(work && {work}), ...(capabilityIds && {capabilityIds}), ...(artifacts && {artifacts})});
     resetHandoff();
     render();
-    node('mission-work-panel').open = Boolean(receipt.work);
+    node('mission-work-panel').open = Boolean(receipt.work && encoder.encode(receipt.work).length <= 1600);
   }
 
   function revealHandoff(prepared) {
@@ -784,14 +879,44 @@ export function setupMissionConsole(member, shell) {
     handoff.open = true;
   }
 
+  function priorContext(value) {
+    const prefixes = ['Excerpt from previous unverified work','Extrait du travail précédent à vérifier',
+      ...Object.values(messages).flatMap(labels=>[labels.contextObjective,labels.contextAction,labels.contextWork])];
+    return prefixes.some(label=>value.startsWith(`${label}: `));
+  }
+
+  function priorMaterial() {
+    const prior = currentReport();
+    const original = prior?.artifacts?.find(file=>['assisted-text','assisted-original'].includes(file.kind));
+    const held = resultFiles().map(file=>`${file.name} · SHA-256 ${file.sha256}`);
+    const checks = nativeChecks().filter(result=>result.disposition === 'VERIFIED_CALCULATION');
+    return [checks.length ? `${words.auditDone}\n${checks.map(auditSummary).join('\n')}` : null,
+      held.length ? `${words.priorFiles}\n${held.join('\n')}` : null,
+      original?.content || prior?.work ? `${words.priorOriginal}\n${original?.content ?? prior.work}` : null]
+      .filter(Boolean).join('\n\n');
+  }
+
+  function refreshHistoryPreview() {
+    const preview = node('mission-history-preview');
+    const material = request ? priorMaterial() : '';
+    if (preview.textContent !== material) {
+      preview.textContent = material;
+      node('mission-include-history').checked = false;
+      clearCopyFallback();
+      text('mission-copy-status', '');
+    }
+    show('mission-history-share', Boolean(material) && !node('mission-prompt').readOnly);
+  }
+
   function updateAssistedBrief() {
     if (!request) return;
-    const context = request.context.filter(value => !value.startsWith(`${words.contextRun}: `));
+    const context = request.context.filter(value => !value.startsWith(`${words.contextRun}: `) && !priorContext(value));
     const prompt = node('mission-prompt');
     prompt.readOnly = node('mission-technical').checked;
     prompt.value = prompt.readOnly ? createMissionPrompt(request)
       : assistedDraft ?? createAssistedBrief(request, context, Boolean(mission.reports.length));
     show('mission-evidence-context', !prompt.readOnly && Boolean(evidenceContext));
+    refreshHistoryPreview();
     text('mission-copy-status', '');
     clearCopyFallback();
     updateHandoffControls();
@@ -800,7 +925,7 @@ export function setupMissionConsole(member, shell) {
   function renderEvidence() {
     const items = evidenceContext?.items ?? [];
     show('mission-evidence-context', Boolean(request) && !node('mission-technical').checked && Boolean(evidenceContext));
-    text('mission-context-status', items.length ? words.evidenceAppend
+    text('mission-context-status', items.length ? missionWorkPlan(evidenceContext, [...selectedEvidence])
       : evidenceSources?.release ? words.evidenceGap : words.evidenceUnavailable);
     show('mission-context-download', items.length > 0);
     node('mission-context-items').replaceChildren(...items.map(item => {
@@ -814,6 +939,8 @@ export function setupMissionConsole(member, shell) {
         else selectedEvidence.delete(item.id);
         clearCopyFallback();
         text('mission-copy-status', '');
+        text('mission-context-status', missionWorkPlan(evidenceContext, [...selectedEvidence]));
+        renderHeadline();
       });
       label.append(include, document.createTextNode(' ' + item.title));
       const detail = document.createElement('p');
@@ -836,16 +963,33 @@ export function setupMissionConsole(member, shell) {
 
   function refreshEvidence() {
     const {ambition, instruction, language:missionLanguage} = missionPacket(mission);
-    evidenceContext = selectMissionContext({ambition, instruction, language:missionLanguage, ...evidenceSources});
+    const requestScope = {ambition, language:missionLanguage, ...evidenceSources};
+    const previous = currentReport();
+    const previousScope = !instruction && previous?.provider === 'assisted' && previous.work
+      ? selectMissionContext({...requestScope, instruction:workPreview(previous.work,2200)}) : null;
+    evidenceContext = previousScope?.items.length ? previousScope : selectMissionContext({...requestScope, instruction});
     selectedEvidence = new Set(evidenceContext.items.map(item => item.id));
     renderEvidence();
   }
 
   function sharedBrief() {
     const prompt = node('mission-prompt');
-    const rows = !prompt.readOnly && evidenceContext ? missionContextLines(evidenceContext, [...selectedEvidence]) : [];
-    return rows.length ? `${prompt.value}\n\n${words.evidenceHeading}\n${rows.join('\n\n')}` : prompt.value;
+    if (prompt.readOnly || !evidenceContext) return prompt.value;
+    const selected = [...selectedEvidence];
+    const rows = missionContextLines(evidenceContext, selected);
+    const parts = [prompt.value,`${words.evidencePlan}\n${missionWorkPlan(evidenceContext, selected)}`];
+    if (rows.length) parts.push(`${words.evidenceHeading}\n${rows.join('\n\n')}`);
+    if (node('mission-include-history').checked) {
+      const reviewed = node('mission-history-preview').textContent;
+      if (reviewed) parts.push(reviewed);
+    }
+    return parts.join('\n\n');
   }
+
+  node('mission-include-history').addEventListener('change', () => {
+    clearCopyFallback();
+    text('mission-copy-status', '');
+  });
 
   node('mission-context-download').addEventListener('click', () => {
     if (!active() || !request || !evidenceContext) return;
@@ -877,7 +1021,7 @@ export function setupMissionConsole(member, shell) {
     execution.clearWaiting();
     const token = ++serial;
     try {
-      if (mission.status !== 'waiting' || mission.run?.provider !== 'assisted' || !mission.request) {
+      if (mission.status !== 'waiting' || mission.run?.provider !== 'assisted' || !mission.request || mission.request.context.some(priorContext)) {
         const queued = prepareMission(mission, {provider:'assisted'});
         mission = queued;
         const prepared = await bindMissionRequest(queued, queued.run.id, await requestForMission());
@@ -954,14 +1098,19 @@ export function setupMissionConsole(member, shell) {
       text('mission-handoff-status', words.duplicateReply);
       return;
     }
-    const receipt = result.receipt ?? {route:'continuing', objective:mission.ambition, nextAction:words.workReview};
+    const inspection = inspectReturnedWork(result.raw, resultFiles());
+    const proposed = result.work.match(/^#{1,6} +(?:next [^\n]*|prochaine? [^\n]*|suite)\n\s*([^#\n][^\n]*)/imu)?.[1]?.trim();
+    const nextAction = inspection.missing.length ? words.deliverablesMissing(inspection.missing)
+      : proposed ? `${words.nextFromReply} · ${workPreview(proposed,650)}` : (inspection.hasTable || inspection.sources.length) ? words.supplySource : words.workReview;
+    const receipt = result.receipt ?? {route:'continuing', objective:mission.ambition, nextAction};
     const work = workPreview(result.work.trim() ? result.work : result.raw);
     accept({...receipt, work, artifacts:[artifact]}, mission.run.id);
     if (workInspection(currentReport()).missing.length) node('mission-deliverables').open = true;
     const workPanel = node('mission-work-panel');
-    if (workPanel.getClientRects().length) {
-      workPanel.querySelector('summary').focus({preventScroll:true});
-      workPanel.scrollIntoView({block:'start', behavior:'instant'});
+    const target = workInspection(currentReport()).missing.length ? node('mission-deliverable-import') : workPanel.querySelector('summary');
+    if (target.getClientRects().length) {
+      target.focus({preventScroll:true});
+      target.scrollIntoView({block:'nearest', behavior:'instant'});
     }
   }
 
@@ -1250,6 +1399,7 @@ export function setupMissionConsole(member, shell) {
         resetRequest();
         localRuns.clear();
         mission = restored;
+        nativeKey = '';
         recoveredDocuments = entryDocuments = undefined;
         editingAmbition = false;
         fileSerial++;
@@ -1259,7 +1409,10 @@ export function setupMissionConsole(member, shell) {
         atlas = undefined;
         input.value = mission.ambition;
         input.dispatchEvent(new Event('input'));
-        if (mission.status === 'waiting' && mission.request) revealHandoff(mission.request);
+        if (mission.status === 'waiting' && mission.request) {
+          if (mission.request.context.some(priorContext)) void prepareAssistance({focus:false});
+          else revealHandoff(mission.request);
+        }
         render(words.reopened);
         text('mission-file-status', words.reopened);
         shell.show(node('frontier-mission-panel'), {remember:true});

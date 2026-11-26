@@ -81,6 +81,7 @@ ASSETS += (
     'frontier-omega-alpha/frontier-mission.mjs',
     'frontier-omega-alpha/frontier-mission-router.mjs',
     'frontier-omega-alpha/frontier-mission-ui.mjs',
+    'frontier-omega-alpha/frontier-native-work.mjs',
     'frontier-omega-alpha/frontier-mission-context.mjs',
     'frontier-omega-alpha/frontier-artifact-exchange.mjs',
     'frontier-omega-alpha/dpp-source-review.mjs',

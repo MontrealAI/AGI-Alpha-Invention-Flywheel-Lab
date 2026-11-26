@@ -76,6 +76,14 @@ The scoped original-source follow-through recovered both previously withheld bat
 | Blended JWST line ratio | **EXPERIMENTAL with a verified development dependency.** The extra observed Hβ and [O III] window enabled a conditional recovery in one open PRISM record and tied ordinary joint fitting. Differential calibration and matched dither checks exposed material uncertainty. The twelve-system independent-observation follow-through accepted zero. |
 | Retained specialist and inventive transfer | **NOT TESTED as a qualified specialist or subsequent-invention claim.** The development mechanisms and failure evidence are retained. TOI-216's attribution remains **ABSTAIN**. Training, paid inference, member admission and economic claims require their own evidence. |
 
+## Make it worth using
+
+| Gate | Current evidence |
+| --- | --- |
+| Owner ambition and imported result | **PROVEN for the scoped engineering replay.** The exact live activation selected no public evidence and rejected the package. In the repaired journey, the browser retained the original ZIP and independently reconstructed three scores where the stated maxima diverge. The exact original return is available for a reviewed continuation. [Member journey and operating guide](research-activation/member-journey/README.md) |
+| Fresh results and reusable calculations | **PROVEN for two source-bound operations.** Original Canadian weather and reference-rate records yielded accepted results in English and French. Strong ordinary computations tied. Actual consenting-member work, whole-work advantage, autonomous invention and realized economic value remain unqualified. |
+| JWST native response | **PARTIAL.** Independent calibrator exposures, archived wavelength grids, a pinned MSAFIT ordinary model and equal-exposure comparisons establish response limits. The calibration and noise alternatives withhold a line-ratio gain claim. A disjoint cohort supplied sixteen formal sensitivity checks. Effective illumination and independent reference custody remain open. |
+
 ## External outcomes
 
 | Gate | Existing route and smallest unresolved action |

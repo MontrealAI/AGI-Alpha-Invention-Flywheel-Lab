@@ -658,7 +658,11 @@ async function ownerConnectionJourney(page, language, width) {
   assert.equal(await readFile(await (await originalDownload).path(), 'utf8'), copied);
   await page.locator('#mission-continue-assisted').click();
   await prompt.waitFor({state:'visible'});
-  assert.ok((await prompt.inputValue()).includes('Check the scope'));
+  assert.doesNotMatch(await prompt.inputValue(), /Check the scope/u);
+  const priorMaterial = page.locator('#mission-history-share');
+  await priorMaterial.locator('summary').click();
+  assert.match(await priorMaterial.locator('pre').textContent(), /Check&#x20;the scope|Check the scope/u);
+  assert.equal(await page.locator('#mission-include-history').isChecked(), false);
   assert.deepEqual(await page.evaluate(() => window.reviewedBriefWrites), originalCopy);
   await page.locator('#mission-follow-up').fill('Use the comparator output as the next piece of evidence.');
   await page.locator('#mission-follow-up-form button').click();
@@ -702,7 +706,7 @@ async function proofOfAdvantageJourney(page, language, width) {
       window.advantageClipboard = [];
       navigator.clipboard.writeText = async text => { window.advantageClipboard.push(text); };
     });
-    const ambition = 'CAPTURE THE EXPONENTIAL';
+    const ambition = language === 'fr' ? 'Vérifier la masse du passeport de batterie selon sa source' : 'Verify battery passport weight against its source';
     await page.locator('#goal-text').fill(ambition);
     await page.locator('#goal-submit').click();
     const prompt = page.locator('#mission-prompt');
@@ -728,7 +732,8 @@ async function proofOfAdvantageJourney(page, language, width) {
     const share = JSON.parse(await readFile(await (await sharing).path()));
     assert.deepEqual(Object.keys(share), ['schema','language','brief','context']);
     assert.ok(share.brief.startsWith(modified));
-    assert.doesNotMatch(JSON.stringify(share), /CAPTURE THE EXPONENTIAL|14\/16.*6\/6/u);
+    assert.ok(!JSON.stringify(share).includes(ambition));
+    assert.doesNotMatch(JSON.stringify(share), /14\/16.*6\/6/u);
     assert.ok(share.context.every(item => item.id !== 'battery-source-review'));
     await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw Error('fixture clipboard unavailable'); }; });
     const fallback = page.locator('#mission-copy-fallback');

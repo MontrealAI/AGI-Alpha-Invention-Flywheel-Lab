@@ -79,6 +79,9 @@ const rejects = {
 // The general exploration package spans industries. An ambition already
 // narrowed to a field should receive only individually matched evidence.
 const focusedDiscovery = /\b(?:(?:recent advances?|emerging technolog\w*|newly (?:possible|attainable|feasible)|nouvelles possibilites|avancees recentes) (?:in|for|within|dans|en|pour)|focus(?:ed)? on|concentre\w* sur) (?!ai\b|technology\b|technologie\b|ia\b)\w/u;
+const activate = /\b(?:activat\w*|activ\w*|mobiliz\w*|mobilis\w*|harness|exploit\w*|build|invent\w*|concevoir|construir\w*|creer|unlock|deploy\w*|deployer|apply|appliquer|put .{1,48} to work|mettre .{1,48} au travail)\b/u;
+const frontier = /\b(?:(?:ai|ia|intelligence artificielle|artificial intelligence) (?:progr\w*|advanc\w*|de pointe|de frontiere)|(?:frontier|cutting edge|state of the art) (?:ai|artificial intelligence|intelligence|capabilit\w*|models?)|(?:intelligence|capacite\w*|ia|modele\w*) (?:de pointe|de frontiere)|progres (?:de |en )?(?:l )?(?:ia|intelligence artificielle))\b/u;
+const substantiveDomain = /\b(?:game theory|theorie des jeux|wavelength|nirspec|temperature|precipitation\w*|precipitations|exchange rates?|taux de change|latency|latence|equations?|battery|batterie|calibration|efficiency|efficacite|encryption|chiffrement|neural networks?|reseaux neuronaux)\b/u;
 
 const intent = /\b(?:verify|verifier|validate|valider|research|recherch\w*|investigat\w*|enquet\w*|review|examin\w*|compare|comparer|check|evaluate|evalu\w*|discover|decouvr\w*|catalog\w*|availability|disponibilite)\b/u;
 const ignored = new Set(('their about this these those what which with from please would recent technology technical software report results system research publication review public verify validated compare using supported support evidence study author frontier source ' +
@@ -118,6 +121,25 @@ function scopedOverlap(words, title) {
   if (!words || typeof title !== 'string') return 0;
   const overlap = [...terms(title)].filter(term => words.has(term));
   return overlap.length >= 2 && overlap.some(term => term.length >= 6) ? overlap.length : 0;
+}
+
+function fittingEvidence(words, title, fact) {
+  if (scopedOverlap(words,title)) return true;
+  return words && typeof title === 'string'
+    && [...terms(title)].some(term => term.length >= 6 && words.has(term))
+    && scopedOverlap(words,`${title} ${fact ?? ''}`) > 0;
+}
+
+function discoveryIntent(query) {
+  if (!query || rejects.discovery.test(query) || focusedDiscovery.test(query) || substantiveDomain.test(query)) return false;
+  return fits('discovery', query) || activate.test(query) && frontier.test(query);
+}
+
+function evidenceRank(entry, words, release) {
+  const anchors = scopedOverlap(words, `${entry.title} ${entry.fact}`);
+  const lead = entry.kind === 'lead';
+  return 4 * anchors + Number(!lead) * 4 + Number(recent(entry, release)) * 2
+    + Number(Boolean(entry.artifact)) * 2 + Number(Boolean(entry.source.primaryMetadataSha256));
 }
 
 function reviewedSource(release, path) {
@@ -249,6 +271,26 @@ function gameItem(language, release) {
       instructions:'python -I -S verify.py EXAMPLE.json EXAMPLE-CERTIFICATE.json'}});
 }
 
+function assessmentItem(language, release) {
+  const filename = 'frontier-native-work.mjs';
+  const digest = release?.universal_mission_sha256?.[filename];
+  if (!sha.test(digest ?? '')) return undefined;
+  const fr = language === 'fr';
+  return item({id:'assessment-version-replay',kind:'result',
+    title:fr ? 'Versions de calcul des évaluations algorithmiques' : 'Versioned assessment scoring',
+    fact:fr ? 'Trois exports publics de niveau II s’affichaient au niveau I dans le calculateur courant. Le calcul lié à la version d’origine a reproduit les niveaux publiés.' :
+      'Three public Level II exports displayed as Level I in the current calculator. Replaying the version-bound calculation reproduced the published levels.',
+    scope:fr ? 'Exemples publics vérifiés. Un tableau de seuils à maximums fixes peut être recalculé localement. Il ne constitue pas une évaluation complète.' :
+      'Verified public examples. A fixed-maximum boundary table can be recalculated locally. It is an arithmetic screen, with separate questionnaire and policy scope.',
+    relevance:fr ? 'Vérifier le maximum applicable et refaire le calcul pour chaque export autorisé.' :
+      'Bind the correct maximum to each authorized export and reproduce the calculation.',
+    sourceURL:'https://open.canada.ca/data/dataset/01396e33-2c69-47e5-9381-32e717943b96',sourceDate:'2026-11-26',dateBasis:'reviewDate',
+    recordURL:reviewedSource(release,'publication/prove-advantage/binding-constraint/assessment-versions/README.md'),
+    artifact:{url:published+filename, sha256:digest, version:'1.0.0',rights:'Published repository source',
+      instructions:fr ? 'Ajoutez le tableau de seuils à la mission pour recalculer les scores sur votre appareil.' :
+        'Add the boundary CSV to the mission to recompute its shared scores on your device.'}});
+}
+
 function atlasLead(entry, language, broad, release) {
   if (entry.state !== 'discovered') return undefined;
   const words = word[language];
@@ -290,31 +332,52 @@ export function selectMissionContext({ambition, instruction, language = 'en', at
   if (query) {
     for (const key of Object.keys(tools)) if (fits(key, query)) items.push(toolItem(key, language, memberValue, release));
     if (fits('game', query)) items.push(gameItem(language, release));
-    const broad = fits('discovery', query) && !focusedDiscovery.test(query);
-    if (broad || fits('battery', query)) items.push(batterySourceStudy(language, release));
-    const researchTerms = intent.test(query) ? terms(query) : null;
+    if (/\b(?:algorithmic impact assessments?|evaluations? d incidence algorithmique|aia|eia)\b/u.test(query)
+      && /\b(?:scor\w*|scores?|denominat\w*|seuil\w*|impact levels?|niveaux? d incidence)\b/u.test(query)) {
+      items.push(assessmentItem(language, release));
+    }
+    const broad = discoveryIntent(query);
+    if (fits('battery', query)) items.push(batterySourceStudy(language, release));
+    const researchTerms = intent.test(query) || activate.test(query) ? terms(query) : null;
     if (opportunity?.schema === 'frontier/opportunity-capture-v1' && Array.isArray(opportunity.opportunities)) {
       const opportunities = opportunity.opportunities.filter(record)
-        .filter(entry => broad || scopedOverlap(researchTerms, entry[language]?.title))
+        .filter(entry => broad || fittingEvidence(researchTerms, entry[language]?.title, entry[language]?.finding))
         .map(entry => opportunityItem(opportunity, entry, language, broad, release))
         .filter(entry => entry && (!broad || recent(entry, release)));
-      items.push(...opportunities.slice(0, broad ? 1 : 2));
-      if (broad) items.push(comparison(opportunity, language, release));
+      items.push(...opportunities);
     }
     if (atlas?.schema === 'frontier-omega-alpha/atlas-ledger-v1' && Array.isArray(atlas.records)) {
       const leads = atlas.records.filter(record).map(entry => atlasLead(entry, language, broad, release))
-        .filter(entry => entry && (broad ? recent(entry, release) : scopedOverlap(researchTerms, entry.title)))
-        .sort((a, b) => Number(Boolean(b.source.primaryMetadataSha256)) - Number(Boolean(a.source.primaryMetadataSha256))
-          || b.source.date.localeCompare(a.source.date) || a.id.localeCompare(b.id));
-      items.push(...leads.slice(0, broad ? 1 : 2));
+        .filter(entry => entry && (broad ? recent(entry, release) : fittingEvidence(researchTerms, entry.title, entry.fact)));
+      items.push(...leads);
     }
+    const ranked = [...new Map(items.filter(Boolean).map(entry => [entry.id, entry])).values()]
+      .sort((a, b) => evidenceRank(b, broad ? null : researchTerms, release) - evidenceRank(a, broad ? null : researchTerms, release)
+        || b.source.date.localeCompare(a.source.date) || a.id.localeCompare(b.id));
+    const selected = ranked.slice(0, broad ? 3 : 4);
+    const priorComparison = broad && opportunity?.schema === 'frontier/opportunity-capture-v1' ? comparison(opportunity, language, release) : null;
+    if (priorComparison && selected.length) selected.push(priorComparison);
+    if (selected.length) return {schema:contextSchema, language, items:selected, gap:null};
   }
-  const selected = items.filter(Boolean).slice(0, 3);
-  return {schema:contextSchema, language, items:selected, gap:selected.length ? null : 'NO_APPLICABLE_PUBLIC_EVIDENCE'};
+  return {schema:contextSchema, language, items:[], gap:'NO_APPLICABLE_PUBLIC_EVIDENCE'};
 }
 
 function selectedItems(context, ids) {
   return context.items.filter(entry => ids === undefined || ids.includes(entry.id));
+}
+
+export function missionWorkPlan(context, ids) {
+  const primary = selectedItems(context, ids).find(entry => entry.id !== 'opportunity-comparison');
+  const fr = context.language === 'fr';
+  if (!primary) return fr
+    ? 'Cherchez la source primaire ou la meilleure méthode directement applicable. Livrez une mesure, un fichier ou un résultat vérifiable, ou indiquez la donnée précise qui manque.'
+    : 'Find the primary evidence or strongest directly applicable method. Deliver a checkable result, measurement or file, or identify the precise missing input.';
+  if (primary.kind === 'tool') return fr
+    ? `Essayez d’abord ${primary.title} sur une entrée réelle autorisée. Livrez le résultat et ses données sources. Vérifiez le résultat par une méthode indépendante. Signalez tout écart de périmètre.`
+    : `Start by operating ${primary.title} on an authorized real input. Deliver its output and source data. Check the result independently and identify any scope mismatch.`;
+  return fr
+    ? `Partez de « ${primary.title} ». Reproduisez une mesure ou une décision utile avec des données originales. Comparez-la à la méthode courante et livrez les entrées et le résultat réutilisables. Si la piste échoue, documentez le test décisif.`
+    : `Start from “${primary.title}”. Reproduce one useful measurement or decision on original inputs. Compare with the ordinary method and return the reusable inputs and output. If the lead fails, preserve the decisive test.`;
 }
 
 export function missionContextLines(context, selectedIds) {

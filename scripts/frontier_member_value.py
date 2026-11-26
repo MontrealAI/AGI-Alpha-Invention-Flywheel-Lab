@@ -87,10 +87,10 @@ OUTCOME_PUBLICATION = MAIN / 'publication/outcome-driven'
 INTELLIGENCE_PUBLICATION = MAIN / 'publication/bring-your-own-intelligence'
 MISSION_MARKER = '<!-- UNIVERSAL_PUBLIC_RUNS -->'
 MISSION_CONTEXT_MARKER = '<!-- UNIVERSAL_PUBLIC_CONTEXT -->'
-MISSION_CONTEXT_ASSETS = (GAME_THEORY_ZIP, 'dpp-source-review.mjs', 'frontier-battery-source-example.json')
+MISSION_CONTEXT_ASSETS = (GAME_THEORY_ZIP, 'dpp-source-review.mjs', 'frontier-battery-source-example.json', 'frontier-native-work.mjs')
 PUBLIC_MISSIONS = MAIN / 'publication/universal'
 MISSION_ASSETS = ('frontier-mission.mjs', 'frontier-mission-router.mjs', 'frontier-mission-ui.mjs', 'frontier-assisted-work.mjs',
-                  'frontier-mission-context.mjs', 'frontier-artifact-exchange.mjs', 'dpp-source-review.mjs',
+                  'frontier-mission-context.mjs', 'frontier-artifact-exchange.mjs', 'frontier-native-work.mjs', 'dpp-source-review.mjs',
                   'frontier-battery-source-example.json',
                   'frontier-execution.mjs', 'frontier-browser-model.mjs', 'frontier-companion-link.mjs', 'companion-start.html',
                   GAME_THEORY_ZIP, OBSERVATION_ZIP,
