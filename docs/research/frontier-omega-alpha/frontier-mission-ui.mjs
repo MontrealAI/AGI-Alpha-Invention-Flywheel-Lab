@@ -487,7 +487,7 @@ export function setupMissionConsole(member, shell) {
       const download = document.createElement('button');
       download.type = 'button';
       download.className = 'quiet';
-      download.textContent = words.downloadExact;
+      download.textContent = file.kind === 'archive' ? words.downloadExact : words.fileDownload;
       download.addEventListener('click', () => {
         if (active()) downloadText(missionArtifactBytes(file), file.name, 'application/octet-stream');
       });
