@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce the published scores for three exact, version-bound assessments."""
+"""Reproduce published scores for exact, version-bound assessments."""
 import argparse
 import hashlib
 import json
@@ -9,6 +9,7 @@ from stat import S_ISREG
 
 
 MANIFEST = Path(__file__).with_name('SOURCES.json')
+LEVEL_CASES = Path(__file__).with_name('LEVEL-EVIDENCE.json')
 SCORED_FORM_TYPES = {'checkbox', 'dropdown', 'radiogroup'}
 
 
@@ -39,7 +40,7 @@ def option_score(option):
     return int(pieces[-1]) if len(pieces) == 2 and pieces[-1].isdigit() else 0
 
 
-def totals(form, answers):
+def totals(form, answers, *, use_legacy_encoding=False):
     maximum = {'RS': 0, 'MS': 0}
     scores = {'RS': 0, 'MS': 0}
     seen = set()
@@ -67,7 +68,12 @@ def totals(form, answers):
                 if isinstance(selected, list) != multiple:
                     raise ValueError(f'Unexpected answer shape for {name}.')
                 selected = selected if multiple else [selected]
-                if len(set(selected)) != len(selected) or any(option not in options for option in selected):
+                if len(set(selected)) != len(selected):
+                    raise ValueError(f'Unsupported answer option for {name}.')
+                if use_legacy_encoding:
+                    scores[kind] += sum(option_score(option) for option in selected)
+                    continue
+                if any(option not in options for option in selected):
                     raise ValueError(f'Unsupported answer option for {name}.')
                 scores[kind] += sum(options[option] for option in selected)
     return scores, maximum
@@ -81,11 +87,14 @@ def published_formula(scores, maximum):
     return {'raw_impact': raw, 'mitigation': mitigation, 'current': current, 'level': level}
 
 
-def replay(directory, selected):
+def replay(directory, selected, *, level_study=False):
     manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
+    assessments = manifest['assessments']
+    if level_study:
+        assessments = json.loads(LEVEL_CASES.read_text(encoding='utf-8'))['assessments']
     forms = {}
     outcomes = {}
-    for case, definition in manifest['assessments'].items():
+    for case, definition in assessments.items():
         if selected and case != selected:
             continue
         original = read_verified(directory, definition)
@@ -94,7 +103,9 @@ def replay(directory, selected):
             raise ValueError(f'Original version evidence differs for {case}.')
         if version not in forms:
             forms[version] = read_verified(directory, manifest['definitions'][version])
-        observed, maximum = totals(forms[version], original['data'])
+        # The level study includes an encoded choice beyond the tagged option list.
+        # Its two published PDFs independently bind the archived scorer's totals.
+        observed, maximum = totals(forms[version], original['data'], use_legacy_encoding=level_study)
         result = published_formula(observed, maximum)
         if result != definition['published_scores']:
             raise ValueError(f'Computed scores differ from the independently checked publication for {case}.')
@@ -109,10 +120,11 @@ def replay(directory, selected):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('source_directory', type=Path, help='Directory of the pinned public JSON inputs.')
-    parser.add_argument('--case', help='Optional exact case name from SOURCES.json.')
+    parser.add_argument('--case', help='Optional exact case name from the selected evidence manifest.')
+    parser.add_argument('--level-study', action='store_true', help='Reproduce the three independently checked legacy impact-level cases.')
     args = parser.parse_args()
     try:
-        result = replay(args.source_directory, args.case)
+        result = replay(args.source_directory, args.case, level_study=args.level_study)
     except (OSError, KeyError, ValueError) as error:
         parser.exit(1, f'{error}\n')
     print(json.dumps(result, indent=2, ensure_ascii=False))
