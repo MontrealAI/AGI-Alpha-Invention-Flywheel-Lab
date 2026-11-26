@@ -1,0 +1,119 @@
+{
+  "schema": "frontier/scientific-measurement-development-result-v1",
+  "prior_source_commit": "a4652bedee64348372701da42db86e1c5eaf9ee3",
+  "qualification": "EXPERIMENTAL; additional recovered measurements above the strongest applicable incumbent, matched risk, trained specialist, and causal subsequent invention remain unqualified.",
+  "ground_case_finding": {
+    "candidate_count": 12,
+    "native_tess_cutouts_with_valid_checksums": 10,
+    "native_ground_tables": 8,
+    "paired_originals": 6,
+    "ground_event_admissions": 0,
+    "alternative_dual_band_acquired": 2,
+    "alternative_ground_recurrences": 0,
+    "admitted_protected_confirmation": 0,
+    "independently_administered_custody": false
+  },
+  "public_development_cases": {
+    "toi-1423": {
+      "tess": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019253231442-s0016-0000000346418409-0152-s_tp.fits",
+      "tess_sha256": "13cca7e95bbc8da1f36d1c657d74b829ba76a6e07e493a432e3eb39ba131a623",
+      "tess_quality_zero_cadences": 13567,
+      "independent_ground_recurrence_days": 2.756413176,
+      "independent_ground_measurements": 1472,
+      "ground_filter_observations": {
+        "r": 854,
+        "g": 618
+      },
+      "reference_source": "https://doi.org/10.1093/mnras/stad3857",
+      "underlying_ground_photons": "https://irsa.ipac.caltech.edu/docs/program_interface/ztf_lightcurve_api.html",
+      "tess_model_conditional_95_days": [
+        2.7535213,
+        2.7590873
+      ],
+      "classification": "Positive conventional control",
+      "recurrence_days_from_tess": 2.756304288
+    },
+    "toi-531": {
+      "tess": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2018349182500-s0006-0000000302895996-0126-s_tp.fits",
+      "tess_sha256": "8f0b1c9263ab192d5ee91fef38c92694f7692dffe783ddaafad9c83fb56d2ea3",
+      "independent_original_ground_table": "https://exofop.ipac.caltech.edu/tess/get_file.php?id=12277",
+      "ground_table_sha256": "1b92486afa01d9cc0f6e748883bc37496fbd3c59329725e79d83b62b6e674171",
+      "ground_points": 78,
+      "tess_quality_zero_cadences": 14595,
+      "ordinary_tess_source_offset_pixels": 0.073,
+      "independent_ground_recurrence": "WITHHOLD",
+      "classification": "Positive conventional control for source localization"
+    }
+  },
+  "public_tpf_integrity_note": "Both official MAST and STScI S3 delivered byte-identical two-minute originals. A stale or invalid embedded PIXELS/APERTURE header checksum is noted. Separately produced official FFI cutouts verified HDU checksums.",
+  "anonymous_tess_kepler_pilots": {
+    "first_case_count": 3,
+    "independently_observed_reference_frequency_count": 17,
+    "declared_absolute_frequency_tolerance_per_day": 0.02,
+    "strong_conventional_reports": 1,
+    "strong_conventional_matches": 1,
+    "covariance_reports": 0,
+    "covariance_matches": 0,
+    "reference_scope": "Target-aperture frequency from separate Kepler photons. Evaluation separated by role under shared administration.",
+    "strong_match_abs_error_per_day": 0.00442657,
+    "strong_report_halfwidth_per_day": 0.009,
+    "fresh_case_count": 3,
+    "all_frozen_fresh_arms_reports": 0,
+    "population_false_detection_rate": null,
+    "fresh_reference_frequency_count": 10,
+    "fresh_scored_frozen_arms": 11,
+    "fresh_matched_reports": 0,
+    "fresh_unmatched_reports": 0
+  },
+  "jades": {
+    "official_release": "https://jades-survey.github.io/scientists/data.html",
+    "public_development_spectra": {
+      "prism": {
+        "url": "https://jades.herts.ac.uk/DR4/goods-n/spectra/clear-prism/goods-n-mediumjwst/hlsp_jades_jwst_nirspec_goods-n-mediumjwst-00078773_clear-prism_v1.0_x1d.fits",
+        "sha256": "daa94b7a72c25d56e6a5992260fcbc7086bb2dda0908576091eb1e769e06aac3",
+        "bytes": 648000
+      },
+      "grating": {
+        "url": "https://jades.herts.ac.uk/DR4/goods-n/spectra/f290lp-g395m/goods-n-mediumjwst/hlsp_jades_jwst_nirspec_goods-n-mediumjwst-00078773_f290lp-g395m_v1.0_x1d.fits",
+        "sha256": "64be80ced08f17bee6b4ea49c8f78920f577fc8a23c9822b874e781f3afee016",
+        "bytes": 362880
+      },
+      "calibration": {
+        "url": "https://jwst-docs.stsci.edu/files/216455634/216455648/1/1762452062676/jwst_nirspec_prism_disp.fits",
+        "sha256": "58f9330440c50af624313e70f3e5b9f58a6b22d06af094e0085ed66408d0d937",
+        "bytes": 20160
+      }
+    },
+    "case": "GOODS-N 78773",
+    "line_ratio": "Flux of the stronger [N II] line (6585 Å vacuum) divided by H-alpha flux",
+    "instrument_and_modes": "JWST NIRSpec PRISM/CLEAR and G395M/F290LP, separate photons from the same instrument",
+    "integrations_per_mode": 9,
+    "matching_slit_components": 3,
+    "shared_calibration_ratio": 0.10218,
+    "separately_acquired_grating_ratio": 0.083,
+    "equal_input_ordinary_result": "TIE",
+    "narrow_profile_width_dex": 0.241,
+    "oxygen_window_withdrawal_width_dex": 1.13,
+    "independent_differential_response_stress_width_dex": 0.921,
+    "illustrative_aperture_component": {
+      "prism_interval": [
+        0.11612152035453717,
+        0.18961927376061508
+      ],
+      "separate_matched_grating_interval": [
+        0.07580914749022986,
+        0.1066287930113396
+      ]
+    },
+    "distinct_fresh_pairs": 12,
+    "both_fresh_methods_accepted": 0
+  },
+  "evidence_receipt_sha256": {
+    "p0_aggregate": "45c9675ce91982f7382c7d617739cedbda009fe5246db55b7ce5d89c1a81c43e",
+    "kepler_pilot_score": "5669788a40ab2f0af60d062cde972042d1e0e640b07729b00af0afdf76bd5a47",
+    "jades_independent_review": "feebec37e9e5afddbc0cbd7cec632ad0828c78437a571d09778d0a78c107eba0",
+    "jades_fresh": "6e087c22e48729ce1c8a7daf27a8d75ba4f997f544ced31a6e557c291ace3ac6",
+    "jades_component_comparison": "628f2f4fc6c10bf48418945d5a1814617c65db8951ff94b49059c270e98162ac",
+    "fresh_kepler_pilot_score": "cc4caa9b4046f6d3dcadcc518dc6b2329d93538bb2ff663f62d6bfc2d900f61e"
+  }
+}

@@ -67,6 +67,15 @@ The scoped original-source follow-through recovered both previously withheld bat
 | Historical assessment reproducibility | **PROVEN for three published cases.** Two legacy records scored five mitigation points below their published results when replayed through the current application components. An independent Chromium replay of captured official assets confirmed the discrepancy and observed a changed version label on the two legacy downloads. The version-matched tool and archived official scoring rules reproduce the published scores. Impact levels were unchanged. Deployment assurance and operating economics remain open. [Version-matched replay](binding-constraint/assessment-versions/README.md) |
 | Historical impact-level changes on import | **PROVEN for three additional public records.** The captured current calculator displayed Level I when it opened three original legacy immigration assessments published as Level II. The exact version-matched replay recovered all four published scores and both language reports per record. The cases concern the historical document and current calculator display. [Documentary and browser evidence](binding-constraint/assessment-versions/LEVEL-EVIDENCE.json) |
 
+## Advance the Measurable Frontier
+
+| Gate | Current evidence |
+| --- | --- |
+| Independent physical case acquisition | **PARTIAL.** Six of twelve provisional cases yielded paired original TESS and ground products. Ground event, source and geometry review withheld all six. Open TOI 1423 and TOI 531 are positive controls for ordinary point-response extraction. [Scientific measurement evidence](research-activation/scientific-measurements/README.md) |
+| Anonymous source-aperture frequency | **FAIL for a candidate gain.** Conventional extraction supplied one Kepler-matched frequency in the first three-case pilot. The covariance detector abstained throughout. The disjoint three-case follow-through remained unresolved under the alternate readout and timing controls. Separate evaluators share infrastructure. Representative and matched-risk confirmation remains open. |
+| Blended JWST line ratio | **EXPERIMENTAL with a verified development dependency.** The extra observed Hβ and [O III] window enabled a conditional recovery in one open PRISM record and tied ordinary joint fitting. Differential calibration and matched dither checks exposed material uncertainty. The twelve-system independent-observation follow-through accepted zero. |
+| Retained specialist and inventive transfer | **NOT TESTED as a qualified specialist or subsequent-invention claim.** The development mechanisms and failure evidence are retained. TOI-216's attribution remains **ABSTAIN**. Training, paid inference, member admission and economic claims require their own evidence. |
+
 ## External outcomes
 
 | Gate | Existing route and smallest unresolved action |
