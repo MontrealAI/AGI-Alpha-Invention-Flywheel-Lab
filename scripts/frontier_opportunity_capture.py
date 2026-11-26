@@ -6,6 +6,7 @@ from html import escape
 import json
 from pathlib import Path
 import re
+import sys
 
 from frontier_public_watch import unique_object
 
@@ -163,6 +164,10 @@ def render(study, language, revision):
 
 
 def main():
+    if sys.argv[1:2] == ['--research']:
+        from frontier_research_activation import main as research
+        research(sys.argv[2:])
+        return
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('ledger', type=Path)
     parser.add_argument('evidence', type=Path)

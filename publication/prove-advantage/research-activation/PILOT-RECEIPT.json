@@ -1,0 +1,141 @@
+{
+  "atlas_baseline": {
+    "ledger_sha256": "1ea337f85e57c0bb33795b358f706c1e88bf7a3e268738c0a84e19d93518688d",
+    "published_source_versions": 115,
+    "revision": "b35f937fcb77199334e267360e9a0c9e438a74ad"
+  },
+  "environment": {
+    "actual_revenue": null,
+    "complete_cost": null,
+    "human_attention": null,
+    "model_inference_in_studies": false,
+    "paid_requests": 0
+  },
+  "intake": {
+    "latest_report_bodies_returned": 5,
+    "original_report_archive_denominator": null,
+    "scouts_enabled": 6,
+    "sightings": 126,
+    "source_versions": 123
+  },
+  "schema": "frontier/research-activation-pilot-v1",
+  "scope": "Operator-selected local studies on archived public cohorts.",
+  "studies": {
+    "evaluation-sampling": {
+      "disposition": "FAIL",
+      "local_cycle_wall_seconds": 5.121567,
+      "public_primary_metadata": {
+        "checked_at": "2026-11-26T13:47:34+00:00",
+        "date": "2026-11-25",
+        "scope": "EXACT_VERSION_METADATA",
+        "sha256": "80f710e9b7529cefa22274a29164937b239453298501c0672bbd7e76399a6385",
+        "title": "Evaluating More with Less: Black-Box Test Selection for AI Agents",
+        "url": "https://arxiv.org/abs/2611.34617v1"
+      },
+      "registered_decisions": {
+        "early_failure_detection": {
+          "advance": false,
+          "best_control": "stratified_random",
+          "mean_precision_gain_pp": -1.548342508940351,
+          "worst_arm_precision_gain_pp": -7.086156597026175
+        },
+        "estimation": {
+          "advance": false,
+          "best_random_control": "stratified_random",
+          "relative_mae_reduction": 0.04513888888888884,
+          "worst_p90_error_pp": 8.0
+        }
+      },
+      "registration_sha256": "d7ea9bcf24ae2322c3beec1b4a0a93a6d41c8c8fbc1a56a2483eb01a06ce790d",
+      "runner_exit_code": 0,
+      "selected_sources_sha256": {
+        "publication/prove-advantage/research-activation/sampling_replay.py": "96d1511309f1eb85b8d0fe1cf8a1db03c5e85c13756bba5820e392543ce8a7c3"
+      }
+    },
+    "game-event-order": {
+      "disposition": "PARTIAL",
+      "gates": {
+        "finite_order_agreement": true,
+        "ordinary_exact_control": true,
+        "rejects_contradiction": true,
+        "reviewed_cited_claims": true,
+        "withdrawal_exposes_false_access": true
+      },
+      "local_cycle_wall_seconds": 3.470132,
+      "public_primary_metadata": {
+        "checked_at": "2026-11-26T13:47:38+00:00",
+        "date": "2026-11-25",
+        "scope": "EXACT_VERSION_METADATA",
+        "sha256": "3e3567378858a96a345e7df584b002f0d07fbc114eb6f327195332e273be9dbd",
+        "title": "Do We Still Need Reinforcement Learning When We Can Read the World Model?",
+        "url": "https://arxiv.org/abs/2611.34656v1"
+      },
+      "registration_sha256": "4c186cf58d557a31c5c4a6c1f4b08637763984278a34606729b33299f62610ca",
+      "runner_exit_code": 0,
+      "selected_sources_sha256": {
+        "publication/prove-advantage/game-theory/curriculum.py": "699cdee6085e8687f9dc3f2848f0181c60a5a26d3c358ec9f4b729081f2652d8",
+        "publication/prove-advantage/game-theory/partition.py": "70a15f5873e48c90b6f6f84af1c9b93837c0f00772ae158a87fa9c18ce519fe1",
+        "publication/prove-advantage/game-theory/replay.py": "b32ad9c6f42b2d119028c893ba8d495340dec5c9f0f3e73366ff244080d207e3",
+        "publication/prove-advantage/game-theory/research-reactivation/check.py": "3fb036206020d83d9da4eba02da91348cd4843794e3993d33c3ff1af8be7af5f"
+      }
+    },
+    "routing-ceiling": {
+      "disposition": "PROVEN_ON_ARCHIVED_PANELS",
+      "harness": {
+        "actions": 2,
+        "artifact_sha256": "b76b6587d0d3b2d87146cff6cb5765d3f28f2bc50a4a5461e3008052ac38321f",
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "input_sha256": "e294cf5e5bea858fadfaceb72ab74c33abc8f7c7a032beaed9edbac752fbe18b",
+        "mode": "OPERATOR_AUTHORED_TRANSPORT_NO_MODEL_INFERENCE",
+        "outcomes": 136,
+        "qualification": "UNVERIFIED",
+        "rows": [
+          [
+            "confirmation",
+            6,
+            6,
+            6,
+            0
+          ],
+          [
+            "game_theory_confirmation",
+            8,
+            0,
+            0,
+            0
+          ],
+          [
+            "game_theory_primary",
+            10,
+            8,
+            8,
+            0
+          ],
+          [
+            "primary",
+            16,
+            14,
+            14,
+            0
+          ]
+        ],
+        "status": "needs_review"
+      },
+      "local_cycle_wall_seconds": 3.872407,
+      "public_primary_metadata": {
+        "checked_at": "2026-11-26T13:47:30+00:00",
+        "date": "2026-11-25",
+        "scope": "EXACT_VERSION_METADATA",
+        "sha256": "e28d3574606d9bc4510a085fea2426b92f4bdbc028328551b50177770198f18a",
+        "title": "Routeability Before Routing: Routeability Audit Protocol (RAP) and RouteabilityBench for Audited LLM Model Selection",
+        "url": "https://arxiv.org/abs/2611.34825v1"
+      },
+      "registration_sha256": "87ce86635a821733e3cfe9e80a59b584dcf1d6847c648d96f2d31c6a9405d296",
+      "runner_exit_code": 0,
+      "selected_sources_sha256": {
+        "publication/prove-advantage/research-activation/router_ceiling.py": "0a0d42908f723c2ed07037342516a0ed84d74d78696c3a9204b130649867f0f3",
+        "publication/prove-advantage/research-activation/routing_mission.py": "f91265e92fe34c9dca721caf57f956c6947f93b1852ee8f1bd66b64ce27d46fc"
+      }
+    }
+  }
+}

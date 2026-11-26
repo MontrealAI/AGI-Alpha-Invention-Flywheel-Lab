@@ -8,6 +8,7 @@ on:
       - 'scripts/frontier_public_watch.py'
       - 'scripts/frontier_atlas.py'
       - 'scripts/frontier_opportunity_capture.py'
+      - 'scripts/frontier_research_activation.py'
       - 'scripts/frontier_member_value.py'
       - 'scripts/frontier_member_first.py'
       - 'scripts/qualify_frontier_member.py'
@@ -32,6 +33,8 @@ on:
       - 'publication/cascade/**'
       - 'publication/factory/**'
       - 'publication/opportunity/**'
+      - 'publication/prove-advantage/research-activation/**'
+      - 'publication/prove-advantage/game-theory/research-reactivation/**'
       - 'publication/universal/**'
       - 'publication/mission-executor/**'
       - 'publication/evidence-bound/**'
@@ -56,6 +59,7 @@ on:
       - 'scripts/frontier_public_watch.py'
       - 'scripts/frontier_atlas.py'
       - 'scripts/frontier_opportunity_capture.py'
+      - 'scripts/frontier_research_activation.py'
       - 'scripts/frontier_member_value.py'
       - 'scripts/frontier_member_first.py'
       - 'scripts/qualify_frontier_member.py'
@@ -80,6 +84,8 @@ on:
       - 'publication/cascade/**'
       - 'publication/factory/**'
       - 'publication/opportunity/**'
+      - 'publication/prove-advantage/research-activation/**'
+      - 'publication/prove-advantage/game-theory/research-reactivation/**'
       - 'publication/universal/**'
       - 'publication/mission-executor/**'
       - 'publication/evidence-bound/**'
@@ -125,6 +131,7 @@ jobs:
             scripts/frontier_public_watch.py
             scripts/frontier_atlas.py
             scripts/frontier_opportunity_capture.py
+            scripts/frontier_research_activation.py
             scripts/frontier_member_value.py
             scripts/frontier_member_first.py
             scripts/qualify_frontier_member.py
@@ -153,6 +160,9 @@ jobs:
             publication/cascade
             publication/factory
             publication/opportunity
+            publication/prove-advantage/dpp-replay
+            publication/prove-advantage/game-theory
+            publication/prove-advantage/research-activation
             publication/universal
             publication/mission-executor
             publication/evidence-bound
@@ -199,6 +209,11 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p 'test_frontier_public_watch.py' -v
           python3 -m unittest discover -s tests -p 'test_frontier_atlas.py' -v
+      - name: Reproduce the public routing and sampling studies
+        if: github.event_name != 'schedule'
+        run: |
+          python3 publication/prove-advantage/research-activation/routing_mission.py
+          python3 publication/prove-advantage/research-activation/sampling_replay.py | cmp - publication/prove-advantage/research-activation/sampling-results.json
       - name: Replay the ALPHA-1 availability correction
         if: github.event_name != 'schedule'
         run: |

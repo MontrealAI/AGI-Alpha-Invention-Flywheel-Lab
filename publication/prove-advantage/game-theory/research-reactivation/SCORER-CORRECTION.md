@@ -1,0 +1,5 @@
+# First run and scorer correction
+
+The first scorer (`f24535f96c352d15e292e9daef3db29c779014e7a96e930d7716c963b975f97f`) returned FAIL (`cc3d08435ef2c1e1e97228050be42f739e243cdfa3f6c1c23590698742b8e7bf`). It observed 768/768 event relations, 9/9 cited judgments, zero false access claims in the direct comparison and one when the source-scope check was withdrawn. It rejected the early sealed-bid comparison because it incorrectly required a zero-width interval from the retained quantized-policy certificate. Both arms received the same interval `[1/2, 10000000001/20000000000]` and the separate exact normal-form bounds both equaled `1/2`.
+
+The corrected scorer implements the registered requirement. Both retained certificates must be accepted with identical intervals, the independently certified rational value must equal the registered result, and the common interval must contain that exact value. The interventions, inputs, comparison arms, retained instruments and registration are identical. Additional defensive validation rejects undeclared event names. The initial outcome remains a failed scorer execution. The replay is a separate run.

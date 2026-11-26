@@ -1,0 +1,233 @@
+{
+  "schema": "frontier/game-theory-event-order-research-v1",
+  "scope": "Strict precedences transcribed by hand. Existing public cases and separately executed exact controls.",
+  "lead": "https://arxiv.org/abs/2611.34656v1",
+  "registration_sha256": "4c186cf58d557a31c5c4a6c1f4b08637763984278a34606729b33299f62610ca",
+  "code_sha256": "3fb036206020d83d9da4eba02da91348cd4843794e3993d33c3ff1af8be7af5f",
+  "input_sha256": {
+    "CONFIRMATION-BRIEFS.json": "2acf5f20f86bfd0c1cc2680a03ecc2f205f645d8d29ee13e817f51ec735dbf6d",
+    "CONFIRMATION-ORACLE.json": "f21eea3225905a4a9abd01c0b6ab0b6f433e15ef5a749f0047b43ce55fd28726",
+    "PARTITION-REPLAY.json": "cc3140380862be388d0f728991967a4cbcc56fdbb90fe5bbef5fd0dcee6cd8af"
+  },
+  "retained_code_sha256": {
+    "curriculum.py": "699cdee6085e8687f9dc3f2848f0181c60a5a26d3c358ec9f4b729081f2652d8",
+    "partition.py": "70a15f5873e48c90b6f6f84af1c9b93837c0f00772ae158a87fa9c18ce519fe1",
+    "replay.py": "b32ad9c6f42b2d119028c893ba8d495340dec5c9f0f3e73366ff244080d207e3"
+  },
+  "scipy_version": "1.17.0",
+  "gates": {
+    "finite_order_agreement": true,
+    "reviewed_cited_claims": true,
+    "ordinary_exact_control": true,
+    "rejects_contradiction": true,
+    "withdrawal_exposes_false_access": true
+  },
+  "finite_orders": {
+    "matches": 768,
+    "relations": 768,
+    "graphs": 64
+  },
+  "reviewed_transcriptions": {
+    "matched_cited_claims": 9,
+    "claims": 9,
+    "false_known": 0,
+    "cases": {
+      "order-03": {
+        "answers": [
+          {
+            "access": "known",
+            "witness": [
+              1
+            ]
+          },
+          {
+            "access": "hidden",
+            "witness": [
+              2
+            ]
+          },
+          {
+            "access": "unclear",
+            "witness": [
+              3
+            ]
+          }
+        ],
+        "reviewed": [
+          {
+            "access": "known",
+            "witness": [
+              1
+            ]
+          },
+          {
+            "access": "hidden",
+            "witness": [
+              2
+            ]
+          },
+          {
+            "access": "unclear",
+            "witness": [
+              3
+            ]
+          }
+        ]
+      },
+      "pupitre-05": {
+        "answers": [
+          {
+            "access": "known",
+            "witness": [
+              2
+            ]
+          },
+          {
+            "access": "hidden",
+            "witness": [
+              3
+            ]
+          },
+          {
+            "access": "unclear",
+            "witness": [
+              4
+            ]
+          }
+        ],
+        "reviewed": [
+          {
+            "access": "known",
+            "witness": [
+              2
+            ]
+          },
+          {
+            "access": "hidden",
+            "witness": [
+              3
+            ]
+          },
+          {
+            "access": "unclear",
+            "witness": [
+              4
+            ]
+          }
+        ]
+      },
+      "cloche-07": {
+        "answers": [
+          {
+            "access": "known",
+            "witness": [
+              1
+            ]
+          },
+          {
+            "access": "hidden",
+            "witness": [
+              2
+            ]
+          },
+          {
+            "access": "unclear",
+            "witness": [
+              3
+            ]
+          }
+        ],
+        "reviewed": [
+          {
+            "access": "known",
+            "witness": [
+              1
+            ]
+          },
+          {
+            "access": "hidden",
+            "witness": [
+              2
+            ]
+          },
+          {
+            "access": "unclear",
+            "witness": [
+              3
+            ]
+          }
+        ]
+      }
+    },
+    "physical_receipt_substituted": {
+      "access": "known",
+      "witness": [
+        4
+      ]
+    },
+    "reviewed_effective_access": {
+      "access": "unclear",
+      "witness": [
+        4
+      ]
+    }
+  },
+  "sealed_bid_control": {
+    "early": {
+      "identical_partitions": true,
+      "treatment_access": "known",
+      "treatment_status": "compiled",
+      "ordinary_status": "compiled",
+      "expected_value": "1/2",
+      "ordinary_exact_interval": [
+        "1/2",
+        "10000000001/20000000000"
+      ],
+      "treatment_exact_interval": [
+        "1/2",
+        "10000000001/20000000000"
+      ],
+      "exact_reference": "1/2",
+      "solver_called": true,
+      "accepted": true
+    },
+    "late": {
+      "identical_partitions": true,
+      "treatment_access": "hidden",
+      "treatment_status": "compiled",
+      "ordinary_status": "compiled",
+      "expected_value": "1/4",
+      "ordinary_exact_interval": [
+        "1/4",
+        "1/4"
+      ],
+      "treatment_exact_interval": [
+        "1/4",
+        "1/4"
+      ],
+      "exact_reference": "1/4",
+      "solver_called": true,
+      "accepted": true
+    },
+    "conditional": {
+      "identical_partitions": true,
+      "treatment_access": "unclear",
+      "treatment_status": "withheld",
+      "ordinary_status": "withheld",
+      "expected_value": null,
+      "solver_called": false,
+      "accepted": true
+    }
+  },
+  "observed_cost": {
+    "wall_seconds": 0.023736919999919337,
+    "cpu_seconds": 0.05971211199999993,
+    "model_calls": 0,
+    "paid_service_calls": 0,
+    "transcribed_queries": 9,
+    "source_transcription_time": null,
+    "complete_economic_cost": null
+  },
+  "disposition": "PARTIAL",
+  "limitation": "The exact control ties. Equal-content ordinary reachability has the same mechanism. Source transcription, live acceptance, training and raw-text generalization were not evaluated."
+}
