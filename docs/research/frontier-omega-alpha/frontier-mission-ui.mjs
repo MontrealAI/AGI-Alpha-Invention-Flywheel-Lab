@@ -13,6 +13,7 @@ import {
 import {createAssistedBrief, maximumReturnedBytes, readAssistedReply, renderAssistedWork, workPreview} from './frontier-assisted-work.mjs';
 import {inspectReturnedWork, readMissionArtifact, importMissionArtifacts, missionArtifactBytes, maximumArtifacts, maximumArtifactBytes} from './frontier-artifact-exchange.mjs';
 import {evaluateMissionFiles} from './frontier-native-work.mjs';
+import {evaluateMissionInstruments, instrumentBatch} from './frontier-mission-instruments.mjs';
 import {selectMissionContext, missionContextLines, missionIntelligencePackage, missionWorkPlan} from './frontier-mission-context.mjs';
 import {reviewBatterySources, sourceReviewSchema} from './dpp-source-review.mjs';
 
@@ -82,6 +83,15 @@ const messages = {
     auditWithheld:'Calculation withheld. Check the format, completeness and source identity shown in the receipt.',
     auditNeedSource:'Add the exact source file named by the calculation request.',
     auditNext:'Download the calculation and source record to reuse or independently check the result.',
+    instrumentPending:'Checking the supplied instrument and source files…',
+    instrumentScope:'Executed on this device using the supplied data. Source interpretation remains subject to review.',
+    instrumentRetained:'Used the same instrument from an earlier mission step.',
+    instrumentChecks:(matched,total)=>`Supplied checks matched · ${matched} of ${total}.`,
+    instrumentWithheld:'Instrument withheld. Review the instrument, inputs and source files.',
+    instrumentMissingSource:'Add the exact source files named by this batch.',
+    instrumentMissingCandidate:'Add the exact instrument named by this batch.',
+    instrumentNeedsChecks:'Add a matching confirmation file to reuse an instrument from an earlier mission step.',
+    instrumentNext:'Download the instrument and results, or save the mission to use it with fresh source files.',
     supplySource:'Add the data behind the table or the actual result file to make it possible to check this claim.',
     duplicateReply: 'That exact reply is already in this mission. Bring back a new finding, test or file.',
     useFile: 'Stage for private companion review',
@@ -164,6 +174,15 @@ const messages = {
     auditWithheld:'Calcul suspendu. Vérifiez le format, l’exhaustivité et l’identité de la source indiqués dans le relevé.',
     auditNeedSource:'Ajoutez le fichier source exact indiqué dans la demande de calcul.',
     auditNext:'Téléchargez le calcul et les sources pour réutiliser le résultat ou le vérifier indépendamment.',
+    instrumentPending:'Vérification de l’instrument et des fichiers sources fournis…',
+    instrumentScope:'Exécuté sur cet appareil à partir des données fournies. L’interprétation des sources demeure à vérifier.',
+    instrumentRetained:'L’instrument d’une étape précédente a été réutilisé.',
+    instrumentChecks:(matched,total)=>`Vérifications fournies concordantes · ${matched} sur ${total}.`,
+    instrumentWithheld:'Exécution suspendue. Vérifiez l’instrument, les données et les fichiers sources.',
+    instrumentMissingSource:'Ajoutez les fichiers sources exacts désignés par le lot.',
+    instrumentMissingCandidate:'Ajoutez l’instrument exact désigné par le lot.',
+    instrumentNeedsChecks:'Ajoutez le fichier de confirmation correspondant pour réutiliser un instrument d’une étape précédente.',
+    instrumentNext:'Téléchargez l’instrument et ses résultats ou enregistrez la mission pour l’utiliser avec de nouvelles sources.',
     supplySource:'Ajoutez les données du tableau ou le fichier de résultats pour pouvoir vérifier cette affirmation.',
     duplicateReply: 'Cette réponse exacte figure déjà dans la mission. Rapportez un nouveau résultat, un essai ou un fichier.',
     useFile: 'Préparer l’examen dans le compagnon privé',
@@ -249,6 +268,7 @@ export function setupMissionConsole(member, shell) {
   let entryDocuments, recoveredDocuments, fileSerial = 0, editingAmbition = false;
   let evidenceContext, selectedEvidence, assistedDraft;
   let artifactSerial = 0, nativeKey = '', nativeResults = [];
+  let instrumentKey = '', instrumentResults = [];
   let browserCheck = 0;
   const active = () => !member.hidden;
   const files = () => mission ? mission.documents ?? recoveredDocuments ?? [] : entryDocuments ?? [];
@@ -378,6 +398,73 @@ export function setupMissionConsole(member, shell) {
     const inputs = resultFiles().map(({name,sha256,bytes}) => ({name,sha256,bytes}));
     downloadJSON({mission:mission.originalAmbition, inputs, calculations:nativeChecks()}, 'frontier-calculation-receipt.json');
   });
+
+  function renderInstrumentResults() {
+    const files = mission?.workFiles ?? [];
+    const key = JSON.stringify([mission?.id,mission?.revision,files.map(file=>[file.name,file.sha256,file.revision])]);
+    if (key === instrumentKey) return;
+    instrumentKey = key;
+    instrumentResults = [];
+    show('mission-instrument-result', false);
+    node('mission-instrument-list').replaceChildren();
+    if (!mission || !files.length) return;
+    if (resultFiles().some(file => file.kind === 'data' && file.content.includes(instrumentBatch))) {
+      text('mission-instrument-status', words.instrumentPending);
+      show('mission-instrument-result', true);
+      show('mission-instrument-download', false);
+      show('mission-instrument-save', false);
+    }
+    void evaluateMissionInstruments(files,mission.revision).then(results => {
+      if (key !== instrumentKey || !active()) return;
+      instrumentResults = results;
+      const executed = results.filter(result=>result.disposition === 'EXECUTED_INSTRUMENT');
+      show('mission-instrument-result', results.length > 0);
+      show('mission-instrument-download', results.length > 0);
+      show('mission-instrument-save', executed.some(result=>result.asset));
+      text('mission-instrument-status', executed.length ? words.instrumentScope : words.instrumentWithheld);
+      node('mission-instrument-list').replaceChildren(...results.map(result => {
+        const row = document.createElement('li');
+        if (result.disposition === 'WITHHELD') {
+          row.textContent = [result.batch.name, {
+            SOURCE_MISSING:words.instrumentMissingSource,
+            INSTRUMENT_MISSING:words.instrumentMissingCandidate,
+            RECHECK_REQUIRED:words.instrumentNeedsChecks,
+          }[result.reason] ?? words.instrumentWithheld].join(' · ');
+          return row;
+        }
+        const heading = document.createElement('strong');
+        heading.textContent = result.instrument;
+        const checks = result.comparison;
+        const details = [result.retained ? words.instrumentRetained : '', checks ? words.instrumentChecks(checks.matched,checks.total) : ''];
+        row.append(heading, ...details.filter(Boolean).map(value => {
+          const detail = document.createElement('p');
+          detail.textContent = value;
+          return detail;
+        }));
+        const resultsList = document.createElement('ul');
+        for (const {id,output} of result.results) {
+          const line = document.createElement('li');
+          const values = Object.entries(output).map(([name,value]) => {
+            const shown = typeof value === 'boolean' ? (i ? (value ? 'oui' : 'non') : (value ? 'yes' : 'no')) : value;
+            return `${name} = ${shown}`;
+          });
+          line.textContent = [id,...values].join(' · ');
+          resultsList.append(line);
+        }
+        row.append(resultsList);
+        return row;
+      }));
+      if (executed.length) renderHeadline();
+    }).catch(() => {
+      if (key === instrumentKey && active()) text('mission-instrument-status', words.instrumentWithheld);
+    });
+  }
+
+  node('mission-instrument-download').addEventListener('click', () => {
+    if (!active() || !mission || !instrumentResults.length) return;
+    downloadJSON({mission:mission.originalAmbition, currentAmbition:mission.ambition, results:instrumentResults}, 'frontier-instrument-results.json');
+  });
+  node('mission-instrument-save').addEventListener('click', () => downloadMission('mission-file-status'));
 
   function evidenceBundle(file) {
     if (!/\.json$/iu.test(file.name)) return null;
@@ -664,15 +751,16 @@ export function setupMissionConsole(member, shell) {
       : browserReport ? words.browserSource : observed ? words.localSource : words.restoredSource;
     const labels = [source, observed && !browserReport ? report.model : null, words.unpublished].filter(Boolean);
     const running = state === 'running' && mission.run.model === browserModelId;
+    const instrument = instrumentResults.some(result=>result.disposition === 'EXECUTED_INSTRUMENT');
     const plan = state === 'waiting' && evidenceContext?.items.length ? missionWorkPlan(evidenceContext, [...selectedEvidence]) : '';
     text('mission-plan', plan);
     show('mission-plan', Boolean(plan));
-    text('mission-status', message ?? native?.status
+    text('mission-status', message ?? native?.status ?? (instrument ? words.instrumentScope : null)
       ?? (nativeChecks().some(result => result.disposition === 'VERIFIED_CALCULATION') ? words.auditDone
         : report && state === 'review' ? labels.join(' · ') : running ? words.browserRunning : words[state]));
     const missing = state === 'review' ? workInspection(report).missing : [];
     const check = nativeChecks().find(result => result.disposition === 'VERIFIED_CALCULATION');
-    text('mission-next', native?.nextAction ?? (check ? words.auditNext : missing.length ? words.deliverablesMissing(missing)
+    text('mission-next', native?.nextAction ?? (instrument ? words.instrumentNext : check ? words.auditNext : missing.length ? words.deliverablesMissing(missing)
       : state === 'canceled' ? words.canceledNext : state === 'paused' ? words.pausedNext
       : state === 'waiting' ? words.assisted : state === 'running' ? words.localNext
       : state === 'ready' && missionPacket(mission).instruction ? words.nextInstruction : report?.nextAction ?? words.choose));
@@ -683,6 +771,7 @@ export function setupMissionConsole(member, shell) {
     panel.hidden = !mission;
     node('mission-export').disabled = !mission;
     renderNativeResults();
+    renderInstrumentResults();
     refreshHistoryPreview();
     show('mission-return', Boolean(mission));
     show('mission-reopen-current', Boolean(mission));

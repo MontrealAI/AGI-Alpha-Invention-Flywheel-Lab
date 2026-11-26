@@ -819,6 +819,71 @@ async function proofOfAdvantageJourney(page, language, width) {
   }
 }
 
+async function retainedInstrumentJourney(page, language, width) {
+  const digest = value => createHash('sha256').update(value).digest('hex');
+  const source = content('initial-rows.json', {rows:[{reading:4}]});
+  const later = content('new-rows.json', {rows:[{reading:7}]});
+  const task = {
+    acceptance:'Replay the independently specified arithmetic result.',
+    alternative:'Use ordinary arithmetic.',
+    inputs:{reading:'integer'}, language, objective:'Double each supplied reading.',
+    outputs:{doubled:'integer'}, rule:'Multiply by two.', schema:'frontier/foundry-mission-v1',
+  };
+  const instrument = content('instrument.json', {
+    schema:'frontier/mission-instrument-candidate-v1', mission:task,
+    candidate:{name:'Reading instrument', inputs:['reading'], outputs:{doubled:{op:'mul',args:[{field:'reading'},2]}}},
+  });
+  const cases = content('confirmation.json', {
+    schema:'frontier/foundry-cases-v1', mission_sha256:digest(JSON.stringify(task)),
+    reference:'Ordinary fixture arithmetic', cases:[{input:{reading:8},expected:{doubled:16}}],
+  });
+  const batch = (file, id) => content(id + '.json', {
+    schema:'frontier/mission-instrument-batch-v1', candidate_file_sha256:digest(instrument.buffer),
+    confirmation_file_sha256:digest(cases.buffer),
+    sources:[{name:file.name,sha256:digest(file.buffer)}],
+    cases:[{id,source:file.name,path:['rows','0']}],
+  });
+  const search = page.locator('#goal-text');
+  const importFile = page.locator('#mission-deliverable-import');
+  const report = page.locator('#mission-instrument-list');
+  const open = async ambition => {
+    await search.fill(ambition);
+    await page.locator('#goal-submit').click();
+    await page.locator('#mission-prompt').waitFor({state:'visible'});
+    const files = page.locator('#mission-deliverables');
+    if (!await files.evaluate(node=>node.open)) await files.locator(':scope > summary').click();
+  };
+  const save = async button => {
+    const download = page.waitForEvent('download');
+    await page.locator(button).click();
+    return JSON.parse(await readFile(await (await download).path()));
+  };
+  await open(language === 'fr' ? 'Doubler les lectures de ce lot' : 'Double the readings of this batch');
+  await importFile.setInputFiles([instrument,cases,batch(source,'initial')]);
+  await report.locator('li').filter({hasText:/exact source files|fichiers sources exacts/u}).waitFor();
+  await importFile.setInputFiles(source);
+  await report.locator('li').filter({hasText:'initial · doubled = 8'}).first().waitFor();
+  const first = await save('#mission-instrument-download');
+  assert.equal(first.results[0].candidate.sha256,digest(instrument.buffer));
+  assert.deepEqual(first.results[0].results[0].input,{reading:4});
+  assert.equal(first.results[0].asset.asset.comparison.matched,1);
+  const checkpoint = await save('#mission-instrument-save');
+  await page.locator('#mission-import').setInputFiles(content('frontier-mission.json',checkpoint));
+  await page.waitForFunction(() => /restored|rétablie/u.test(document.getElementById('mission-file-status').textContent));
+  await report.locator('li').filter({hasText:'initial · doubled = 8'}).first().waitFor();
+  await page.locator('#mission-revise').click();
+  await open(language === 'fr' ? 'Doubler les nouvelles lectures' : 'Double the new readings');
+  await importFile.setInputFiles([later,batch(later,'fresh')]);
+  await report.locator('li').filter({hasText:'fresh · doubled = 14'}).first().waitFor();
+  const fresh = await save('#mission-instrument-download');
+  assert.equal(fresh.results[0].retained,true);
+  assert.equal(fresh.results[0].asset.sha256,first.results[0].asset.sha256);
+  assert.notEqual(fresh.results[0].sources[0].sha256,first.results[0].sources[0].sha256);
+  await capture(page,language,width,'retained-instrument');
+  await page.locator('#mission-new').click();
+  checks.push({kind:'retained-instrument',language,width,sourceBinding:true,reopened:true,freshInput:true,sameInstrument:true});
+}
+
 async function pairedRevisionJourney(browser, language) {
   const page = await browser.newPage({viewport:dimensions(1440)});
   try {
@@ -1365,7 +1430,10 @@ async function walletPaths(browser, language, width) {
     assert.ok([goalInput, goalSubmit].every(box => box.y >= 0 && box.y + box.height <= dimensions(width).height));
     await capture(page, language, width, 'arrival-token');
     await ownerConnectionJourney(page, language, width);
-    if (width === (language === 'fr' ? 390 : 1440)) await proofOfAdvantageJourney(page, language, width);
+    if (width === (language === 'fr' ? 390 : 1440)) {
+      await proofOfAdvantageJourney(page, language, width);
+      await retainedInstrumentJourney(page, language, width);
+    }
     await universalMission(page, language, width);
     await missionSourceRecovery(page, language);
     const {scriptedMs, saved} = await guidedJourney(page, language, width, started);
