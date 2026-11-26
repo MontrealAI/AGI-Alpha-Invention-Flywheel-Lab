@@ -155,6 +155,14 @@ class AtlasPublicationTests(TestCase):
         with self.assertRaisesRegex(ValueError, 'observed outcome'):
             capture.parse(atlas.canonical_json(study))
 
+    def test_research_packet_instructions_bind_both_languages_to_the_release(self):
+        study = {'opportunities': [], 'summary': {'en': 'Public study.', 'fr': 'Étude publique.'}}
+        expected = capture.report_url(A, 'publication/prove-advantage/research-activation/positive-advancement/README.md')
+        for language, label in (('en', 'Restore verified evidence'), ('fr', 'Récupérer les preuves vérifiées')):
+            markup = capture.render(study, language, A)
+            self.assertIn(f'<a href="{expected}">{label}</a>', markup)
+            self.assertIn(capture.report_url(A), markup)
+
 
 class ResearchActivationTests(TestCase):
     def setUp(self):

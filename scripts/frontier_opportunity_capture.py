@@ -133,11 +133,11 @@ def projection(ledger, raw):
             'next_supported_check': open_checks[0] if open_checks else None}
 
 
-def report_url(revision):
+def report_url(revision, path='publication/opportunity/REPORT.md'):
     if not re.fullmatch('[0-9a-f]{40}', revision):
         raise ValueError('Expected an exact opportunity report revision')
     return ('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/'
-            f'{revision}/publication/opportunity/REPORT.md')
+            f'{revision}/{path}')
 
 
 def render(study, language, revision):
@@ -155,12 +155,15 @@ def render(study, language, revision):
     intro = escape(study['summary'][language])
     label = 'Résultats et sources (JSON)' if fr else 'Results and sources (JSON)'
     method = 'Méthode et comparaison' if fr else 'Method and comparison'
+    restore_label = 'Récupérer les preuves vérifiées' if fr else 'Restore verified evidence'
+    restore_report = report_url(revision, 'publication/prove-advantage/research-activation/positive-advancement/README.md')
     all_checks = 'Autres possibilités examinées' if fr else 'More reviewed opportunities'
     return (f'<p>{intro}</p><div class="mv-grid factory-findings">{"".join(case_cards[:3])}</div>'
             f'<details><summary>{all_checks}</summary><div class="mv-grid factory-findings">'
             f'{"".join(case_cards[3:])}</div></details>'
             f'<p class="mv-links"><a href="{ASSET}" download>{label}</a> '
-            f'<a href="{report_url(revision)}">{method}</a></p>')
+            f'<a href="{report_url(revision)}">{method}</a> '
+            f'<a href="{restore_report}">{restore_label}</a></p>')
 
 
 def main():

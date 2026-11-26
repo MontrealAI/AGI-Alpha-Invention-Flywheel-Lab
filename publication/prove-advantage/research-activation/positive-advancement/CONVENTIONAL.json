@@ -1,0 +1,290 @@
+{
+  "source_revision": "f0c8db6c7a1110dc614ab8a02c7a0bd5f79260de",
+  "atlas_workflow_run": "45846458825",
+  "atlas_manifest_sha256": "09de46889f9c3db371e743a114e3f4fa4adb9588f512f0c7e8a65157223c0e39",
+  "common_provenance_prep": {
+    "wall_seconds": 4.514268081000409,
+    "parent_cpu_seconds": 0.013484702999999987,
+    "operations": [
+      {
+        "file": "atlas-release.json",
+        "range": null,
+        "status": 200,
+        "content_range": null,
+        "content_length": "5675",
+        "etag": "\"6b084c5b-162b\"",
+        "body_bytes_read": 5675,
+        "wall_seconds": 4.500838815998577
+      }
+    ]
+  },
+  "author_or_reviewer_time": "unmeasured",
+  "construction": "single operator command for both arms",
+  "cases": {
+    "ACT15": {
+      "whole_archive": {
+        "operations": [
+          {
+            "file": "frontier-activation-1.5.0.zip",
+            "range": null,
+            "status": 200,
+            "content_range": null,
+            "content_length": "1805184",
+            "etag": "\"6b084c5b-1b8b80\"",
+            "body_bytes_read": 1805184,
+            "wall_seconds": 3.6677211660007742
+          }
+        ],
+        "verification": {
+          "outcome": "MATCHED",
+          "accepted": [
+            "bambu_software",
+            "prusa_offer"
+          ],
+          "withheld": [
+            "bambu_h2c",
+            "bambu_machine",
+            "bambu_prior",
+            "bambu_x2d",
+            "prusa_canada",
+            "prusa_fulfillment",
+            "prusa_prior"
+          ],
+          "stdout_sha256": "3d2b51bb75d3bbfe35ede9f1a95c582a5d71b012ae1db1b966c8cedb2f8a7a58",
+          "exact_decisions": 9,
+          "runner_metrics": {
+            "input_sha256": "62bdbfd8998a4b099534db8423ffd9b7aaf22ef4a08de35702d0aa378207f033",
+            "output_sha256": "3d2b51bb75d3bbfe35ede9f1a95c582a5d71b012ae1db1b966c8cedb2f8a7a58",
+            "peak_rss_kib": 19072,
+            "request_cpu_ns": 3727783,
+            "request_wall_ns": 3729072,
+            "sqlite_version": "3.53.1"
+          }
+        },
+        "wall_seconds": 3.717894707000596,
+        "parent_cpu_seconds": 0.017366749,
+        "sha256": "5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791",
+        "body_bytes": 1805184,
+        "required_member_sha256": {
+          "evidence_control.py": "dc0392e6ff2423c120873630347b33d0bf184b3bd7435dc6f8af2651ab3313e5",
+          "study/factory/EVIDENCE.json": "62bdbfd8998a4b099534db8423ffd9b7aaf22ef4a08de35702d0aa378207f033"
+        }
+      },
+      "ordinary_optimal_two_ranges": {
+        "operations": [
+          {
+            "file": "frontier-activation-1.5.0.zip",
+            "range": [
+              198073,
+              208546
+            ],
+            "status": 206,
+            "content_range": "bytes 198073-208546/1805184",
+            "content_length": "10474",
+            "etag": "\"6b084c5b-1b8b80\"",
+            "body_bytes_read": 10474,
+            "wall_seconds": 3.8899255910000647
+          },
+          {
+            "file": "frontier-activation-1.5.0.zip",
+            "range": [
+              1008957,
+              1040404
+            ],
+            "status": 206,
+            "content_range": "bytes 1008957-1040404/1805184",
+            "content_length": "31448",
+            "etag": "\"6b084c5b-1b8b80\"",
+            "body_bytes_read": 31448,
+            "wall_seconds": 3.4281406240006618
+          }
+        ],
+        "planned_intervals": [
+          [
+            198073,
+            208546
+          ],
+          [
+            1008957,
+            1040404
+          ]
+        ],
+        "known_index": true,
+        "index_elapsed_seconds": 1.5963998521328904e-05,
+        "two_single_range_exact_optimum_bytes": 41922,
+        "member_payload_lower_bound_bytes": 41922,
+        "verification": {
+          "outcome": "MATCHED",
+          "accepted": [
+            "bambu_software",
+            "prusa_offer"
+          ],
+          "withheld": [
+            "bambu_h2c",
+            "bambu_machine",
+            "bambu_prior",
+            "bambu_x2d",
+            "prusa_canada",
+            "prusa_fulfillment",
+            "prusa_prior"
+          ],
+          "stdout_sha256": "3d2b51bb75d3bbfe35ede9f1a95c582a5d71b012ae1db1b966c8cedb2f8a7a58",
+          "exact_decisions": 9,
+          "runner_metrics": {
+            "input_sha256": "62bdbfd8998a4b099534db8423ffd9b7aaf22ef4a08de35702d0aa378207f033",
+            "output_sha256": "3d2b51bb75d3bbfe35ede9f1a95c582a5d71b012ae1db1b966c8cedb2f8a7a58",
+            "peak_rss_kib": 19328,
+            "request_cpu_ns": 3446415,
+            "request_wall_ns": 3482582,
+            "sqlite_version": "3.53.1"
+          }
+        },
+        "outcome": "MATCHED",
+        "wall_seconds": 7.3722211880012765,
+        "parent_cpu_seconds": 0.014683744000000012,
+        "body_bytes": 41922
+      },
+      "member_spans": {
+        "evidence_control.py": [
+          198073,
+          208546
+        ],
+        "study/factory/EVIDENCE.json": [
+          1008957,
+          1040404
+        ]
+      }
+    },
+    "INV10": {
+      "whole_archive": {
+        "operations": [
+          {
+            "file": "frontier-inventor-1.0.0.zip",
+            "range": null,
+            "status": 200,
+            "content_range": null,
+            "content_length": "371811",
+            "etag": "\"6b084c5b-5ac63\"",
+            "body_bytes_read": 371811,
+            "wall_seconds": 3.177456235000136
+          }
+        ],
+        "verification": {
+          "outcome": "MATCHED",
+          "comparisons": {
+            "editions-conventional": {
+              "matched": 9,
+              "total": 9,
+              "verdict": "MATCHED"
+            },
+            "endpoint-conventional": {
+              "matched": 9,
+              "total": 9,
+              "verdict": "MATCHED"
+            },
+            "impact-conventional": {
+              "matched": 9,
+              "total": 9,
+              "verdict": "MATCHED"
+            }
+          },
+          "stdout_sha256": "fe2ec60d44e0466a82106a00c028e1c0c9503f1c6f305c3ed714c6fd1c244908",
+          "exact_decisions": 27
+        },
+        "wall_seconds": 3.2264101170003414,
+        "parent_cpu_seconds": 0.006524205000000005,
+        "sha256": "7eb4759ffb168b6cc46504c92aa3dcc7c4d40914cb122d6b3ba36327aa90534d",
+        "body_bytes": 371811,
+        "required_member_sha256": {
+          "relational.py": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+          "study/reproduction.json": "37cae3850b058f44917503a6ab63b8832e6e123ca6ef627e70db5be0a06fa88b",
+          "study/evidence.json": "fdac418e43ee6495c4f230564bbd547eba762c22d61556254a1158ba3c48fb1b"
+        }
+      },
+      "ordinary_optimal_two_ranges": {
+        "operations": [
+          {
+            "file": "frontier-inventor-1.0.0.zip",
+            "range": [
+              132193,
+              137685
+            ],
+            "status": 206,
+            "content_range": "bytes 132193-137685/371811",
+            "content_length": "5493",
+            "etag": "\"6b084c5b-5ac63\"",
+            "body_bytes_read": 5493,
+            "wall_seconds": 3.4923702890009736
+          },
+          {
+            "file": "frontier-inventor-1.0.0.zip",
+            "range": [
+              214633,
+              365342
+            ],
+            "status": 206,
+            "content_range": "bytes 214633-365342/371811",
+            "content_length": "150710",
+            "etag": "\"6b084c5b-5ac63\"",
+            "body_bytes_read": 150710,
+            "wall_seconds": 4.4266435359986644
+          }
+        ],
+        "planned_intervals": [
+          [
+            132193,
+            137685
+          ],
+          [
+            214633,
+            365342
+          ]
+        ],
+        "known_index": true,
+        "index_elapsed_seconds": 1.6775000403868034e-05,
+        "two_single_range_exact_optimum_bytes": 156203,
+        "member_payload_lower_bound_bytes": 93071,
+        "verification": {
+          "outcome": "MATCHED",
+          "comparisons": {
+            "editions-conventional": {
+              "matched": 9,
+              "total": 9,
+              "verdict": "MATCHED"
+            },
+            "endpoint-conventional": {
+              "matched": 9,
+              "total": 9,
+              "verdict": "MATCHED"
+            },
+            "impact-conventional": {
+              "matched": 9,
+              "total": 9,
+              "verdict": "MATCHED"
+            }
+          },
+          "stdout_sha256": "fe2ec60d44e0466a82106a00c028e1c0c9503f1c6f305c3ed714c6fd1c244908",
+          "exact_decisions": 27
+        },
+        "outcome": "MATCHED",
+        "wall_seconds": 7.95672815800026,
+        "parent_cpu_seconds": 0.011173407999999996,
+        "body_bytes": 156203
+      },
+      "member_spans": {
+        "relational.py": [
+          132193,
+          137685
+        ],
+        "study/reproduction.json": [
+          328394,
+          365342
+        ],
+        "study/evidence.json": [
+          214633,
+          265261
+        ]
+      }
+    }
+  }
+}

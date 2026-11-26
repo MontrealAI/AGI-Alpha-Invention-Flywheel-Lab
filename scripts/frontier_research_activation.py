@@ -306,9 +306,17 @@ def main(argv=None):
     commands.add_parser('atlas', help='Import the historical reference projection from the live public Atlas.')
     run = commands.add_parser('cycle', help='Activate one explicitly selected registered public study.')
     run.add_argument('study', choices=STUDIES)
+    restore = commands.add_parser('restore-packet', help='Restore the exact evidence for a qualified public review.')
+    restore.add_argument('case', choices=('ACT15', 'INV10'))
+    restore.add_argument('output', type=Path, help='Write the verified files and receipt to a new directory.')
+    restore.add_argument('--reads', type=int, choices=range(1, 9), default=2)
     commands.add_parser('status')
     args = parser.parse_args(argv)
     try:
+        if args.action == 'restore-packet':
+            from frontier_evidence_packets import restore_into
+            print(json.dumps(restore_into(args.case, args.output, args.reads), indent=2))
+            return
         with closing(open_store(args.store)) as store:
             if args.action == 'cycle':
                 result = cycle(store, args.study)

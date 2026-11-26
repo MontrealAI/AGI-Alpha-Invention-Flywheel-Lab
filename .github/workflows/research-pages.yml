@@ -10,6 +10,7 @@ on:
       - 'scripts/frontier_opportunity_capture.py'
       - 'scripts/frontier_research_activation.py'
       - 'scripts/frontier_research_capture.py'
+      - 'scripts/frontier_evidence_packets.py'
       - 'scripts/frontier_member_value.py'
       - 'scripts/frontier_member_first.py'
       - 'scripts/qualify_frontier_member.py'
@@ -43,6 +44,7 @@ on:
       - 'publication/bring-your-own-intelligence/README.md'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_frontier_atlas.py'
+      - 'tests/test_frontier_evidence_packets.py'
       - 'tests/live_frontier_browser.cjs'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
@@ -62,6 +64,7 @@ on:
       - 'scripts/frontier_opportunity_capture.py'
       - 'scripts/frontier_research_activation.py'
       - 'scripts/frontier_research_capture.py'
+      - 'scripts/frontier_evidence_packets.py'
       - 'scripts/frontier_member_value.py'
       - 'scripts/frontier_member_first.py'
       - 'scripts/qualify_frontier_member.py'
@@ -95,6 +98,7 @@ on:
       - 'publication/bring-your-own-intelligence/README.md'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_frontier_atlas.py'
+      - 'tests/test_frontier_evidence_packets.py'
       - 'tests/live_frontier_browser.cjs'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
@@ -135,6 +139,7 @@ jobs:
             scripts/frontier_opportunity_capture.py
             scripts/frontier_research_activation.py
             scripts/frontier_research_capture.py
+            scripts/frontier_evidence_packets.py
             scripts/frontier_member_value.py
             scripts/frontier_member_first.py
             scripts/qualify_frontier_member.py
@@ -173,6 +178,7 @@ jobs:
             publication/bring-your-own-intelligence/README.md
             tests/test_frontier_public_watch.py
             tests/test_frontier_atlas.py
+            tests/test_frontier_evidence_packets.py
             tests/test_research_site.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
@@ -212,6 +218,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p 'test_frontier_public_watch.py' -v
           python3 -m unittest discover -s tests -p 'test_frontier_atlas.py' -v
+          python3 -m unittest discover -s tests -p 'test_frontier_evidence_packets.py' -v
       - name: Reproduce the public routing and sampling studies
         if: github.event_name != 'schedule'
         run: |
