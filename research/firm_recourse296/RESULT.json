@@ -1,0 +1,4000 @@
+{
+  "source_commit": "90aa1a57035156f480817536e23b6a728108d511",
+  "source_blob": "3c9ab40c2ad74db464351acce38f6db441cde625",
+  "execution_ms": 135,
+  "retrieval_and_execution_ms": 560,
+  "actual_billing": null,
+  "process_cpu": null,
+  "model_calls": 0,
+  "financial_operations": 0,
+  "cases": [
+    {
+      "id": "diverse",
+      "slots": 4,
+      "worlds": 3,
+      "minimum": {
+        "pooled": 1,
+        "dedicated": 2,
+        "firm": 2,
+        "clairvoyant": 1
+      },
+      "arms": [
+        {
+          "mode": "pooled",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "pooled",
+          "cap": 1,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "pooled",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            1
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            2
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "firm",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 1,
+          "pass": true,
+          "witness": [
+            [
+              {
+                "observation": [
+                  0,
+                  1,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      0,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          0,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              1,
+                              0,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  1,
+                  0,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      0,
+                      1,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          0,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              0,
+                              1,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  1,
+                  1,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              1,
+                              1,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            [
+              {
+                "observation": [
+                  0,
+                  1,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      0,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          0,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              1,
+                              0,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  1,
+                  0,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      0,
+                      1,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          0,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              0,
+                              1,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  1,
+                  1,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              1,
+                              1,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "correlated",
+      "slots": 4,
+      "worlds": 2,
+      "minimum": {
+        "pooled": 2,
+        "dedicated": 2,
+        "firm": 2,
+        "clairvoyant": 2
+      },
+      "arms": [
+        {
+          "mode": "pooled",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "pooled",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "pooled",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            1
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            2
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "firm",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            [
+              {
+                "observation": [
+                  0,
+                  0,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              1,
+                              1,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  1,
+                  1,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              0,
+                              0,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slack",
+      "slots": 4,
+      "worlds": 2,
+      "minimum": {
+        "pooled": 0,
+        "dedicated": 0,
+        "firm": 1,
+        "clairvoyant": 0
+      },
+      "arms": [
+        {
+          "mode": "pooled",
+          "cap": 0,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 0,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 0,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "pooled",
+          "cap": 1,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 1,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 2,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "pooled",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            0
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 3,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 0,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 0,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 1,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 1,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 2,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 2,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            0
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 2,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 2,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 1,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 1,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 1,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 1,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 2,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 2,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            0
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 2,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 2,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 1,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 1,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "firm",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 1,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 1,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 1,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 2,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 2,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 1,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 1,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 2,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 2,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "firm",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    0,
+                    0,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        1,
+                        1,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            1,
+                            1,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "observation": [
+                1,
+                1,
+                1
+              ],
+              "mask": 0,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "mask": 0,
+                  "children": [
+                    {
+                      "observation": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "mask": 3,
+                      "children": [
+                        {
+                          "observation": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "mask": 3,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 0,
+          "pass": true,
+          "witness": [
+            [
+              {
+                "observation": [
+                  0,
+                  0,
+                  1
+                ],
+                "mask": 0,
+                "children": [
+                  {
+                    "observation": [
+                      0,
+                      0,
+                      1
+                    ],
+                    "mask": 0,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              1,
+                              1,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  1,
+                  1,
+                  1
+                ],
+                "mask": 3,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          0,
+                          0,
+                          1
+                        ],
+                        "mask": 0,
+                        "children": [
+                          {
+                            "observation": [
+                              0,
+                              0,
+                              1
+                            ],
+                            "mask": 0,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 1,
+          "pass": true,
+          "witness": [
+            [
+              {
+                "observation": [
+                  0,
+                  0,
+                  1
+                ],
+                "mask": 0,
+                "children": [
+                  {
+                    "observation": [
+                      0,
+                      0,
+                      1
+                    ],
+                    "mask": 0,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              1,
+                              1,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  1,
+                  1,
+                  1
+                ],
+                "mask": 0,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "mask": 3,
+                    "children": [
+                      {
+                        "observation": [
+                          0,
+                          0,
+                          1
+                        ],
+                        "mask": 1,
+                        "children": [
+                          {
+                            "observation": [
+                              0,
+                              0,
+                              1
+                            ],
+                            "mask": 2,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            [
+              {
+                "observation": [
+                  0,
+                  0,
+                  1
+                ],
+                "mask": 0,
+                "children": [
+                  {
+                    "observation": [
+                      0,
+                      0,
+                      1
+                    ],
+                    "mask": 0,
+                    "children": [
+                      {
+                        "observation": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              1,
+                              1,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  1,
+                  1,
+                  1
+                ],
+                "mask": 0,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "mask": 0,
+                    "children": [
+                      {
+                        "observation": [
+                          0,
+                          0,
+                          1
+                        ],
+                        "mask": 3,
+                        "children": [
+                          {
+                            "observation": [
+                              0,
+                              0,
+                              1
+                            ],
+                            "mask": 3,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "causal_trap",
+      "slots": 2,
+      "worlds": 2,
+      "minimum": {
+        "pooled": 2,
+        "dedicated": 2,
+        "firm": 2,
+        "clairvoyant": 1
+      },
+      "arms": [
+        {
+          "mode": "pooled",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "pooled",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "pooled",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                },
+                {
+                  "observation": [
+                    0,
+                    1,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            1
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            2
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                },
+                {
+                  "observation": [
+                    0,
+                    1,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                },
+                {
+                  "observation": [
+                    0,
+                    1,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            1
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                },
+                {
+                  "observation": [
+                    0,
+                    1,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            2
+          ],
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                },
+                {
+                  "observation": [
+                    0,
+                    1,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "firm",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            {
+              "observation": [
+                0,
+                0,
+                1
+              ],
+              "mask": 3,
+              "children": [
+                {
+                  "observation": [
+                    1,
+                    0,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                },
+                {
+                  "observation": [
+                    0,
+                    1,
+                    0
+                  ],
+                  "mask": 0,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 1,
+          "pass": true,
+          "witness": [
+            [
+              {
+                "observation": [
+                  0,
+                  0,
+                  1
+                ],
+                "mask": 2,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      0,
+                      0
+                    ],
+                    "mask": 1,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  0,
+                  0,
+                  1
+                ],
+                "mask": 1,
+                "children": [
+                  {
+                    "observation": [
+                      0,
+                      1,
+                      0
+                    ],
+                    "mask": 2,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 2,
+          "pass": true,
+          "witness": [
+            [
+              {
+                "observation": [
+                  0,
+                  0,
+                  1
+                ],
+                "mask": 2,
+                "children": [
+                  {
+                    "observation": [
+                      1,
+                      0,
+                      0
+                    ],
+                    "mask": 1,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "observation": [
+                  0,
+                  0,
+                  1
+                ],
+                "mask": 1,
+                "children": [
+                  {
+                    "observation": [
+                      0,
+                      1,
+                      0
+                    ],
+                    "mask": 2,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nonportable",
+      "slots": 2,
+      "worlds": 2,
+      "minimum": {
+        "pooled": null,
+        "dedicated": null,
+        "firm": null,
+        "clairvoyant": null
+      },
+      "arms": [
+        {
+          "mode": "pooled",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "pooled",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "pooled",
+          "cap": 2,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            1
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            0,
+            2
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            1
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            0
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            1,
+            2
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            1
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "dedicated",
+          "cap": [
+            2,
+            2
+          ],
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "firm",
+          "cap": 2,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 0,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 1,
+          "pass": false,
+          "witness": null
+        },
+        {
+          "mode": "clairvoyant",
+          "cap": 2,
+          "pass": false,
+          "witness": null
+        }
+      ]
+    }
+  ],
+  "referenceChecks": 90,
+  "replaySlots": 268
+}
