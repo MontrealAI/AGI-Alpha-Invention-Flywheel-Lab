@@ -1,0 +1,29 @@
+# Grid recourse 297 — 2026-11-26
+Decision: NO ENTRY / NO DEPLOY. Conventional joint fixed dispatch captures the entire observed robust-delivery benefit in the frozen finite model; do not fund a separate adaptive-dispatch product on this evidence.
+
+## Construction and selection
+Compared (1) conventional direct power-system planning and security-constrained dispatch, (2) shared contingency-responsive delivery using complementary generator sites, (3) staged conditional-load/portable computation with externally qualified backup (prior 296; no new confirmation), and (4) no entry. Selected the second for a small discriminating construction, not commercial admission. Missing means hypothesis: independently deliverable capacity that remains useful when a contingency changes network deliverability, not merely pooled nameplate power. Strong conventional alternatives are allowed the same joint dispatch and contingency information. PGLib documents conventional MATPOWER and PowerModels implementations, including published AC/DC baseline results: https://github.com/power-grid-lib/pglib-opf/blob/dc6be4b2f85ca0e776952ec22cbd4c22396ea5a3/BASELINE.md . These standard complete solvers were not executed here; the numerical comparator is a conventional interval-feasibility LP on the same authored reduced model.
+
+## Registered evidence
+Frozen executable/protocol: 005f861f92d6d3ba44c550f65e5c4e96192b070a. Result commit c8c575ad10be1c5c2fe5089c0efc100f022ac793. Executed fetched frozen text with three original PGLib files at dc6be4b2f85ca0e776952ec22cbd4c22396ea5a3; original file Git blob IDs retained in RESULT.json. IEEE PES PGLib v23.07; case3 IEEE (2011), case5 IEEE (2010), case14 Richard D. Christie (1999), CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ ; derived authored test changes the operating assumptions, not the source files. To replay, load run.js in a trusted JS runtime and call run(inputs) with the three named original UTF-8 files as {path,content,blob} objects. Every intact and single-line outage retained; 32 topology scenarios, 718 checks, zero failures. Vertex enumeration and independent scalar interval/bisection LP agree; KCL residuals checked on each connected unit-transfer case. Two calculation paths share input and DC sensitivities; no independent human or hosted qualification.
+
+| Case | Equal share robust MW | Joint fixed robust MW | Contingency-observed adaptive robust MW |
+|---|---:|---:|---:|
+| 3 | 50 | 50 | 50 |
+| 5 | 420 | 525 | 525 |
+| 14 | 118 | 145 | 145 |
+
+Adaptive scenario-specific maximum is sometimes higher, but its worst-case common delivered amount is no greater than a single jointly optimized fixed dispatch in all three registered networks. This falsifies an incremental robust-capacity advantage on these cases, not on all grids. Zero background, nameplate capacity assumed available for incremental transfer, line rating as DC MW proxy, no losses, reactive feasibility, generator outages, stability, ramp or commitment, actual grid dispatch, customer rights or commercial acceptance. This is not an actual interconnection or operational security study. Actual execution 476 ms; retrieval plus execution 1140 ms; CPU and actual host/model billing unknown.
+
+## Current buyer evidence and economics
+ESIG's November 10 RFP for a consultant to develop practical solutions and lead stakeholder convenings and reporting closes December 15: https://www.esig.energy/working-groups/system-planning/advancing-operational-fidelity-in-generation-and-transmission-planning-task-force/ . A numerical witness does not satisfy this full scope or demonstrate eligibility, paid demand, accepted deliverables or costs. Budget undisclosed. Lawrence Berkeley National Laboratory's 2026 Queued Up reports about 8,200 active US generation interconnection projects at year-end 2025, not annual customers, not load requests, and not spend: https://emp.lbl.gov/queues . Even treating every active project as a single customer in one year would require about $366k after-tax complete-cost profit per project to reach $3B; this is a deliberately optimistic arithmetic requirement, not a reachable market or revenue forecast. No customer, partner, contract, cost, cash or profit imputed. No expenditure, real transaction, outreach, paid model call, native account or deployment. No primary human productivity claim or retained successor gain.
+
+## Acceptance matrix
+- ACHIEVED: frozen source execution on all registered benchmark cases; numerical agreement within registered tolerance; complete result preserved.
+- FAILED: incremental worst-case delivery advantage of adaptive dispatch against competent jointly optimized fixed dispatch on all three cases.
+- PARTIAL: current public procurement signal and relevant market scale context, no complete offer or actual buyer acceptance.
+- BLOCKED: real rights-cleared network/dispatch/contingency inputs and verified delivery/economics; independent full acceptance; original native finance owner custody.
+- NOT ACHIEVED: native T365 complete-cost profit, observed paid commerce, recursive discovery benefit, $3B milestone.
+
+## Ownership and continuation
+Current main inspected b35f937fcb77199334e267360e9a0c9e438a74ad. All three release qualification jobs on workflow 45715434890 were successful; no fresh economic claim from those historical receipts. PR40 remains open/unmerged at ced6c1cb004887dcdafaea59a2976020be649f8e, actual original task custody unverified. PR77 remains open/unmerged at cd5281b0ae7b484572bfb35ccb7e51ef5b3be4b3. No overlapping source, account, liability, release or owner mutation. Historical failures unchanged. This is an additive evidence branch, not a runtime release. Next: reject adaptive-dispatch product on this evidence and investigate a genuine residual with actual deliverable/acceptance/cost data, rather than another synthetic dispatch improvement. Existing mandate remains open.
