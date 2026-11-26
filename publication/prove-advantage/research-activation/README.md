@@ -31,6 +31,19 @@ State defaults to `~/.local/state/frontier-omega/research`. To choose a differen
 - A registered source match identifies an investigation and its known bottleneck. A run requires explicit operator selection, independent exact-version metadata retrieval and a fixed reviewed runner. The registry covers the three cases above. Other leads remain `DISCOVERED` or `WATCH` at intake. Packet content supplies evidence only.
 - A repeat request for the same selected runner and registration returns the historical receipt and separately lists any later sightings. For a fresh run, use a new private state directory or run the standalone reproduction for that investigation. A nonzero runner result stays recorded with a nonzero command exit. Receipt hashes identify selected study files, with frozen-input verification performed by the runners on actual execution.
 
+## Capture a reported scout run
+
+Use an authorized latest-result lookup or saved handoff to collect the report and its run metadata. For a run-aware export, use `frontier/research-scout-capture-v1` with an `observations` array. Each observation contains `stream`, `scout_id`, `observed_at`, `last_run` and `latest_result`. Use `null` for an unavailable run or result. When present, a run carries `run_id`, `scheduled_for`, `started_at`, `completed_at` and `recorded_status`. A result can supply `run_id`, `scheduled_for`, `completed_at`, `content_text`, `content_truncated`, `is_failure_message` and `requires_user_action`. Keep the exact ISO 8601 times and the unmodified report text. Save the export in a private location.
+
+```sh
+python3 scripts/frontier_opportunity_capture.py --research capture observations.json
+python3 scripts/frontier_opportunity_capture.py --research status
+```
+
+The capture returns a status and, where applicable, a suggested retry time. Retry through the authorized lookup and capture the new observation with its own observation time. Replaying the same observation preserves one execution history. Revised content is retained with its run and source links. A stale or unavailable body remains a capture disposition. The importer accepts caller-supplied metadata and the timestamps retain that provenance.
+
+Use `--research revoke-scout SCOUT_ID` to persist a local stop for that exact scope. After the revocation is recorded, further capture and new study dispatch through that scope are refused. An already reserved operator run can finish. The local command has no account credentials or schedule. A standing service requires the separate operating authority in the [qualification ledger](../GATES.md).
+
 ## Observed pilot
 
 The supported per-task lookup returned complete latest report bodies for five of the six enabled scouts. Action Alerts showed a completed run without a result body in that lookup. The publisher returned a publication receipt. The lookup exposed a latest run per scout. Total private history remains unknown. The pilot imported five reports, found 11 exact versioned references in them and combined them with 115 public source versions. Three overlapped, yielding 123 distinct versions and 126 sightings in the initial local cohort. These counts represent references, including comparators, as distinct from consequential findings.
@@ -45,6 +58,18 @@ The public inbox history contained 875 slots in 55 path snapshots, representing 
 
 The work used published cohorts and a local operator-run process. The routing computation went through the existing HARNESS controller with an authored transport and zero model inference. The specialized and sampling computations ran as registered local experiments. Independent replay here shares administration with the constructors. Author-reported results on the three papers remain distinct from the local results. [Public pilot receipt](PILOT-RECEIPT.json) · [Current qualification and external gates](../GATES.md) · [Five opportunities](OPPORTUNITIES.md)
 
+The subsequent Possible Now alert led to an actual CPU runtime and model-admission decision on two live documentation needs. [From alert to achievement](alert-achievement/REPORT.md)
+
 ## Mode d’emploi
 
-Enregistrez le rapport copié en Markdown ou en texte UTF-8, puis importez-le avec `--research import rapport.md`. Utilisez `--research atlas` pour ajouter l’historique public et `--research status` pour voir les études disponibles. Exécutez une étude autorisée avec `--research cycle NOM`. Les rapports et les reçus de provenance restent dans le dossier privé local. Les premiers résultats portent sur des dossiers archivés. Les essais prospectifs, la valeur économique et l’exploitation continue restent à établir.
+À la racine du dépôt, avec Python 3.11 ou une version ultérieure, lancez les commandes suivantes.
+
+```sh
+python3 scripts/frontier_opportunity_capture.py --research atlas
+python3 scripts/frontier_opportunity_capture.py --research status
+python3 scripts/frontier_opportunity_capture.py --research cycle routing-ceiling
+```
+
+La première importe l’historique public et le vérifie à l’aide du manifeste de publication. La deuxième indique les études dont les sources sont présentes. La troisième lance l’étude d’aiguillage. Cette étude mesure le gain maximal possible à partir des réponses archivées. L’exploitation continue reste à qualifier.
+
+Pour importer un rapport copié, utilisez `--research import rapport.md`. Avec cette version, vous pouvez aussi utiliser `--research capture observations.json` si vous disposez d’un export autorisé avec l’identité de la veille, les dates et le résultat de l’exécution. Les rapports, leurs révisions et les reçus restent dans le dossier privé local `~/.local/state/frontier-omega/research`, hors de Git. Ajoutez `--store /chemin/prive` entre `--research` et la sous-commande pour choisir un autre dossier. Un résultat absent ou périmé reçoit un statut de suivi. `--research revoke-scout SCOUT_ID` enregistre l’arrêt des nouvelles opérations dans la portée locale de cette veille.

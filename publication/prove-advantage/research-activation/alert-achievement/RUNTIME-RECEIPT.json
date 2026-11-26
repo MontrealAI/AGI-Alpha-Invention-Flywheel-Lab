@@ -1,0 +1,242 @@
+{
+  "schema": "frontier/alert-achievement-local-runtime-v1",
+  "baseline_source_commit": "8bb8d60b43c1f3bbffc26ee1ae9ed2a810fe0a44",
+  "scope": "Bounded operator-run CPU model admission on two live MONTREAL.AI documentation needs.",
+  "alert": {
+    "scout": "Possible Now",
+    "completed_at": "2026-11-26T14:39:50.164848Z",
+    "first_seen_at": "2026-11-26T14:41:35.726Z",
+    "initial_post_release_monitor_cutoff": "2026-11-26T14:10:14.383Z",
+    "local_eligibility_freeze": "2026-11-26T14:41:17.449641Z",
+    "construction_registration": "2026-11-26T14:48:20.862144+00:00",
+    "original_body_owner_only": true
+  },
+  "eligibility": {
+    "previous_reports_checked": 5,
+    "public_atlas_versions_checked": 115,
+    "earlier_exact_method_mentions": 0
+  },
+  "capture": {
+    "first_batch": {
+      "CAPTURED": 5,
+      "MISSING_BODY": 1
+    },
+    "repeat_batch": {
+      "DUPLICATE_OBSERVATION": 6
+    },
+    "retained_links": 28,
+    "complete_private_report_denominator": null,
+    "standing_operation_qualified": false
+  },
+  "runtime": {
+    "tag": "v1.1.0",
+    "commit": "171527522610996f5f0acf12334e185156ca8f44",
+    "published_pointer": "b12774",
+    "cpu_sha256": "ab5837cca2317cfb7ecb5f85b550934e7355cd9df74cdde6e106581457034dbb",
+    "platform": "Ubuntu x64 CPU",
+    "thread_count": 8,
+    "gpu_layers": 0,
+    "archive": {
+      "bytes": 23454685,
+      "sha256": "ab5837cca2317cfb7ecb5f85b550934e7355cd9df74cdde6e106581457034dbb"
+    },
+    "isolation_helper_sha256": "57c673dedbc4e21173b75d4e4b872d134ec03cddd1216d434c94745857f52603",
+    "socket_denial_and_workspace_mount_check": "PASS"
+  },
+  "weights": {
+    "repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "file": "qwen2.5-1.5b-instruct-fp16.gguf",
+    "license": "Apache-2.0",
+    "sha256": "fc89e330deb3fd8fa560f1c0f35a1e2b8da96d59e13445559ed190307a6f5649"
+  },
+  "inputs": {
+    "release_operator_fr.txt": {
+      "bytes": 4198,
+      "sha256": "2c8090cd6e40f448f75ccea5d8743dfa1313bac3f97ffd1936fbaf97e4e549bb"
+    },
+    "host_qualification_en.txt": {
+      "bytes": 1836,
+      "sha256": "01aac44fb4e99246d774980b4b05d2f151de80cd0d18bab4db726674ac73d6c6"
+    },
+    "calibration.txt": {
+      "bytes": 48117,
+      "sha256": "2299df134e92c60eb34bde25cdf0f345ab62fd8a2e246230352831e0e5876390"
+    }
+  },
+  "calibration": {
+    "chunks": 8,
+    "ctx_per_chunk": 256,
+    "allocation": "Same activation-bearing GGUF importance matrix in both quantized arms.",
+    "local_elapsed_seconds": 34.6,
+    "matrix": {
+      "bytes": 4137664,
+      "sha256": "0561fb8a713f5e84db73e912c6d779259cc2a250fbfb314c139fe8737b027209"
+    },
+    "activation_entries": 196
+  },
+  "registered_quality_gates": [
+    {
+      "name": "release_operator_fr",
+      "task": "Draft the French operator paragraph for the released research intake and study route; preserve exact commands and its known limitations.",
+      "requirements": [
+        "exact Atlas and status commands",
+        "exact routing-ceiling invocation",
+        "reports stay in owner-only local storage",
+        "no live or standing qualification claimed",
+        "usable French"
+      ]
+    },
+    {
+      "name": "host_qualification_en",
+      "task": "Produce a local deployment and workstation readiness decision from actual vendor and current owner instructions.",
+      "requirements": [
+        "exact semver, nightly pointer and same source binding",
+        "activation-bearing imatrix requirement",
+        "Linux CPU observation scope only",
+        "actual dual TITAN and GPU outcome withheld",
+        "owner approval and actual GPU receipt needed"
+      ]
+    }
+  ],
+  "matched_ceiling_bytes": 1117320960,
+  "automatic_target_bytes": 1111734355,
+  "optimizer_state": {
+    "bytes": 68020,
+    "sha256": "c936f27f4e15cf0a19da7419476648448dfb4ffdff20907da814a56759b483a3"
+  },
+  "arms": {
+    "conventional": {
+      "model": {
+        "bytes": 1117320960,
+        "sha256": "7ad8a8e45e4d80671537f0f8e85bcf9f972bab5d001643abeaff3847aabcdc47"
+      },
+      "accepted_tasks": 0,
+      "tasks": {
+        "release_operator_fr": {
+          "acceptance": "FAIL",
+          "issues": [
+            "Output in English and incomplete.",
+            "Omitted private state and receipts, archived scope and standing-operation limit."
+          ],
+          "elapsed_seconds": 19.724,
+          "cpu_seconds": 134.714,
+          "peak_rss_kib": 1947544,
+          "output": {
+            "bytes": 2652,
+            "sha256": "30a47fd298e21aff27ab112e12bc6aa475f0eccbcf1a062511c7fd5c9eefabc6"
+          }
+        },
+        "host_qualification_en": {
+          "acceptance": "FAIL",
+          "issues": [
+            "Omitted b12774 and the activation matrix requirement.",
+            "Directed the GPU test to the engineering host, asserted unverified compatibility and omitted the required GPU receipt."
+          ],
+          "elapsed_seconds": 8.567,
+          "cpu_seconds": 60.83,
+          "peak_rss_kib": 1936636,
+          "output": {
+            "bytes": 941,
+            "sha256": "a148efdb298599ac7c8ce8fdc33b77000ea79fa555c2f8cfd3aa792dddc1d8a6"
+          }
+        }
+      },
+      "quantization": {
+        "elapsed_seconds": 34.045,
+        "cpu_seconds": 217.317,
+        "peak_rss_kib": 1607212
+      }
+    },
+    "automatic": {
+      "model": {
+        "bytes": 1111729920,
+        "sha256": "d97d170b220404833105c01005540681c28d1deefac654e72d6d0e9fa7bd86b7"
+      },
+      "accepted_tasks": 0,
+      "tasks": {
+        "release_operator_fr": {
+          "acceptance": "FAIL",
+          "issues": [
+            "Exact commands present. Output was incomplete.",
+            "Omitted the private boundary, archived scope and standing-operation limit."
+          ],
+          "elapsed_seconds": 17.617,
+          "cpu_seconds": 134.88,
+          "peak_rss_kib": 1401256,
+          "output": {
+            "bytes": 2151,
+            "sha256": "3ecaa1073326f0d814182f3889676f407ccdad0d77ff611a82a3e208ab69eeb5"
+          }
+        },
+        "host_qualification_en": {
+          "acceptance": "FAIL",
+          "issues": [
+            "Exact build and commit present. Omitted activation data requirement and the reviewed receipt.",
+            "Mixed CPU and CUDA evidence and asserted unsupported checkpoint readiness."
+          ],
+          "elapsed_seconds": 10.811,
+          "cpu_seconds": 80.472,
+          "peak_rss_kib": 1392364,
+          "output": {
+            "bytes": 1294,
+            "sha256": "3a4949126965efb423182af5b7989c83f882c43b484cdf949df52c9be3f4a288"
+          }
+        }
+      },
+      "quantization": {
+        "elapsed_seconds": 162.751,
+        "cpu_seconds": 1146.665,
+        "peak_rss_kib": 4702984
+      }
+    },
+    "fp16": {
+      "model": {
+        "bytes": 3560416288,
+        "sha256": "fc89e330deb3fd8fa560f1c0f35a1e2b8da96d59e13445559ed190307a6f5649"
+      },
+      "accepted_tasks": 0,
+      "tasks": {
+        "release_operator_fr": {
+          "acceptance": "FAIL",
+          "issues": [
+            "Output in English and incomplete.",
+            "Omitted archived scope and standing-operation limit."
+          ],
+          "elapsed_seconds": 41.601,
+          "cpu_seconds": 325.083,
+          "peak_rss_kib": 3723208,
+          "output": {
+            "bytes": 2594,
+            "sha256": "51caebb8ff0d30c0e873584df04ce016f1f107de87be61f962726d1d0cd8adc6"
+          }
+        },
+        "host_qualification_en": {
+          "acceptance": "FAIL",
+          "issues": [
+            "Omitted b12774 and misstated the importance matrix requirement.",
+            "Asserted GPU readiness and omitted the reviewed receipt."
+          ],
+          "elapsed_seconds": 25.988,
+          "cpu_seconds": 202.014,
+          "peak_rss_kib": 3715332,
+          "output": {
+            "bytes": 1384,
+            "sha256": "b2ace8bc934e4732836ee245a0b46f0a4b4d86d01fe943c891bb8a8a992733ed"
+          }
+        }
+      }
+    }
+  },
+  "direct_documentary_control_accepted_tasks": 2,
+  "evaluation_custody": "Separate reviewer of blinded model outputs in shared workspace administration.",
+  "advance": "FAIL_MODEL_ADMISSION_RETAIN_DOCUMENTARY_INCUMBENT",
+  "economics": {
+    "paid_model_calls": 0,
+    "collected_revenue": null,
+    "complete_economic_cost": null,
+    "owner_attention": null,
+    "hardware_energy": null,
+    "external_adoption": null
+  }
+}

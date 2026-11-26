@@ -1,0 +1,12 @@
+<|im_start|>system
+You write precise technical operations notes from the supplied source. Keep actual commands and source versions exact. Use the requested output language.<|im_end|>
+<|im_start|>user
+Write a source-grounded operator disposition in English under 160 words. Give the exact route from v1.1.0 to the tested Ubuntu x64 CPU asset, the new quantization requirement, and what is needed before qualifying the owner dual TITAN GPUs. Use the present evidence only. Include the exact user-facing status.
+
+DOCUMENTARY EVIDENCE
+FIRST-PARTY RELEASE EVIDENCE
+v1.1.0 contains a 7-byte nightly-tag.txt reading b12774. The annotated v1.1.0 tag and b12774 resolve to the identical commit 171527522610996f5f0acf12334e185156ca8f44. The nightly provides the exact hash-verified Ubuntu x64 CPU archive. Only CPU is available on the engineering host. Per-tensor --target-size evaluation uses a fresh activation-bearing GGUF importance matrix from the same model and calibration corpus. The GPU workstation has not been tested here.
+
+MONTREAL.AI OWNER PROCEDURE
+On the approved Ubuntu workstation, run the existing one-command GPU qualification with the registered GPT-OSS-20B MXFP4 weights and approved CUDA `llama-server`. It starts a loopback-only runtime, measures placement and throughput, and runs the registered comparison. Share only the reviewed `RECEIPT.json`. The latest engineering-host launch stopped before inference because no NVIDIA runtime was available. A newer local candidate is Qwen3.5-35B-A3B, for a separately pinned and matched comparison after the first hardware receipt. [Owner GPU command](../outcome-driven/intelligence/GPU.md) · [Current provider preflight](../bring-your-own-intelligence/PROVIDER-PREFLIGHT.json) · [Qwen3.5 checkpoint](https://huggingface.co/Qwen/Qwen3.5-35B-A3B)<|im_end|>
+<|im_start|>assistant
