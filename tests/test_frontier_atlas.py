@@ -158,9 +158,14 @@ class AtlasPublicationTests(TestCase):
     def test_research_packet_instructions_bind_both_languages_to_the_release(self):
         study = {'opportunities': [], 'summary': {'en': 'Public study.', 'fr': 'Étude publique.'}}
         expected = capture.report_url(A, 'publication/prove-advantage/research-activation/positive-advancement/README.md')
-        for language, label in (('en', 'Restore verified evidence'), ('fr', 'Récupérer les preuves vérifiées')):
+        assessment = capture.report_url(A, 'publication/prove-advantage/binding-constraint/assessment-links/README.md')
+        for language, label, assessment_label in (
+            ('en', 'Restore verified evidence', 'Find public AI impact assessments'),
+            ('fr', 'Récupérer les preuves vérifiées', 'Consulter les évaluations algorithmiques publiques'),
+        ):
             markup = capture.render(study, language, A)
             self.assertIn(f'<a href="{expected}">{label}</a>', markup)
+            self.assertIn(f'<a href="{assessment}">{assessment_label}</a>', markup)
             self.assertIn(capture.report_url(A), markup)
 
 

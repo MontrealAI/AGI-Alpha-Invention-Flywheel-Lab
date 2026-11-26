@@ -1,0 +1,155 @@
+{
+  "schema": "frontier/public-assessment-linkage-study-v1",
+  "observation_date": "2026-11-26",
+  "original_registration_sha256": "0457d8bf18f33f37c2a133f27e7aca68c55a75d2eb106dd8357f9c808b2134bd",
+  "frozen_candidate_sha256": "d63fe12d41cf839f8059d39a28a0c75be54fb15c71674cce4d7011997dc208e3",
+  "candidate_freeze_sha256": "7034e97f2a40b816a4d1db6abb57918f337fb87ddcf2d539635933e31dbcf0c2",
+  "source_catalogue_receipts": [
+    {
+      "name": "title-en",
+      "url": "https://open.canada.ca/data/api/3/action/package_search?q=title%3A%22Algorithmic+Impact+Assessment%22&rows=100&sort=id+asc",
+      "sha256": "12392b4deb341c1f8cfe0da3d9f3e6d46796180a9e0ac0dec56c22817b87f90e",
+      "bytes": 354452,
+      "status": 200,
+      "elapsed_s": 4.843,
+      "count": 32,
+      "retrieved_records": 32
+    },
+    {
+      "name": "title-fr",
+      "url": "https://open.canada.ca/data/api/3/action/package_search?q=title_translated_fr%3A%22%C3%A9valuation+de+l%E2%80%99incidence+algorithmique%22&rows=100&sort=id+asc",
+      "sha256": "d2d860c5e95941801779dab8246f3b797110fd2273acb361bdbd4d92010747a6",
+      "bytes": 353,
+      "status": 200,
+      "elapsed_s": 4.783,
+      "count": 0,
+      "retrieved_records": 0
+    },
+    {
+      "name": "phrase",
+      "url": "https://open.canada.ca/data/api/3/action/package_search?q=%22Algorithmic+Impact+Assessment%22&rows=100&sort=score+desc",
+      "sha256": "9962af26d63ace4dfb64430aad57c67c31bc04c0e012b6289564a1dd797a4c5a",
+      "bytes": 473579,
+      "status": 200,
+      "elapsed_s": 4.817,
+      "count": 42,
+      "retrieved_records": 42
+    },
+    {
+      "name": "legacy-package",
+      "url": "https://open.canada.ca/data/api/3/action/package_show?id=fcbc0200-79ba-4fa4-94a6-00e32facea6b",
+      "sha256": "91989641d3bb42808d5b7f265418ed0f43f7e14cae709dc1bd8a9a59ffd9cfdd",
+      "bytes": 11338,
+      "status": 200,
+      "elapsed_s": 4.725,
+      "count": null,
+      "retrieved_records": 0
+    },
+    {
+      "source": "phrase-fr",
+      "url": "https://open.canada.ca/data/api/3/action/package_search?q=%22incidence+algorithmique%22&rows=100&sort=id+asc",
+      "count": 38,
+      "bytes": 429922,
+      "sha256": "83a5aa61289793a452b296326d46c6fe4daf590504f81228dfbef965a633584e",
+      "elapsed_s": 3.92
+    },
+    {
+      "source": "phrase-fr-impact",
+      "url": "https://open.canada.ca/data/api/3/action/package_search?q=%22impact+algorithmique%22&rows=100&sort=id+asc",
+      "count": 11,
+      "bytes": 142481,
+      "sha256": "b1bae1dfd37b9fb22c13392a74abe61c21ef2d842bd27499a2abb763f8ffd599",
+      "elapsed_s": 3.639
+    },
+    {
+      "source": "abbreviation-en",
+      "url": "https://open.canada.ca/data/api/3/action/package_search?q=%22Algorithmic+Impact+Assessments%22&rows=100&sort=id+asc",
+      "count": 42,
+      "bytes": 473575,
+      "sha256": "f335d2b4cd454bba400d17148023de9b98d7cfc5b9532aa3042c9eb3caf0014b",
+      "elapsed_s": 3.792
+    },
+    {
+      "source": "typo-en",
+      "url": "https://open.canada.ca/data/api/3/action/package_search?q=%22Algorithm+Impact+Assessment%22&rows=100&sort=id+asc",
+      "count": 42,
+      "bytes": 473575,
+      "sha256": "f335d2b4cd454bba400d17148023de9b98d7cfc5b9532aa3042c9eb3caf0014b",
+      "elapsed_s": 3.835
+    }
+  ],
+  "register": {
+    "rows": 412,
+    "observed_organizations": 43,
+    "snapshot_sha256": "de0a5d2961fac0fb81c0c552104c21bea2c87a0b9c18ad58e2380199b4bfb313"
+  },
+  "first_acquisition_attempt": {
+    "requests": 78,
+    "elapsed_s": 54.54,
+    "accepted_artifacts": 0
+  },
+  "resolved_acquisition": {
+    "requests": 122,
+    "elapsed_s": 139.659,
+    "verified_artifacts": 121,
+    "response_body_bytes": 10365168
+  },
+  "work": {
+    "before_manual_review_link_candidates": 14,
+    "frozen_candidate_positive_claims": 23,
+    "selected_links_for_delivery": 24,
+    "distinct_reviewed_outside_held": 16,
+    "direct_review_correction_after_freeze": "2526-ESDC-EDSC-011"
+  },
+  "held_results": {
+    "candidate": {
+      "expected_linked": 8,
+      "submitted_links": 7,
+      "invalid_resource_claims": 0,
+      "correct_exact_links": 7,
+      "false_linked_withhold": 0,
+      "correctly_withheld": 8,
+      "binary_correct": 15,
+      "strict_disposition_correct": 14,
+      "expected_withheld": 8
+    },
+    "exact_title": {
+      "expected_linked": 8,
+      "submitted_links": 5,
+      "invalid_resource_claims": 0,
+      "correct_exact_links": 5,
+      "false_linked_withhold": 0,
+      "correctly_withheld": 8,
+      "binary_correct": 13,
+      "strict_disposition_correct": 10,
+      "expected_withheld": 8
+    },
+    "reviewed_scope_withdrawal": {
+      "expected_linked": 8,
+      "submitted_links": 5,
+      "invalid_resource_claims": 0,
+      "correct_exact_links": 5,
+      "false_linked_withhold": 0,
+      "correctly_withheld": 8,
+      "binary_correct": 13,
+      "strict_disposition_correct": 10,
+      "expected_withheld": 8
+    },
+    "strongest_direct": {
+      "expected_linked": 8,
+      "submitted_links": 8,
+      "invalid_resource_claims": 0,
+      "correct_exact_links": 8,
+      "false_linked_withhold": 0,
+      "correctly_withheld": 8,
+      "binary_correct": 16,
+      "strict_disposition_correct": 15,
+      "expected_withheld": 8
+    }
+  },
+  "independent_receipts": {
+    "held_comparison_sha256": "60d9758fa5b0e37cbcae0f0b35fb95fc33cca07e5868d84b9489b8feb2bdbc8b",
+    "outside_source_review_sha256": "5c42fca070f7f35d2c1395a7061e612127bac24734dd94005138d692a02f853b"
+  },
+  "scope": "Historical source identity evidence, with separately named narrower published project editions. No effectiveness, compliance, member adoption or complete-work cost comparison."
+}
