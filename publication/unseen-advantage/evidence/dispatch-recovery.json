@@ -1,0 +1,366 @@
+{
+  "schema": "frontier/distribution-source-recovery/v1",
+  "phase": "registered_public_evaluation",
+  "registration": "933219e2b791132dae69e840f834b82566416f0c",
+  "evidence_revision": "3cc6bc95a13f991b5158e5bd5064b766b21632a4",
+  "executable_revision": "4fc58ceca7bb10109b71e8a6d6d4e7faf70700d4",
+  "started_at_utc": "2026-11-24T00:48:02.834304+00:00",
+  "cases": [
+    {
+      "acquisition": {
+        "case": "cdp_o45_08d",
+        "source_url": "https://data.mendeley.com/public-files/datasets/b78bc94d95/files/dcac9669-c76f-40fd-a922-c2932bcaebb0/file_downloaded",
+        "sha256": "66a5e28901d8a9357d87045d69aa8eaf145fee366b28fe5887b216b9401455ce",
+        "bytes": 4812,
+        "request_count": 0,
+        "transport": "cache",
+        "wall_ms": 0.043214
+      },
+      "baseline": {
+        "case": "cdp_o45_08d",
+        "orders": 45,
+        "source_spec_orders": 45,
+        "travel_shape": [
+          45,
+          8
+        ],
+        "distance_shape": [
+          53,
+          53
+        ],
+        "row_mapping_verified": true,
+        "verdict": "ABSTAIN",
+        "missing_travel": 8,
+        "missing_distance_forward": 8,
+        "missing_distance_reverse": 8,
+        "reason": "source_value_not_identified"
+      },
+      "challenger": {
+        "case": "cdp_o45_08d",
+        "source_sha256": "66a5e28901d8a9357d87045d69aa8eaf145fee366b28fe5887b216b9401455ce",
+        "orders": 45,
+        "travel_rows": 45,
+        "travel_columns": 8,
+        "distance_shape": [
+          53,
+          53
+        ],
+        "recovered_cells": 0,
+        "verdict": "ABSTAIN",
+        "overlap_cells": 352,
+        "unidentifiable_cells": [
+          [
+            36,
+            0
+          ],
+          [
+            36,
+            1
+          ],
+          [
+            36,
+            2
+          ],
+          [
+            36,
+            3
+          ],
+          [
+            36,
+            4
+          ],
+          [
+            36,
+            5
+          ],
+          [
+            36,
+            6
+          ],
+          [
+            36,
+            7
+          ]
+        ],
+        "reason": "source_value_not_identified",
+        "counterexamples": [
+          {
+            "cell": [
+              36,
+              0
+            ],
+            "hypothetical_car_minutes": 12.0
+          },
+          {
+            "cell": [
+              36,
+              0
+            ],
+            "hypothetical_car_minutes": 24.0
+          }
+        ]
+      },
+      "independent_technical_check": true,
+      "costs": {
+        "acquisition": {
+          "wall_ms": 0.105114,
+          "cpu_ms": 0.105601
+        },
+        "pinned_metadata": {
+          "wall_ms": 9.442836,
+          "cpu_ms": 0.797914
+        },
+        "conventional": {
+          "wall_ms": 0.792143,
+          "cpu_ms": 0.794468
+        },
+        "challenger": {
+          "wall_ms": 0.350559,
+          "cpu_ms": 0.351203
+        },
+        "independent_check": {
+          "wall_ms": 0.326421,
+          "cpu_ms": 0.32724
+        }
+      }
+    },
+    {
+      "acquisition": {
+        "case": "cdp_o50_d",
+        "source_url": "https://data.mendeley.com/public-files/datasets/b78bc94d95/files/e085eaff-68e1-4adc-b1a8-c5a3eb2befbd/file_downloaded",
+        "sha256": "3239317645729f0a888151193f2e1fcd23d1a203ac550dd37668fdceae5a82e9",
+        "bytes": 4935,
+        "request_count": 0,
+        "transport": "cache",
+        "wall_ms": 0.027707
+      },
+      "baseline": {
+        "case": "cdp_o50_d",
+        "orders": 50,
+        "source_spec_orders": 50,
+        "travel_shape": [
+          49,
+          8
+        ],
+        "distance_shape": [
+          57,
+          57
+        ],
+        "row_mapping_verified": false,
+        "verdict": "ABSTAIN",
+        "missing_travel": 0,
+        "missing_distance_forward": 0,
+        "missing_distance_reverse": 0,
+        "reason": "row_identity_not_established"
+      },
+      "challenger": {
+        "case": "cdp_o50_d",
+        "source_sha256": "3239317645729f0a888151193f2e1fcd23d1a203ac550dd37668fdceae5a82e9",
+        "orders": 50,
+        "travel_rows": 49,
+        "travel_columns": 8,
+        "distance_shape": [
+          57,
+          57
+        ],
+        "recovered_cells": 0,
+        "verdict": "ABSTAIN",
+        "overlap_cells": 392,
+        "unidentifiable_cells": [],
+        "reason": "row_identity_not_established",
+        "counterexamples": [
+          {
+            "omitted_order": 1,
+            "order_for_first_observed_row": 2
+          },
+          {
+            "omitted_order": 50,
+            "order_for_first_observed_row": 1
+          }
+        ]
+      },
+      "independent_technical_check": true,
+      "costs": {
+        "acquisition": {
+          "wall_ms": 0.132611,
+          "cpu_ms": 0.132784
+        },
+        "pinned_metadata": {
+          "wall_ms": 7.383566,
+          "cpu_ms": 0.458855
+        },
+        "conventional": {
+          "wall_ms": 0.382216,
+          "cpu_ms": 0.383215
+        },
+        "challenger": {
+          "wall_ms": 0.314001,
+          "cpu_ms": 0.31464
+        },
+        "independent_check": {
+          "wall_ms": 0.281247,
+          "cpu_ms": 0.281909
+        }
+      }
+    },
+    {
+      "acquisition": {
+        "case": "cdp_o5_06d",
+        "source_url": "https://data.mendeley.com/public-files/datasets/b78bc94d95/files/8bb8a385-a0ae-4bcb-ac35-a8bd6d36faff/file_downloaded",
+        "sha256": "efe911936baf5febd3b4ebd7ead392f21ebbf6438fa7c6a42ee76a9e61b0d35a",
+        "bytes": 1954,
+        "request_count": 0,
+        "transport": "cache",
+        "wall_ms": 0.022932
+      },
+      "baseline": {
+        "case": "cdp_o5_06d",
+        "orders": 5,
+        "source_spec_orders": 5,
+        "travel_shape": [
+          5,
+          8
+        ],
+        "distance_shape": [
+          13,
+          13
+        ],
+        "row_mapping_verified": true,
+        "verdict": "SOURCE_READY",
+        "missing_travel": 0,
+        "missing_distance_forward": 0,
+        "missing_distance_reverse": 0,
+        "recovered_cells": 0
+      },
+      "challenger": {
+        "case": "cdp_o5_06d",
+        "source_sha256": "efe911936baf5febd3b4ebd7ead392f21ebbf6438fa7c6a42ee76a9e61b0d35a",
+        "orders": 5,
+        "travel_rows": 5,
+        "travel_columns": 8,
+        "distance_shape": [
+          13,
+          13
+        ],
+        "recovered_cells": 0,
+        "verdict": "SOURCE_READY",
+        "overlap_cells": 40,
+        "unidentifiable_cells": [],
+        "order_ids": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "truck_travel_minutes": [
+          [
+            93.8,
+            61.599999999999994,
+            40.599999999999994,
+            16.799999999999997,
+            32.199999999999996,
+            99.39999999999999,
+            64.39999999999999,
+            40.599999999999994
+          ],
+          [
+            93.8,
+            61.599999999999994,
+            40.599999999999994,
+            16.799999999999997,
+            32.199999999999996,
+            99.39999999999999,
+            64.39999999999999,
+            40.599999999999994
+          ],
+          [
+            58.8,
+            72.8,
+            131.6,
+            124.6,
+            95.19999999999999,
+            92.39999999999999,
+            131.6,
+            131.6
+          ],
+          [
+            128.79999999999998,
+            96.6,
+            39.199999999999996,
+            47.599999999999994,
+            67.19999999999999,
+            135.79999999999998,
+            29.4,
+            39.199999999999996
+          ],
+          [
+            93.8,
+            61.599999999999994,
+            43.4,
+            15.399999999999999,
+            29.4,
+            100.8,
+            67.19999999999999,
+            43.4
+          ]
+        ]
+      },
+      "independent_technical_check": true,
+      "costs": {
+        "acquisition": {
+          "wall_ms": 0.074111,
+          "cpu_ms": 0.074202
+        },
+        "pinned_metadata": {
+          "wall_ms": 9.929578,
+          "cpu_ms": 0.353716
+        },
+        "conventional": {
+          "wall_ms": 0.372782,
+          "cpu_ms": 0.374409
+        },
+        "challenger": {
+          "wall_ms": 0.178887,
+          "cpu_ms": 0.179899
+        },
+        "independent_check": {
+          "wall_ms": 0.161641,
+          "cpu_ms": 0.162156
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "recovered_case_ids": [],
+  "negative_controls": {
+    "cdp_o45_08d_modified_counterexample": "rejected",
+    "cdp_o50_d_modified_counterexample": "rejected",
+    "wrong_source_digest": "source length or SHA-256 disagrees with registration",
+    "truncated_source": "source length or SHA-256 disagrees with registration",
+    "truncated_numeric_payload": "truncated MAT payload",
+    "unavailable_acquisition": "registered acquisition control",
+    "unavailable_acquisition_no_commit": true,
+    "contradictory_distance": "contradictory_representation",
+    "unbacked_missing_cell": "source_value_not_identified",
+    "unkeyed_missing_row": "row_identity_not_established",
+    "modified_numeric_receipt": "rejected"
+  },
+  "verdict": "ABSTAIN",
+  "limits": [
+    "Source recovery only",
+    "Public findings and case IDs",
+    "No independently administered confirmation or beneficiary approval",
+    "Imports, installation, downstream dispatch, people, and maintenance unmeasured"
+  ],
+  "resources": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "elapsed_ms_after_import": 36.853863,
+    "cpu_ms_after_import": 7.082802,
+    "peak_process_rss": 48420,
+    "peak_rss_unit": "KiB"
+  }
+}

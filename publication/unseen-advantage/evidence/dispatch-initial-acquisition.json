@@ -1,0 +1,49 @@
+{
+  "schema": "frontier/distribution-source-recovery/v1",
+  "phase": "registered_public_evaluation",
+  "registration": "933219e2b791132dae69e840f834b82566416f0c",
+  "evidence_revision": "3cc6bc95a13f991b5158e5bd5064b766b21632a4",
+  "executable_revision": "4fc58ceca7bb10109b71e8a6d6d4e7faf70700d4",
+  "started_at_utc": "2026-11-24T00:46:31.111963+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "case": "cdp_o45_08d",
+      "stage": "acquire",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "case": "cdp_o50_d",
+      "stage": "acquire",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "case": "cdp_o5_06d",
+      "stage": "acquire",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "stage": "negative_controls",
+      "error": "clean control unavailable"
+    }
+  ],
+  "recovered_case_ids": [],
+  "negative_controls": {},
+  "verdict": "ABSTAIN",
+  "limits": [
+    "Source recovery only",
+    "Public findings and case IDs",
+    "No independently administered confirmation or beneficiary approval",
+    "Imports, installation, downstream dispatch, people, and maintenance unmeasured"
+  ],
+  "resources": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "elapsed_ms_after_import": 9675.360616,
+    "cpu_ms_after_import": 17.569959,
+    "peak_process_rss": 50324,
+    "peak_rss_unit": "KiB"
+  }
+}
