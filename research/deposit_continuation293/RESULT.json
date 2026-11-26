@@ -1,0 +1,396 @@
+{
+  "frozenCommit": "c9bd914328bcee263bd8f0597d1d2eaa9c2931d5",
+  "probeBlob": "16f867fbccc60efe1dbfc58a14da3938ce21133f",
+  "exactSourceMatch": true,
+  "sourceChecks": {
+    "blobIdentity": true,
+    "creationBeforeSlug": true,
+    "slugMetadata": true,
+    "commitBeforeReceipt": true
+  },
+  "sourceBlobs": [
+    {
+      "name": "SwordMETSContentIngester.java",
+      "sha": "064fc303682f4aba1494ba8f2c9b94241b793fcd"
+    },
+    {
+      "name": "AbstractSwordContentIngester.java",
+      "sha": "4f884f787fd359dee9bc5d1ab05584678ca87301"
+    },
+    {
+      "name": "CollectionDepositManagerDSpace.java",
+      "sha": "b45a5bedee9d25d3d3bc28403eacb93e5494ed96"
+    }
+  ],
+  "results": [
+    {
+      "case": "absent_authoritative",
+      "policy": "blind_retry",
+      "action": "retry",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "absent_authoritative",
+      "policy": "fail_closed",
+      "action": "hold",
+      "count": 0,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "absent_authoritative",
+      "policy": "manual_reconcile",
+      "action": "retry",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "absent_authoritative",
+      "policy": "automated_reconcile",
+      "action": "retry",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "absent_authoritative",
+      "policy": "atomic_server_hypothetical",
+      "action": "atomic",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "present_authoritative",
+      "policy": "blind_retry",
+      "action": "retry",
+      "count": 2,
+      "linked": true,
+      "safe": false,
+      "complete": false
+    },
+    {
+      "case": "present_authoritative",
+      "policy": "fail_closed",
+      "action": "hold",
+      "count": 1,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "present_authoritative",
+      "policy": "manual_reconcile",
+      "action": "link",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "present_authoritative",
+      "policy": "automated_reconcile",
+      "action": "link",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "present_authoritative",
+      "policy": "atomic_server_hypothetical",
+      "action": "atomic",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "known_receipt",
+      "policy": "blind_retry",
+      "action": "link",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "known_receipt",
+      "policy": "fail_closed",
+      "action": "link",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "known_receipt",
+      "policy": "manual_reconcile",
+      "action": "link",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "known_receipt",
+      "policy": "automated_reconcile",
+      "action": "link",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "known_receipt",
+      "policy": "atomic_server_hypothetical",
+      "action": "link",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "unknown_absent",
+      "policy": "blind_retry",
+      "action": "retry",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "unknown_absent",
+      "policy": "fail_closed",
+      "action": "hold",
+      "count": 0,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "unknown_absent",
+      "policy": "manual_reconcile",
+      "action": "hold",
+      "count": 0,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "unknown_absent",
+      "policy": "automated_reconcile",
+      "action": "hold",
+      "count": 0,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "unknown_absent",
+      "policy": "atomic_server_hypothetical",
+      "action": "atomic",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "unknown_present",
+      "policy": "blind_retry",
+      "action": "retry",
+      "count": 2,
+      "linked": true,
+      "safe": false,
+      "complete": false
+    },
+    {
+      "case": "unknown_present",
+      "policy": "fail_closed",
+      "action": "hold",
+      "count": 1,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "unknown_present",
+      "policy": "manual_reconcile",
+      "action": "hold",
+      "count": 1,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "unknown_present",
+      "policy": "automated_reconcile",
+      "action": "hold",
+      "count": 1,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "unknown_present",
+      "policy": "atomic_server_hypothetical",
+      "action": "atomic",
+      "count": 1,
+      "linked": true,
+      "safe": true,
+      "complete": true
+    },
+    {
+      "case": "duplicate_existing",
+      "policy": "blind_retry",
+      "action": "retry",
+      "count": 3,
+      "linked": true,
+      "safe": false,
+      "complete": false
+    },
+    {
+      "case": "duplicate_existing",
+      "policy": "fail_closed",
+      "action": "hold",
+      "count": 2,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "duplicate_existing",
+      "policy": "manual_reconcile",
+      "action": "hold",
+      "count": 2,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "duplicate_existing",
+      "policy": "automated_reconcile",
+      "action": "hold",
+      "count": 2,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "duplicate_existing",
+      "policy": "atomic_server_hypothetical",
+      "action": "hold",
+      "count": 2,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "mismatch",
+      "policy": "blind_retry",
+      "action": "retry",
+      "count": 2,
+      "linked": true,
+      "safe": false,
+      "complete": false
+    },
+    {
+      "case": "mismatch",
+      "policy": "fail_closed",
+      "action": "hold",
+      "count": 1,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "mismatch",
+      "policy": "manual_reconcile",
+      "action": "hold",
+      "count": 1,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "mismatch",
+      "policy": "automated_reconcile",
+      "action": "hold",
+      "count": 1,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    },
+    {
+      "case": "mismatch",
+      "policy": "atomic_server_hypothetical",
+      "action": "hold",
+      "count": 1,
+      "linked": false,
+      "safe": true,
+      "complete": false
+    }
+  ],
+  "checks": {
+    "denominator": true,
+    "allCandidateSafe": true,
+    "determinateComplete": true,
+    "manualParity": true,
+    "blindCounterexample": true,
+    "ambiguity": true
+  },
+  "indistinguishable": [
+    {
+      "action": "hold",
+      "safeAndCompleteBoth": false,
+      "reason": "no completion"
+    },
+    {
+      "action": "retry",
+      "safeAndCompleteBoth": false,
+      "reason": "duplicate in committed world"
+    },
+    {
+      "action": "link",
+      "safeAndCompleteBoth": false,
+      "reason": "no receipt/resource in absent world"
+    }
+  ],
+  "accepted": true,
+  "summary": {
+    "blind_retry": {
+      "safe": 3,
+      "complete": 3
+    },
+    "fail_closed": {
+      "safe": 7,
+      "complete": 1
+    },
+    "manual_reconcile": {
+      "safe": 7,
+      "complete": 3
+    },
+    "automated_reconcile": {
+      "safe": 7,
+      "complete": 3
+    },
+    "atomic_server_hypothetical": {
+      "safe": 7,
+      "complete": 5
+    }
+  },
+  "wallMs": 938,
+  "computeMs": 1,
+  "actualBilling": null,
+  "actualDspaceExecutions": 0,
+  "actualTransactions": 0,
+  "nativeProfit": null
+}
