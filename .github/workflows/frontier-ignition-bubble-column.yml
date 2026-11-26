@@ -1,0 +1,106 @@
+name: FRONTIER IGNITION bubble-column consequence
+
+on:
+  push:
+    branches:
+      - campaign/ignition-bubble-column-consequence-20261125
+    paths:
+      - campaign/frontier-ignition-bubble-column-20261125/evaluate.py
+      - campaign/frontier-ignition-bubble-column-20261125/REGISTRATION.md
+      - .github/workflows/frontier-ignition-bubble-column.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: frontier-ignition-bubble-column-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  registered-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install frozen runtime
+        run: python -m pip install 'numpy==2.1.3'
+
+      - name: Record runner capacity
+        run: |
+          df -h
+          free -h
+
+      - name: Retrieve and verify public archive
+        env:
+          ARCHIVE_URL: https://zenodo.org/records/21773393/files/measurement_data_bubbly_flow.zip?download=1
+          EXPECTED_MD5: f53345e798200524b8808455b5b55792
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/bubble-data" campaign/frontier-ignition-bubble-column-20261125/outcome
+          curl --fail --location --retry 5 --retry-all-errors --output "$RUNNER_TEMP/measurement_data_bubbly_flow.zip" "$ARCHIVE_URL"
+          actual_md5="$(md5sum "$RUNNER_TEMP/measurement_data_bubbly_flow.zip" | cut -d' ' -f1)"
+          test "$actual_md5" = "$EXPECTED_MD5"
+          actual_sha256="$(sha256sum "$RUNNER_TEMP/measurement_data_bubbly_flow.zip" | cut -d' ' -f1)"
+          {
+            echo "source_url=$ARCHIVE_URL"
+            echo "doi=10.5281/zenodo.21773393"
+            echo "published_md5=$EXPECTED_MD5"
+            echo "observed_md5=$actual_md5"
+            echo "observed_sha256=$actual_sha256"
+            echo "bytes=$(stat -c%s "$RUNNER_TEMP/measurement_data_bubbly_flow.zip")"
+          } > campaign/frontier-ignition-bubble-column-20261125/outcome/SOURCE_IDENTITY.txt
+          unzip -q "$RUNNER_TEMP/measurement_data_bubbly_flow.zip" -d "$RUNNER_TEMP/bubble-data"
+          rm "$RUNNER_TEMP/measurement_data_bubbly_flow.zip"
+
+      - name: Execute frozen registered test
+        run: |
+          set -euo pipefail
+          coarse_root="$(find "$RUNNER_TEMP/bubble-data" -type d -name coarse_raw -print -quit)"
+          test -n "$coarse_root"
+          python campaign/frontier-ignition-bubble-column-20261125/evaluate.py \
+            --data-root "$coarse_root" \
+            --output campaign/frontier-ignition-bubble-column-20261125/outcome
+          cat campaign/frontier-ignition-bubble-column-20261125/outcome/RESULTS.md >> "$GITHUB_STEP_SUMMARY"
+          cat campaign/frontier-ignition-bubble-column-20261125/outcome/results.json
+
+      - name: Record execution identity
+        run: |
+          cat > campaign/frontier-ignition-bubble-column-20261125/outcome/EXECUTION.md <<EOF
+          # Execution identity
+
+          - workflow: \`${{ github.workflow }}\`
+          - run: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          - triggering commit: \`${{ github.sha }}\`
+          - runner: \`${{ runner.os }} / ${{ runner.arch }}\`
+          - Python: 3.11
+          - NumPy: 2.1.3
+          - accelerator: none requested
+          - execution date (UTC): $(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+          GitHub-hosted runner accounting and network egress were not measured and are not represented as zero.
+          EOF
+
+      - name: Preserve result on campaign branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add campaign/frontier-ignition-bubble-column-20261125/outcome
+          if ! git diff --cached --quiet; then
+            git commit -m "Record registered bubble-column consequence outcome"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frontier-ignition-bubble-column-outcome
+          path: campaign/frontier-ignition-bubble-column-20261125/outcome
+          if-no-files-found: error
+
