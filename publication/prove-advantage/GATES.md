@@ -36,6 +36,16 @@ The underlying [1.4 qualification ledger](../member-workspace/GATES.md) records 
 
 The scoped original-source follow-through recovered both previously withheld battery decisions. Restoring the authentic PDF block and specifying the exact module scope were jointly necessary in this replay. The next decisive test uses a new original document revision, held acceptance criteria and the strongest conventional review. Count acquisition, extraction, scope interpretation, review and delivery effort. The existing owner packet covers access and custody. [Original-source follow-through](research-activation/ROUTING-RESULT.md#recovered-original-battery-evidence)
 
+## From Alert to Achievement
+
+| Gate | Current evidence |
+| --- | --- |
+| New report and lasting intake | **PROVEN for the observed operator capture.** A completed Possible Now report arrived after the prior release and its registered observation cutoff. Run-aware import captured five available bodies and one missing-body state. Its exact replay preserved one history. Pending, stale, conflicting, revised and revoked observations passed the scoped tests. Standing scheduled operation and the complete private history remain open. |
+| Productive outcome and comparative result | **PROVEN for an operator decision and accuracy of the delivered scope.** The alert led to an exact source-bound CPU runtime check, a registered comparison and two usable source-checked operator outputs. The size-targeted arm fit the byte ceiling. Its cold conversion took 4.78 times the conventional run, and both Q4 arms and FP16 scored 0/2 on the independent review. Keep the direct documentary method for these tasks. Distinctive comparative advantage and realized economics remain unestablished. |
+| Dynamic execution and retention | **PARTIAL.** The bounded operator trial constructed a new experiment and ran actual local inference on two real work packets. Retain the verified implementation scope and investigation recipe. The autonomous runtime, separate evaluator custody, a second prospective alert, stronger owner-host results and repeat qualified local model delivery remain open. |
+
+[Work product, lineage and observed costs](research-activation/alert-achievement/REPORT.md) · [Reproduction](research-activation/alert-achievement/REPRODUCE.md)
+
 ## External outcomes
 
 | Gate | Existing route and smallest unresolved action |

@@ -16,6 +16,7 @@ import sys
 from time import monotonic
 
 import frontier_public_watch as watch
+import frontier_research_capture as scout_capture
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +26,7 @@ MAX_ATLAS = 20_000_000
 ATLAS_RELEASE = watch.SITE + 'atlas-release.json'
 ATLAS_LEDGER = watch.SITE + 'atlas-ledger.json'
 PACKET_SCHEMA = 'frontier/research-updates-v1'
+REPORT_ORIGINS = {'atlas': 'PUBLISHED_ATLAS', 'scout': 'SCOUT_RESULT', 'packet': 'REPORTED_PACKET'}
 ARXIV_URL = re.compile(
     r'(?<![\w./@-])https://arxiv\.org/(?:abs|html|pdf)/'
     r'(\d{2}(?:0[1-9]|1[0-2])\.\d{4,5}v[1-9]\d{0,2})(?:\.pdf)?'
@@ -125,6 +127,7 @@ def open_store(path):
     store.executescript('''
         PRAGMA foreign_keys = ON;
         PRAGMA trusted_schema = OFF;
+        PRAGMA synchronous = FULL;
         CREATE TABLE IF NOT EXISTS packets (
             sha TEXT PRIMARY KEY, body BLOB NOT NULL
         );
@@ -142,7 +145,20 @@ def open_store(path):
             PRIMARY KEY (name, ref, executable_sha, registration_sha)
         );
     ''')
+    store.executescript(scout_capture.SQL)
     return store
+
+
+def record_report_references(store, text, origin, stream, observed):
+    references = set(ARXIV_URL.findall(text))
+    store.executemany('INSERT OR IGNORE INTO observations VALUES (?, ?, ?, ?, ?)',
+                      (('arxiv:' + ref, origin, stream, observed, 'DISCOVERED') for ref in references))
+
+
+def capture_updates(store, raw):
+    if not 0 < len(raw) <= MAX_PACKET:
+        raise InputError('Input is empty or exceeds the read limit.')
+    return scout_capture.capture(store, raw, record_report_references)
 
 
 def import_updates(store, raw, *, structured, stream, observed):
@@ -169,9 +185,7 @@ def import_updates(store, raw, *, structured, stream, observed):
             digest = fingerprint(body)
             store.execute('INSERT OR IGNORE INTO packets VALUES (?, ?)', (digest, body))
             store.execute('INSERT OR IGNORE INTO arrivals VALUES (?, ?, ?, ?)', (digest, stream, observed, recorded))
-            references = set(ARXIV_URL.findall(update['text']))
-            store.executemany('INSERT OR IGNORE INTO observations VALUES (?, ?, ?, ?, ?)',
-                              (('arxiv:' + ref, 'packet:' + digest, stream, observed, 'DISCOVERED') for ref in references))
+            record_report_references(store, update['text'], 'packet:' + digest, stream, observed)
 
 
 def import_atlas(store, request=watch.fetch):
@@ -203,19 +217,22 @@ def import_atlas(store, request=watch.fetch):
 def status(store):
     observations = store.execute('SELECT ref, COUNT(*) FROM observations GROUP BY ref').fetchall()
     sources = dict(observations)
+    active = {row[0] for row in store.execute('SELECT DISTINCT ref FROM active_research_observations')}
     studies = {}
     for name, study in STUDIES.items():
         runs = store.execute('SELECT COUNT(*) FROM studies WHERE name = ? AND ref = ?', (name, study['ref'])).fetchone()[0]
-        studies[name] = {**study, 'observed': study['ref'] in sources, 'recorded_executions': runs}
+        studies[name] = {**study, 'observed': study['ref'] in active, 'recorded_executions': runs}
     return {
         'retained_packet_bodies': store.execute('SELECT COUNT(*) FROM packets').fetchone()[0],
         'recorded_packet_arrivals': store.execute('SELECT COUNT(*) FROM arrivals').fetchone()[0],
         'distinct_source_versions': len(sources),
+        'active_source_versions': len(active),
         'reference_sightings': sum(sources.values()),
         'reference_sightings_by_origin': dict(Counter(row[0].split(':', 1)[0] for row in
                                                     store.execute('SELECT provenance FROM observations'))),
         'reference_sightings_by_intake_state': dict(store.execute('SELECT state, COUNT(*) FROM observations GROUP BY state')),
         'registered_studies': studies,
+        'scout_capture': scout_capture.status(store),
     }
 
 
@@ -228,12 +245,12 @@ def cycle(store, name):
     with store:
         store.execute('BEGIN IMMEDIATE')
         sightings = [{'stream': stream, 'observed_at': observed or None, 'provenance': origin,
-                      'observation_basis': 'PUBLISHED_ATLAS' if origin.startswith('atlas:') else 'REPORTED_PACKET'}
+                      'observation_basis': REPORT_ORIGINS[origin.split(':', 1)[0]]}
                      for stream, observed, origin in store.execute(
-                         'SELECT stream, observed, provenance FROM observations WHERE ref = ? '
+                         'SELECT stream, observed, provenance FROM active_research_observations WHERE ref = ? '
                          'ORDER BY observed, stream, provenance', (ref,))]
         if not sightings:
-            raise InputError('Import a report or Atlas release containing this exact source first.')
+            raise InputError('Import an eligible report or Atlas release containing this exact source first.')
         registration_sha = fingerprint(registration.read_bytes())
         sources = {study['runner']: fingerprint(runner.read_bytes()),
                    **{path: fingerprint((ROOT / path).read_bytes()) for path in study.get('inputs', ())}}
@@ -282,6 +299,10 @@ def main(argv=None):
     intake.add_argument('--format', choices=('text', 'json'))
     intake.add_argument('--stream', choices=(*watch.STREAMS, 'manual'), default='manual')
     intake.add_argument('--observed-at', default='')
+    capture = commands.add_parser('capture', help='Retain observed scout run metadata and available report text.')
+    capture.add_argument('file', nargs='?', default='-')
+    revoke = commands.add_parser('revoke-scout', help='Revoke one scout scope for local capture and subsequent processing.')
+    revoke.add_argument('scout_id')
     commands.add_parser('atlas', help='Import the historical reference projection from the live public Atlas.')
     run = commands.add_parser('cycle', help='Activate one explicitly selected registered public study.')
     run.add_argument('study', choices=STUDIES)
@@ -291,6 +312,12 @@ def main(argv=None):
         with closing(open_store(args.store)) as store:
             if args.action == 'cycle':
                 result = cycle(store, args.study)
+            elif args.action == 'capture':
+                changes = capture_updates(store, read(args.file))
+                result = {'capture_outcomes': changes, 'scout_capture': scout_capture.status(store)}
+            elif args.action == 'revoke-scout':
+                scout_capture.revoke(store, args.scout_id)
+                result = {'revocation': 'RECORDED', 'scout_capture': scout_capture.status(store)}
             else:
                 if args.action == 'import':
                     structured = args.format == 'json' or (args.format is None and args.file.endswith('.json'))
@@ -298,7 +325,7 @@ def main(argv=None):
                 elif args.action == 'atlas':
                     import_atlas(store)
                 result = status(store)
-    except InputError as error:
+    except (InputError, scout_capture.CaptureError) as error:
         parser.exit(2, f'{error}\n')
     except sqlite3.OperationalError as error:
         if getattr(error, 'sqlite_errorcode', None) == sqlite3.SQLITE_BUSY:
