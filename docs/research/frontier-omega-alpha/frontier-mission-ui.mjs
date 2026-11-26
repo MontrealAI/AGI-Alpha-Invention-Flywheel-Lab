@@ -1100,8 +1100,8 @@ export function setupMissionConsole(member, shell) {
     }
     const inspection = inspectReturnedWork(result.raw, resultFiles());
     const proposed = result.work.match(/^#{1,6} +(?:next [^\n]*|prochaine? [^\n]*|suite)\n\s*([^#\n][^\n]*)/imu)?.[1]?.trim();
-    const nextAction = inspection.missing.length ? words.deliverablesMissing(inspection.missing)
-      : proposed ? `${words.nextFromReply} · ${workPreview(proposed,650)}` : (inspection.hasTable || inspection.sources.length) ? words.supplySource : words.workReview;
+    const nextAction = proposed ? `${words.nextFromReply} · ${workPreview(proposed,650)}`
+      : (inspection.hasTable || inspection.sources.length) ? words.supplySource : words.workReview;
     const receipt = result.receipt ?? {route:'continuing', objective:mission.ambition, nextAction};
     const work = workPreview(result.work.trim() ? result.work : result.raw);
     accept({...receipt, work, artifacts:[artifact]}, mission.run.id);
