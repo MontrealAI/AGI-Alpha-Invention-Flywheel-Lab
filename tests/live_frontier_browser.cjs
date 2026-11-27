@@ -739,6 +739,14 @@ async function liveOpportunityJourney(browser, language) {
     assert.equal(await page.locator('#mission-prompt').isVisible(), false);
     assert.equal(await page.locator('#mission-ambition').textContent(), ambition);
     assert.match(await result.innerText(), /apache-2\.0/u);
+    const resultPosition = await result.evaluate(section => ({
+      headingTop:section.querySelector('h3').getBoundingClientRect().top,
+      navigationBottom:document.querySelector('.mf-bar').getBoundingClientRect().bottom,
+      actionBottom:section.querySelector('button').getBoundingClientRect().bottom,
+      viewportHeight:innerHeight,
+    }));
+    assert.ok(resultPosition.headingTop >= resultPosition.navigationBottom - 1);
+    assert.ok(resultPosition.actionBottom <= resultPosition.viewportHeight);
     await capture(page, language, width, 'fresh-opportunity');
 
     const download = async control => {
@@ -782,7 +790,8 @@ async function liveOpportunityJourney(browser, language) {
     assert.deepEqual(errors, []);
     const check = {kind:'fresh-public-acquisition', language, width, ambition, repo:expectedRepo, revision:manifest.revision,
       userActionsToResult:3, resultMs, sourceBytes:source.data.length, manifestSha256:hash(manifestDownload.data),
-      externalGETs:requests.length, weightBytesAcquired:false, exactReopen:true, wallet:'isolated declared test wallet'};
+      externalGETs:requests.length, weightBytesAcquired:false, exactReopen:true, resultPosition,
+      wallet:'isolated declared test wallet'};
     if (screenshots) {
       const evidence = join(screenshots, 'opportunity-evidence');
       await mkdir(evidence, {recursive:true});
