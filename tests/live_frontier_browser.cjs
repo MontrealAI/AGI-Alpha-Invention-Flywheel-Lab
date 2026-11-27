@@ -1410,8 +1410,10 @@ async function doubleFlywheel(page, language, width, reject) {
   assert.equal(await finale.isVisible(), !reject);
   assert.equal(await ledger.isVisible(), false);
   if(!reject) {
-    assert.deepEqual(await Promise.all(['budget','fresh-score','reuse-score','fresh-cost','reuse-cost','spare']
-      .map(key=>finale.locator('[data-df="'+key+'"]').textContent())), ['9','5/5','5/5','10','6','3']);
+    assert.deepEqual(await Promise.all(['tool-budget','tool-cost','fund-budget','fund-cost','both-budget','both-cost','spare']
+      .map(key=>finale.locator('[data-df="'+key+'"]').textContent())), ['5','6','9','10','9','6','3']);
+    assert.deepEqual(await finale.locator('.df-counter-verdict').allTextContents(), language==='fr'
+      ? ['Bloqué','Bloqué','Le cycle s’ouvre'] : ['Blocked','Blocked','Next cycle opens']);
     const reserved=await finale.locator('.df-reserve').boundingBox();
     assert.ok(reserved.y+reserved.height<=dimensions(width).height,'the full payoff must be visible without scrolling');
     assert.equal(await finale.locator('.df-crossing').evaluate(el=>getComputedStyle(el).animationName),'none');

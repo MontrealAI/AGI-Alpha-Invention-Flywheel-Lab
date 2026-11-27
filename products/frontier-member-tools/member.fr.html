@@ -293,23 +293,26 @@
             <div class="df-symbols" aria-hidden="true"><span>Ω</span><span>→</span><strong>Ω<sup>+1</sup></strong></div>
             <p>Un outil vérifié. Un nouveau cycle.</p>
           </div>
-          <p class="df-match-caption">Même problème. Même budget : <strong data-df="budget"></strong> crédits simulés</p>
-          <div class="df-match-grid" aria-label="Résultats du deuxième cycle">
-            <div class="df-arm df-fresh">
-              <h5>Rebâtir</h5>
-              <p class="df-price"><strong data-df="fresh-cost"></strong> crédits pour l’essai</p>
-              <p class="df-score"><strong data-df="fresh-score"></strong> <span>exactes</span></p>
-              <p class="df-arm-state">Hors budget</p>
+          <p class="df-causal-caption">Qu’arrive-t-il si on retire un des cycles?</p>
+          <div class="df-causal-grid" role="group" aria-label="Trois scénarios en crédits simulés">
+            <div class="df-counter df-counter-tool">
+              <div><h5>Garder l’outil seulement</h5><p>Sans réinvestissement</p></div>
+              <div class="df-counter-evidence"><p><strong data-df="tool-budget"></strong> disponibles · <strong data-df="tool-cost"></strong> requis</p>
+                <p class="df-counter-verdict">Bloqué</p></div>
             </div>
-            <div class="df-arm df-reused">
-              <h5>Réutiliser</h5>
-              <p class="df-price"><strong data-df="reuse-cost"></strong> crédits pour l’essai</p>
-              <p class="df-score"><strong data-df="reuse-score"></strong> <span>exactes</span></p>
-              <p class="df-arm-state">Essai possible</p>
+            <div class="df-counter df-counter-fund">
+              <div><h5>Réinvestir seulement</h5><p>Repartir de zéro</p></div>
+              <div class="df-counter-evidence"><p><strong data-df="fund-budget"></strong> disponibles · <strong data-df="fund-cost"></strong> requis</p>
+                <p class="df-counter-verdict">Bloqué</p></div>
+            </div>
+            <div class="df-counter df-counter-both">
+              <div><h5>Combiner les deux</h5><p>Garder l’outil et réinvestir</p></div>
+              <div class="df-counter-evidence"><p><strong data-df="both-budget"></strong> disponibles · <strong data-df="both-cost"></strong> requis</p>
+                <p class="df-counter-verdict">Le cycle s’ouvre</p></div>
             </div>
           </div>
           <div class="df-reserve"><strong data-df="spare"></strong><span>crédits simulés en réserve pour le prochain essai</span></div>
-          <p class="df-close">La première invention ne s’est pas seulement rentabilisée. Elle a rendu la suivante possible.</p>
+          <p class="df-close">L’outil réduit le coût. Le réinvestissement augmente le budget. C’est ce qui permet de lancer la prochaine invention.</p>
         </div>
         <div data-df="ledger-slot"><dl class="df-ledger" data-df="ledger"></dl></div>
         <details data-df="audit" hidden>

@@ -110,6 +110,11 @@ test('double flywheel independently compares exact measured answers and applies 
   assert.equal(run.freshEligible,false);
   assert.equal(run.retainedEligible,true);
   assert.equal(run.retainedBudgetRemaining,3);
+  assert.deepEqual(run.counterfactuals,{
+    tool:{budget:5,cost:6,correct:true,eligible:false},
+    fund:{budget:9,cost:10,correct:true,eligible:false},
+    both:{budget:9,cost:6,correct:true,eligible:true}
+  });
 
   const failure=runDoubleFlywheel({rejectFirst:true});
   assert.notDeepEqual(failure.checks,run.checks);
@@ -120,4 +125,5 @@ test('double flywheel independently compares exact measured answers and applies 
   assert.equal(failure.next,null);
   assert.equal(failure.retainedEligible,false);
   assert.equal(failure.retainedBudgetRemaining,null);
+  assert.equal(failure.counterfactuals,null);
 });
