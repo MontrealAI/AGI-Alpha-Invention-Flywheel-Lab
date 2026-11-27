@@ -330,7 +330,7 @@ export function setupMissionConsole(member, shell) {
   opportunityResult.id = 'mission-opportunity-result';
   opportunityResult.tabIndex = -1;
   opportunityResult.setAttribute('aria-live', 'polite');
-  node('mission-next').after(opportunityResult);
+  node('mission-plan').before(opportunityResult);
 
   function displayElement(tag, value) {
     const element = document.createElement(tag);
@@ -418,6 +418,7 @@ export function setupMissionConsole(member, shell) {
       && mission.revision === revision && !['running','canceled'].includes(mission.status);
     render();
     opportunityResult.focus({preventScroll:true});
+    opportunityResult.scrollIntoView({block:'start', behavior:'instant'});
     void (async () => {
       try {
         const receipt = await runOpportunityOperation(plan, {signal:controller.signal});
@@ -1027,7 +1028,7 @@ export function setupMissionConsole(member, shell) {
       : state === 'waiting' ? words.assisted : state === 'running' ? words.localNext
       : state === 'ready' && missionPacket(mission).instruction ? words.nextInstruction : report?.nextAction ?? words.choose));
     const next = node('mission-next');
-    next.hidden = Boolean(productiveWork && !native && !instrument && !check);
+    next.parentElement.hidden = Boolean(productiveWork && !native && !instrument && !check);
   }
 
   function render(message) {
