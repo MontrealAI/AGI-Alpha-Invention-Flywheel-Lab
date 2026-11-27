@@ -1500,6 +1500,16 @@ async function conclaveDoor(browser, language) {
       assert.equal(await page.locator('html').getAttribute('lang'),'en');
       await page.locator('[data-club-lang=fr]').click();
     }
+    const width=language==='fr'?390:1440;
+    await page.locator('#top').scrollIntoViewIfNeeded();
+    await capture(page,'conclave-entrance',language,width);
+    if(language==='fr'){
+      await page.setViewportSize({width:320,height:740});
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+      assert.ok(await page.locator('#top h1').evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+      await capture(page,'conclave-entrance',language,320);
+      await page.setViewportSize(dimensions(width));
+    }
     const go=page.locator('#conclave-club-enter');
     const label=page.locator('#conclave-club-label');
     await label.fill('frontier-check');
@@ -1530,6 +1540,8 @@ async function conclaveDoor(browser, language) {
     assert.equal(await page.locator('#top').isVisible(),false);
     assert.equal(await page.locator('#conclave-vision').isVisible(),false);
     assert.equal(await edition.locator('.ce-head').isVisible(),true);
+    await edition.locator('.ce-head').scrollIntoViewIfNeeded();
+    await capture(page,'conclave-sanctum',language,width);
     const start=host.locator('[data-df=start]');
     for(let i=0;i<4;i++)await start.press('Enter');
     await host.locator('.df-switch-tool').press('Space');

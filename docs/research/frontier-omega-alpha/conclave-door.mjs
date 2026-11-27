@@ -87,6 +87,7 @@ function lock(reason='locked'){
   document.getElementById('top').hidden=false;
   vision.hidden=false;
   returnLink.href='#top';
+  returnLink.textContent=locale==='fr'?'Retour au seuil ↑':'Return to the threshold ↑';
   $('legacy').hidden=true;
   window.dispatchEvent(new Event('frontier:member-lock'));
   if(typeof cleanup==='function')cleanup();
@@ -182,6 +183,7 @@ $('form').addEventListener('submit',async event=>{
     document.getElementById('top').hidden=true;
     vision.hidden=true;
     returnLink.href='#member';
+    returnLink.textContent=locale==='fr'?'Retour au sanctuaire ↑':'Return to the Inner Sanctum ↑';
     workspace.scrollIntoView({block:'start',behavior:'instant'});
     $('content').querySelector('#conclave-edition-title')?.focus({preventScroll:true});
     clock=setTimeout(()=>lock(),Math.max(0,next.until-Date.now()));
