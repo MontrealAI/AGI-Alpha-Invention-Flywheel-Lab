@@ -73,6 +73,8 @@ ASSETS += (
     'frontier-omega-alpha/frontier.css',
     'frontier-omega-alpha/double-flywheel.mjs',
     'frontier-omega-alpha/conclave-door.mjs',
+    'frontier-omega-alpha/conclave-edition.mjs',
+    'frontier-omega-alpha/conclave-edition.css',
     'frontier-omega-alpha/three-0.160.1.min.mjs',
     'frontier-omega-alpha/three-0.160.1-LICENSE.txt',
     'frontier-omega-alpha/double-flywheel-cover.webp',

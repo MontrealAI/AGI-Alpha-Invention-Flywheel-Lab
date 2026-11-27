@@ -1467,8 +1467,12 @@ async function conclaveDoor(browser, language) {
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   try{
     await page.addInitScript(fakeWallet);
+    const participantRequests=[];
+    page.on('request',request=>{if(request.url().includes('/conclave-participant/'))participantRequests.push(request.url());});
     const r=await page.goto(new URL('../frontier-conclave.html',base).href);
     assert.equal(r.status(),200);
+    assert.equal(await page.locator('#conclave-edition').count(),0);
+    assert.equal(participantRequests.length,0);
     assert.equal(await page.locator('#member').isVisible(),false);
     assert.equal(await page.locator('#double-flywheel').count(),0);
     assert.equal(await page.locator('#dossier').isVisible(),false);
@@ -1481,10 +1485,24 @@ async function conclaveDoor(browser, language) {
     await page.waitForFunction(()=>document.getElementById('conclave-club-status').textContent.match(/does not own|ne détient pas/)&&!document.getElementById('conclave-club-enter').disabled);
     assert.equal(await page.locator('#member').isVisible(),false);
     assert.equal(await page.evaluate(()=>window.walletScenario.signed.length),0);
+    assert.equal(await page.locator('#conclave-edition').count(),0);
+    assert.equal(participantRequests.length,0);
     await page.evaluate(()=>{delete window.walletScenario.clubOwner;});
     await go.click();
     const host=page.locator('#double-flywheel');
     await host.waitFor({state:'visible'});
+    const edition=page.locator('#conclave-edition[data-conclave-edition-ready="true"]');
+    await edition.waitFor({state:'visible'});
+    assert.equal(await edition.getAttribute('lang'),language);
+    assert.equal(await edition.locator('.ce-card').count(),7);
+    assert.equal(await edition.locator('.ce-primary').count(),1);
+    assert.match(await edition.locator('.ce-secondary').getAttribute('href'),/frontier-conclave-participant-v2026\.11\.28\/AGI-CLUB-OMEGA-PARTICIPANT-FINAL\.zip$/);
+    for(const href of await edition.locator('.ce-card, .ce-primary').evaluateAll(nodes=>nodes.map(node=>node.href))){
+      const response=await page.request.head(href);
+      assert.equal(response.status(),200,href);
+      await response.dispose();
+    }
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     assert.match(await host.locator('#df-title').innerText(),/First Light|Première Lumière/);
     assert.equal(await page.locator('#top').isVisible(),false);
     const start=host.locator('[data-df=start]');
@@ -1496,6 +1514,7 @@ async function conclaveDoor(browser, language) {
     const methods=await page.evaluate(()=>window.walletScenario.methods);
     assert.ok(!methods.some(m=>m==='eth_sendTransaction'||m==='wallet_switchEthereumChain'));
     await page.locator('#conclave-club-lock').click();
+    assert.equal(await page.locator('#conclave-edition').count(),0);
     assert.equal(await host.count(),0);
     assert.equal(await page.locator('#dossier').isVisible(),false);
     assert.deepEqual(errors,[]);
