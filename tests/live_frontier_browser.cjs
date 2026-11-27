@@ -1476,7 +1476,30 @@ async function conclaveDoor(browser, language) {
     assert.equal(await page.locator('#member').isVisible(),false);
     assert.equal(await page.locator('#double-flywheel').count(),0);
     assert.equal(await page.locator('#dossier').isVisible(),false);
-    if(language==='fr')await page.locator('[data-club-lang=fr]').click();
+    assert.equal(await page.locator('#conclave-vision').isVisible(),true);
+    assert.equal(await page.locator('.gold-action').first().isVisible(),true);
+    const visuals=new URL('../conclave-visuals/',base);
+    const artReceipt=await page.request.get(new URL('edition.json',visuals).href);
+    assert.equal(artReceipt.status(),200);
+    const artMeta=await artReceipt.json();
+    assert.ok(['celestial-2026-11-28','existing-conclave'].includes(artMeta.artwork));
+    await artReceipt.dispose();
+    for(const file of ['arrival.webp','flywheel.webp','sanctum.webp']){
+      const response=await page.request.get(new URL(file,visuals).href);
+      assert.equal(response.status(),200,file);
+      const body=await response.body();
+      assert.equal(createHash('sha256').update(body).digest('hex'),artMeta.sha256[file],file);
+      await response.dispose();
+    }
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    if(language==='fr') {
+      await page.locator('[data-entrance-lang=fr]').click();
+      assert.equal(await page.locator('html').getAttribute('lang'),'fr');
+      assert.match(await page.locator('#vision-title').innerText(),/Inventer la capacité/);
+      await page.locator('[data-club-lang=en]').click();
+      assert.equal(await page.locator('html').getAttribute('lang'),'en');
+      await page.locator('[data-club-lang=fr]').click();
+    }
     const go=page.locator('#conclave-club-enter');
     const label=page.locator('#conclave-club-label');
     await label.fill('frontier-check');
@@ -1505,6 +1528,8 @@ async function conclaveDoor(browser, language) {
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     assert.match(await host.locator('#df-title').innerText(),/First Light|Première Lumière/);
     assert.equal(await page.locator('#top').isVisible(),false);
+    assert.equal(await page.locator('#conclave-vision').isVisible(),false);
+    assert.equal(await edition.locator('.ce-head').isVisible(),true);
     const start=host.locator('[data-df=start]');
     for(let i=0;i<4;i++)await start.press('Enter');
     await host.locator('.df-switch-tool').press('Space');
@@ -1514,6 +1539,7 @@ async function conclaveDoor(browser, language) {
     const methods=await page.evaluate(()=>window.walletScenario.methods);
     assert.ok(!methods.some(m=>m==='eth_sendTransaction'||m==='wallet_switchEthereumChain'));
     await page.locator('#conclave-club-lock').click();
+    assert.equal(await page.locator('#conclave-vision').isVisible(),true);
     assert.equal(await page.locator('#conclave-edition').count(),0);
     assert.equal(await host.count(),0);
     assert.equal(await page.locator('#dossier').isVisible(),false);

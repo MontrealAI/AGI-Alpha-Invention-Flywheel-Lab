@@ -234,6 +234,18 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 origin 5cced81256c965797988cd682fb5f910fe72c981
           python3 scripts/replay_frontier_alpha1_availability.py --check
+      - name: Stage the Conclave celestial artwork
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/conclave-art"
+          gh release view frontier-conclave-participant-v2026.11.28 --repo "$GITHUB_REPOSITORY" --json assets > "$RUNNER_TEMP/conclave-art/assets.json"
+          if python3 -c 'import json,sys;sys.exit(0 if any(a["name"]=="FRONTIER-CONCLAVE-VISUALS.zip" for a in json.load(open(sys.argv[1]))["assets"]) else 1)' "$RUNNER_TEMP/conclave-art/assets.json"; then
+            gh release download frontier-conclave-participant-v2026.11.28 --repo "$GITHUB_REPOSITORY" --pattern FRONTIER-CONCLAVE-VISUALS.zip --dir "$RUNNER_TEMP/conclave-art"
+            python3 docs/research/stage_conclave_artwork.py --site "$RUNNER_TEMP/research-site" --archive "$RUNNER_TEMP/conclave-art/FRONTIER-CONCLAVE-VISUALS.zip"
+          else
+            python3 docs/research/stage_conclave_artwork.py --site "$RUNNER_TEMP/research-site"
+          fi
       - name: Replay approved public Git history and stage the bilingual Atlas
         id: frontier_watch
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
