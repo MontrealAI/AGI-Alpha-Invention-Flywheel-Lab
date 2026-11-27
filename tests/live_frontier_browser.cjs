@@ -4,7 +4,7 @@
    from a real wallet. The provider fixture is isolated to its own browser page. */
 const assert = require('node:assert/strict');
 const {createHash} = require('node:crypto');
-const {mkdir, readFile} = require('node:fs/promises');
+const {mkdir, readFile, writeFile} = require('node:fs/promises');
 const {join} = require('node:path');
 const { chromium } = require('playwright-core');
 
@@ -581,8 +581,8 @@ function content(name, item) {
 
 async function ownerConnectionJourney(page, language, width) {
   const ambition = language === 'fr'
-    ? 'Résumer les compromis entre une requête indexée et un parcours complet.'
-    : 'Summarize the trade-offs between an indexed query and a full table scan.';
+    ? 'Quels mots riment avec orange?'
+    : 'What rhymes with orange?';
   const externalRequests = [];
   const origin = new URL(base).origin;
   const observe = request => {
@@ -715,6 +715,7 @@ async function liveOpportunityJourney(browser, language) {
     await page.goto(base + (fr ? 'fr.html#my-frontier' : '#my-frontier'));
     if (fr) {
       await page.locator('#enter-club').click();
+      await page.locator('#club-label').fill('frontier-check');
       await page.locator('[data-connect="club"]').click();
     } else {
       await page.locator('[data-connect="token"]').click();
@@ -779,9 +780,16 @@ async function liveOpportunityJourney(browser, language) {
     assert.deepEqual(reopenedDownload.data, manifestDownload.data);
     assert.equal(requests.length, expectedUrls.length);
     assert.deepEqual(errors, []);
-    checks.push({kind:'fresh-public-acquisition', language, width, ambition, repo:expectedRepo, revision:manifest.revision,
+    const check = {kind:'fresh-public-acquisition', language, width, ambition, repo:expectedRepo, revision:manifest.revision,
       userActionsToResult:3, resultMs, sourceBytes:source.data.length, manifestSha256:hash(manifestDownload.data),
-      externalGETs:requests.length, weightBytesAcquired:false, exactReopen:true, wallet:'isolated declared test wallet'});
+      externalGETs:requests.length, weightBytesAcquired:false, exactReopen:true, wallet:'isolated declared test wallet'};
+    if (screenshots) {
+      const evidence = join(screenshots, 'opportunity-evidence');
+      await mkdir(evidence, {recursive:true});
+      await Promise.all([manifestDownload, source].map(file => writeFile(join(evidence, file.filename), file.data)));
+      await writeFile(join(evidence, 'browser-journey-' + language + '.json'), JSON.stringify(check, null, 2) + '\n');
+    }
+    checks.push(check);
   } finally { await page.close(); }
 }
 

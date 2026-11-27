@@ -166,6 +166,27 @@ test('frontier exploration finds dated evidence across unfamiliar wording and bo
   }
 });
 
+test('turning advances into a useful advantage is broad unless the objective specifies a field or deliverable', () => {
+  for (const [ambition, language] of [
+    ['Turn the latest leaps in machine intelligence into an edge we can use.', 'en'],
+    ['Profitons des percées récentes en intelligence artificielle pour gagner du terrain.', 'fr'],
+    ['Convert recent breakthroughs in technology into useful opportunities.', 'en'],
+    ['Transformons les dernières avancées en IA en atouts concrets.', 'fr'],
+  ]) {
+    assert.equal(missionIntent(ambition), 'apply', ambition);
+    assert.ok(choose(ambition, {language}).items.some(item => item.id === 'shift-repofactory'), ambition);
+  }
+  for (const [ambition, language] of [
+    ['Turn the latest machine intelligence papers into a one-page summary.', 'en'],
+    ['Profitons des percées récentes en intelligence artificielle pour le contrôle de la chaîne de froid.', 'fr'],
+    ['Transformons les dernières avancées en IA en un diagnostic des registres municipaux.', 'fr'],
+  ]) {
+    assert.equal(missionIntent(ambition), 'focused', ambition);
+    assert.deepEqual(choose(ambition, {language}).items, [], ambition);
+  }
+  assert.equal(missionIntent('Turn this fruit into a smoothie.'), 'ordinary');
+});
+
 test('narrow goals and routine work keep broad acquisition out of the mission', () => {
   for (const ambition of ['Translate this article about frontier AI into Spanish', 'Translate this sentence into French',
     'Traduis cet article sur l’IA de pointe en espagnol', 'Translate this scanned document into Spanish', 'Integrate e to the 2x']) {

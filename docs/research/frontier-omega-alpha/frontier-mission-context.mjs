@@ -82,17 +82,21 @@ const frontierLanguage = {
   change: /\b(?:advanc\w*|avance\w*|breakthroughs?|percees?|progr\w*|recent\w*|latest|last week|nouve\w*|new\w*|emerg\w*|just|now|aujourd hui|desormais|maintenant|vient|viennent)\b/u,
   possibility: /\b(?:possibl\w*|attain\w*|feasib\w*|achiev\w*|accompl\w*|open\w*|ouvr\w*|doors?|portes?|enabled?|permet\w*|realisabl\w*|accessible\w*)\b/u,
   explore: /\b(?:discover\w*|decouvr\w*|explor\w*|survey\w*|map|cartograph\w*|scout\w*|show|montr\w*|spot|reper\w*|find|identifier|veille|watch|follow|suivr\w*|where|what|which|quels?|quelles?|que puis|qu est ce)\b/u,
-  apply: /\b(?:activat\w*|activ\w*|mobiliz\w*|mobilis\w*|harness|exploit\w*|leverage|tirer parti|build|invent\w*|concevoir|construir\w*|creer|unlock|deploy\w*|deployer|apply|appliquer|put .{1,48} to work|mettre .{1,48} au travail)\b/u,
+  apply: /\b(?:activat\w*|activ\w*|mobiliz\w*|mobilis\w*|harness|exploit\w*|leverage|tirer parti|profit(?:er|ons|ez|e[rs]?)|build|invent\w*|concevoir|construir\w*|creer|unlock|deploy\w*|deployer|apply|appliquer|put .{1,48} to work|mettre .{1,48} au travail)\b/u,
   capture: /\b(?:captur\w*|capter|saisir|capitaliz\w*|capitalis\w*)\b/u,
   exponential: /\b(?:exponential\w*|exponentiel\w*)\b/u,
 };
 const explicitFocus = /\b(?:focus(?:ed)? on|concentre\w* sur|centre\w* sur)\b/u;
 const topicClause = /\b(?:in|for|within|dans|en|pour) /gu;
+const frenchPurpose = /^(?:(?:y|en|me|te|se|nous|vous|m|t|s) )*(?:[a-z]{2,}(?:er|ir|re|oir))\b/u;
 const generalSubject = /^(?:(?:the|a|an|la|le|l|les|des|du|de|un|une|mon|ma|mes|my|our|notre|nos|new|latest|recent|nouveaux|nouvelles) )*(?:ai|ia|artificial intelligence|intelligence artificielle|machine intelligence|intelligence machine|tech|technolog\w*|intelligence|capabilit\w*|capacite\w*|models?|modeles?|llms?|me|moi|us|nous|myself|team|equipe|you|vous)\b/u;
 const topicIntroduction = /\b(?:advanc\w*|avance\w*|breakthroughs?|percees?|progr\w*|emerg\w*|possibl\w*|attain\w*|feasib\w*|realisabl\w*|capabilit\w*|capacite\w*|models?|modeles?)\b/u;
 const constructionVerb = /\b(?:build|construct\w*|create|invent\w*|deploy\w*|construir\w*|concevoir|creer|inventer|deployer) /u;
 const operatingMethod = / (?:using|with|via|avec|au moyen de|grace a)\b/u;
 const unspecifiedDeliverable = /^(?:(?:an?|some|the|une?|new|nouvelle?) )*(?:(?:frontier|ai|intelligence|technolog\w*) )*(?:something|anything|capabilit\w*|capacite\w*|quelque chose)\b/u;
+const transformationVerb = /\b(?:turn|turning|transform\w*|convert\w*) /u;
+const transformationTarget = /\b(?:into|en) /gu;
+const generalOutcome = /^(?:(?:an?|the|some|un|une|des|new|real|practi\w*|useful|nouve\w*|vrai\w*|utile\w*) )*(?:edge|advantage|avantage|atouts?|opportunit\w*|possibilit\w*|capabilit\w*|capacite\w*|something|quelque chose|action|work)\b/u;
 const existingDocumentTask = /\b(?:translat\w*|rewrite|proofread|summari[sz]e|traduir\w*|traduis\w*|reecrir\w*|corriger|resum\w*) (?:this|that|the|a|my|ce|cet|cette|le|la|un|une|mon|ma) (?:(?:scanned|attached|pasted|published) )?(?:articles?|documents?|textes?|paragraph\w*|passage|sentence|phrase|paper|emails?|courriels?|transcript|transcription|draft|brouillon|report|rapport)\b/u;
 const substantiveDomain = /\b(?:game theory|theorie des jeux|wavelength|nirspec|temperature|precipitation\w*|precipitations|exchange rates?|taux de change|latency|latence|equations?|battery|batterie|calibration|efficiency|efficacite|encryption|chiffrement|neural networks?|reseaux neuronaux)\b/u;
 
@@ -153,8 +157,18 @@ function evidenceAffinity(search, title, fact) {
   return (sharedTopic ? 3 : 0) + (titleOverlap || (uniqueTitleAnchor ? scopedOverlap(search.words, `${title} ${fact ?? ''}`) : 0));
 }
 
-function narrowsScope(query) {
+function conversionOutcome(query) {
+  const verb = transformationVerb.exec(query);
+  if (!verb) return null;
+  const marker = [...query.matchAll(transformationTarget)].findLast(match => match.index >= verb.index + verb[0].length);
+  if (!marker) return null;
+  const outcome = query.slice(marker.index + marker[0].length);
+  return {index:marker.index, broad:generalOutcome.test(outcome)};
+}
+
+function narrowsScope(query, conversion) {
   if (explicitFocus.test(query) || substantiveDomain.test(query)) return true;
+  if (conversion && !conversion.broad) return true;
   const construction = constructionVerb.exec(query);
   if (construction) {
     const object = query.slice(construction.index + construction[0].length);
@@ -167,24 +181,28 @@ function narrowsScope(query) {
   });
   const firstSubject = Math.min(...introductions);
   return [...query.matchAll(topicClause)].some(({index, 0: marker}) => {
-    return index >= firstSubject && !generalSubject.test(query.slice(index + marker.length));
+    if (index < firstSubject || index === conversion?.index) return false;
+    const topic = query.slice(index + marker.length);
+    return !(marker === 'pour ' && frenchPurpose.test(topic)) && !generalSubject.test(topic);
   });
 }
 
 function intentOf(query) {
   if (!query || existingDocumentTask.test(query) || rejects.discovery.test(query)) return 'ordinary';
-  if (narrowsScope(query)) return 'focused';
+  const intelligence = frontierLanguage.intelligence.test(query);
+  const technologyField = frontierLanguage.technicalField.test(query);
+  const conversion = intelligence || technologyField ? conversionOutcome(query) : null;
+  if (narrowsScope(query, conversion)) return 'focused';
   const has = key => frontierLanguage[key].test(query);
-  const intelligence = has('intelligence');
   const technology = intelligence || has('technology');
   const frontier = has('frontier');
   const change = has('change');
   const possibility = has('possibility');
-  const apply = has('apply');
+  const apply = has('apply') || conversion?.broad;
   const explore = has('explore');
   if (has('capture') && has('exponential')) return 'apply';
-  if (apply && (technology && frontier || intelligence && change)) return 'apply';
-  if (intelligence && frontier || change && (explore && (intelligence || has('technicalField')) || intelligence && possibility)) return 'explore';
+  if (apply && (technology && frontier || (intelligence || technologyField) && change)) return 'apply';
+  if (intelligence && frontier || change && (explore && (intelligence || technologyField) || intelligence && possibility)) return 'explore';
   if (technology && (apply || explore || intent.test(query)) || topicTags(query).length) return 'focused';
   return 'ordinary';
 }

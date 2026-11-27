@@ -1010,11 +1010,13 @@ export function setupMissionConsole(member, shell) {
     const plan = state === 'waiting' && evidenceContext?.items.length ? missionWorkPlan(evidenceContext, [...selectedEvidence]) : '';
     text('mission-plan', plan);
     show('mission-plan', Boolean(plan));
-    const productiveWork = !native && !report && state === 'ready' && (
+    const productiveWork = !native && !report && state === 'ready'
+      ? (
       publicOutcome?.status === 'running' ? opportunityWords.acquiring
         : publicOutcome?.status === 'choices' ? opportunityWords.choices
         : publicOutcome?.status === 'complete' ? opportunityWords.result
-        : operationPairs().length ? opportunityWords.savedResult : null);
+        : operationPairs().length ? opportunityWords.savedResult : null)
+      : null;
     text('mission-status', message ?? productiveWork ?? native?.status ?? (instrument ? words.instrumentScope : null)
       ?? (nativeChecks().some(result => result.disposition === 'VERIFIED_CALCULATION') ? words.auditDone
         : report && state === 'review' ? labels.join(' · ') : running ? words.browserRunning : words[state]));
