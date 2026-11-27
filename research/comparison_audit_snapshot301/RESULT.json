@@ -1,0 +1,104 @@
+{
+  "schema": "agi-alpha/registered-comparison-audit-snapshot301/v1",
+  "protocol_commit": "86e1eb064b9b80dfaa7fa620bb79cac10b23c652",
+  "frozen_test_commit": "77396422a56bf194d243fbaf48cdbf7f60e0841c",
+  "source_commit": "123de29966ecc7036279428b8cb85b556bf453dc",
+  "runner_blob": "02aebd24b9c1dc1e2d4bea40f387acbf1312829e",
+  "test_blob": "c3f6d3646da2cc66ff3fb53db43393add2f05efe",
+  "test_sha256": "a8a80e2e10bc407a692b63d26d19896092b51b792b91d581b43995bdc6c8725c",
+  "source_function_sha256": "94519a1868e47f52c9318c579823ffb5194518e8bde33c1183b0b57a15201746",
+  "exit_code": 0,
+  "rows": [
+    {
+      "accepted": true,
+      "calls": 1,
+      "case": "unchanged",
+      "marker": 1,
+      "route": "pinned"
+    },
+    {
+      "calls": 0,
+      "case": "refused",
+      "error": "ACCEPTED_NATIVE_AND_OPERATING_AUDIT_REQUIRED",
+      "route": "pinned"
+    },
+    {
+      "accepted": true,
+      "calls": 1,
+      "case": "changed_after_audit",
+      "marker": 2,
+      "route": "pinned"
+    },
+    {
+      "accepted": true,
+      "calls": 1,
+      "case": "unchanged",
+      "marker": 1,
+      "route": "reference"
+    },
+    {
+      "calls": 0,
+      "case": "refused",
+      "error": "ACCEPTED_NATIVE_AND_OPERATING_AUDIT_REQUIRED",
+      "route": "reference"
+    },
+    {
+      "accepted": true,
+      "calls": 1,
+      "case": "changed_after_audit",
+      "marker": 1,
+      "route": "reference"
+    }
+  ],
+  "scope": "Exact public comparison function isolated with substituted audit/freeze/scale dependencies; synthetic filesystem marker, not an actual native account audit or production compromise. Reference is illustrative, not an integrated fix.",
+  "resources": {
+    "local_cpu_seconds": 0.013466310999999953,
+    "local_wall_seconds": 0.013771263000009526,
+    "outer_process_cpu_user_seconds": 1.03,
+    "outer_process_cpu_system_seconds": 0.33,
+    "outer_wall_seconds": 0.95,
+    "actual_billing_usd": null,
+    "local_git_remote_error": "Could not resolve host: github.com",
+    "local_git_exit": 128,
+    "local_git_failure_resources": "UNKNOWN",
+    "whole_episode_cost": "UNKNOWN"
+  },
+  "current_release": {
+    "source_commit": "123de29966ecc7036279428b8cb85b556bf453dc",
+    "published_tag": "connected014-123de29966ecc7036279428b8cb85b556bf453dc",
+    "source_asset_metadata_sha256": "36014d26f5d640096f8cd1c93a09321b7de15f8fe6f4ac66e0d03714b749fee0",
+    "workflow_run": 45911740333,
+    "qualification_job": 140221484545,
+    "publish_job": 140231073578,
+    "downloaded_operation_job": 140231233041,
+    "scope": "Existing source-matched hosted receipts inspected, not newly reproduced in this experiment"
+  },
+  "ownership": {
+    "pr40_head": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+    "actual_task_state": "UNKNOWN",
+    "pr35_historical_handoff": "Owner PR35 reports receipt and bounded operation in historical branch; not proof of current custody",
+    "pr553": "1851100612b8c80a1852f413057bdb635de62d3a",
+    "overlapping_runner_source_untouched": true
+  },
+  "acceptance": {
+    "baseline_release": "ACHIEVED_HISTORICAL_AND_CURRENT_HOSTED_RECEIPTS",
+    "prospective_lifecycle": "PARTIAL_OWNER_UNCOMPOSED",
+    "earned_recycling": "PARTIAL_PRIOR_BOUNDED",
+    "restartable_repeated_operation": "PARTIAL_PROSPECTIVE_CHAIN_NOT_RELEASED",
+    "joint_policy": "PARTIAL_NATIVE_DESIGN_RELEASE_REPRODUCTION_NOT_FULL_COMMERCIAL_QUALIFICATION",
+    "optional_evidence": "PARTIAL",
+    "scale_bridge": "BLOCKED",
+    "annual_profit": "UNACHIEVED",
+    "audit_snapshot_test": "ACHIEVED_NEGATIVE_WITNESS",
+    "pinned_route_atomic_audit_snapshot": "FAILED_IN_ISOLATED_TEST",
+    "reference_pattern": "ACHIEVED_IN_ISOLATED_TEST",
+    "integrated_fix": "BLOCKED_OVERLAPPING_OWNER_SOURCE",
+    "new_release": "NOT_ATTEMPTED"
+  },
+  "commercial": {
+    "new_real_revenue": 0,
+    "new_native_profit": null,
+    "target_achieved": false
+  },
+  "decision": "Retain released champion. Owner-managed runner should return validated in-memory results and bind comparison to that same snapshot. Test the actual CLI after owner composition. Do not relabel existing receipts or claim proof of a real audit bypass."
+}
