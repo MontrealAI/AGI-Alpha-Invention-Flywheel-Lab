@@ -782,3 +782,47 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 }
 .df-entry-link{color:#f5d89f;text-underline-offset:.2em}
 .df [data-df=next-slot] .df-start{margin-top:1rem}
+
+/* Event finale: show the next outcome before the supporting bookkeeping. */
+.df .df-stage[data-df-state=payoff]{padding-inline:clamp(1rem,6vw,5.5rem);background:radial-gradient(ellipse at 80% 2%,#3d284d 0%,#251331 47%,#1a102a 100%)}
+.df .df-stage[data-df-state=payoff] h4{font-size:clamp(1.65rem,3.7vw,3.55rem);max-width:24ch;scroll-margin-top:9.6rem}
+.df .df-stage[data-df-state=payoff] [data-df=body]{margin:.55rem 0 .9rem;color:#eee4f5}
+.df .df-stage [data-df=status]:empty{display:none}
+.df .df-finale{margin:0 0 1rem}
+.df .df-crossing{min-height:125px;display:grid;align-content:center;padding:.65rem 1rem;border:1px solid #87638d;border-radius:14px;overflow:hidden;color:#ffe7af;background:#24152f linear-gradient(90deg,#20112bf5 0%,#21122ae6 37%,#20112b35 100%);background-image:linear-gradient(90deg,#20112bf5 0%,#21122ae6 37%,#20112b35 100%),url("double-flywheel-finale.webp");background-size:cover;background-position:75% 50%}
+.df .df-crossing p{margin:0;max-width:none;font-size:.88rem;font-weight:650;color:#fff0cb}
+.df .df-symbols{display:flex;align-items:center;gap:.33em;white-space:nowrap;font:600 clamp(2.25rem,6vw,4.3rem)/.95 Georgia,serif}
+.df .df-symbols span:first-child{color:#d8b6ff}
+.df .df-symbols span:nth-child(2){font-size:.72em;color:#e5d5ee}
+.df .df-symbols strong{color:#ffe5a7;text-shadow:0 0 .65em #daa85170}
+.df .df-symbols sup{font-size:.53em}
+.df .df-match-caption{margin:.75rem 0 .4rem;color:#ffffff;font-size:.95rem}
+.df .df-match-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+.df .df-arm{min-width:0;padding:.7rem .8rem;border:1px solid #706186;border-radius:12px;background:#251a35}
+.df .df-arm.df-reused{border-color:#deb56b;background:linear-gradient(125deg,#432946,#2f223c 70%)}
+.df .df-arm h5{margin:0;font-size:.9rem;color:#fff}
+.df .df-arm p{margin:.2rem 0;color:#eee6f6;font-size:.9rem}
+.df .df-arm .df-price strong{font:600 clamp(1.85rem,4.6vw,3rem)/1 Georgia,serif;color:#fff6e0}
+.df .df-arm.df-reused .df-price strong,.df .df-arm.df-reused .df-arm-state{color:#ffe5a7}
+.df .df-arm .df-arm-state{font-size:.78rem;font-weight:700}
+.df .df-reserve{display:flex;align-items:center;gap:.6rem;margin-top:.65rem;padding:.45rem .8rem;border-radius:10px;background:#f0ce85;color:#21142e;font-size:.91rem;font-weight:700}
+.df .df-reserve strong{font:700 1.65rem/1 Georgia,serif}
+.df .df-close{margin:.85rem 0 0;font-weight:650;color:#f7e8c5}
+.df [data-df=audit]>.df-ledger{margin:.55rem 0}
+@media(max-width:670px){
+  .df .df-stage[data-df-state=payoff]{padding-inline:1rem}
+  .df .df-stage[data-df-state=payoff] h4{scroll-margin-top:11rem}
+}
+@media(max-width:430px){
+  .df .df-crossing{min-height:76px}
+  .df .df-arm{padding:.6rem;line-height:1.35}
+  .df .df-arm p{font-size:.82rem}
+}
+@media (prefers-reduced-motion:no-preference){
+  .df [data-df-state="0"] [data-df=title],.df [data-df-state="2"] [data-df=title]{animation:df-lift .33s ease-out both}
+  .df [data-df-state="1"] [data-df=title]{animation:df-lift-alt .33s ease-out both}
+  .df [data-df-state=payoff] .df-crossing{animation:df-lift .52s cubic-bezier(.2,.75,.2,1) both}
+  .df [data-df-state=payoff] .df-reused{animation:df-lift-alt .43s .08s ease-out both}
+  @keyframes df-lift{from{transform:translateY(8px)}to{transform:translateY(0)}}
+  @keyframes df-lift-alt{from{transform:translateY(8px)}to{transform:translateY(0)}}
+}
