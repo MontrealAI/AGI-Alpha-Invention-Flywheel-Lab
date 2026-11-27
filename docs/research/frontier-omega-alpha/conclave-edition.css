@@ -185,3 +185,26 @@
  .conclave-page .club-toolbar{gap:8px}
 }
 @media(prefers-reduced-motion:reduce){.conclave-page .ce-card img{transition:none}}
+
+
+/* Inaugural production horizon — visual poetry with a legible editorial field. */
+.conclave-page .stellar-horizon{
+ margin-top:58px;min-height:clamp(360px,50vw,570px);display:flex;align-items:center;
+ border:1px solid #c4a16c78;position:relative;isolation:isolate;
+ background:#140b24 center/cover no-repeat url('../conclave-visuals/horizon.webp');
+}
+.conclave-page .stellar-horizon::before{
+ content:'';position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(90deg,#11091ff7 0%,#11091fe8 32%,#11091f80 61%,#11091f15 100%);
+}
+.stellar-copy{padding:clamp(24px,5vw,62px);max-width:670px}
+.conclave-page .stellar-copy h3{font:400 clamp(32px,4.4vw,53px)/1.08 Georgia,serif;color:#fff0d5;margin:14px 0 21px}
+.conclave-page .stellar-copy p:not(.caps){font-size:17px;line-height:1.6;color:#f1e4f5}
+.conclave-page .stellar-copy .stellar-lineage{font:clamp(21px,3vw,30px)/1.3 Georgia,serif;color:#f4d09a;margin-top:25px}
+@media(max-width:680px){
+ .conclave-page .stellar-horizon{min-height:0;background-size:100% auto;background-position:center bottom}
+ .conclave-page .stellar-horizon::before{background:linear-gradient(180deg,#10091bf8,#10091bf0 60%,#10091b22 100%)}
+ .stellar-copy{padding:24px 20px clamp(140px,50vw,245px)}
+ .conclave-page .stellar-copy p:not(.caps){font-size:15px}
+ .conclave-page .founding-archive{padding-inline:12px}
+}

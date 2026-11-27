@@ -34,7 +34,16 @@ def stage(site, archive=None):
     if dst.exists() or dst.is_symlink():
         raise ValueError('Artwork destination already exists')
     payloads = {}
-    if archive is not None:
+    marker = site / 'conclave-participant' / 'edition.json'
+    participant = json.loads(marker.read_text()) if marker.is_file() else {}
+    if participant.get('archive') == 'AGI-CLUB-OMEGA-PARTICIPANT-PRODUCTION.zip':
+        if participant.get('sha256') != '79d62975b108be36c99caf321951eb34200e9b5a6e07980e5b178f02aa448152':
+            raise ValueError('Production participant receipt mismatch')
+        source = marker.parent / 'AGI-CLUB-DOUBLE-FLYWHEEL' / 'assets' / 'production'
+        for name in ('arrival.webp', 'flywheel.webp', 'sanctum.webp', 'horizon.webp'):
+            payloads[name] = (source / name).read_bytes()
+        mode = 'production-2026-11-28'
+    elif archive is not None:
         archive = Path(archive)
         if archive.name != NAME or archive.stat().st_size != 1368438 or sha(archive.read_bytes()) != ARCHIVE_SHA:
             raise ValueError('Artwork ZIP does not match the approved image pack')
@@ -53,6 +62,8 @@ def stage(site, archive=None):
         for name, source in FALLBACK.items():
             payloads[name] = (site / 'frontier-omega-alpha' / source).read_bytes()
         mode = 'existing-conclave'
+    if 'horizon.webp' not in payloads:
+        payloads['horizon.webp'] = (site / 'frontier-omega-alpha' / 'double-flywheel-finale.webp').read_bytes()
     for data in payloads.values():
         if data[:4] != b'RIFF' or data[8:12] != b'WEBP':
             raise ValueError('Not a WebP image')
