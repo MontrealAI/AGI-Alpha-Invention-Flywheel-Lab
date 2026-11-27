@@ -89,6 +89,7 @@ function lock(reason='locked'){
   returnLink.href='#top';
   returnLink.textContent=locale==='fr'?'Retour au seuil ↑':'Return to the threshold ↑';
   $('legacy').hidden=true;
+  const archive=$('legacy').querySelector('.founding-archive');if(archive)archive.open=false;
   window.dispatchEvent(new Event('frontier:member-lock'));
   if(typeof cleanup==='function')cleanup();
   cleanup=null;

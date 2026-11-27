@@ -1529,6 +1529,9 @@ async function conclaveDoor(browser, language) {
     assert.equal(await edition.getAttribute('lang'),language);
     assert.equal(await edition.locator('.ce-card').count(),7);
     assert.equal(await edition.locator('.ce-primary').count(),1);
+    assert.equal(await edition.locator('.ce-head .ce-primary').count(),1,'Immediate collection action belongs in the welcome');
+    assert.equal(await edition.locator('.ce-head .ce-secondary').count(),1,'Offline action belongs in the welcome');
+    assert.ok(await edition.locator('.ce-primary').evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight;}),'Collection action must be visible immediately after sign-in');
     assert.match(await edition.locator('.ce-secondary').getAttribute('href'),/frontier-conclave-participant-v2026\.11\.28\/AGI-CLUB-OMEGA-PARTICIPANT-FINAL\.zip$/);
     for(const href of await edition.locator('.ce-card, .ce-primary').evaluateAll(nodes=>nodes.map(node=>node.href))){
       const response=await page.request.head(href);
@@ -1550,7 +1553,11 @@ async function conclaveDoor(browser, language) {
     assert.equal(await page.evaluate(()=>window.walletScenario.signed.length),1);
     const methods=await page.evaluate(()=>window.walletScenario.methods);
     assert.ok(!methods.some(m=>m==='eth_sendTransaction'||m==='wallet_switchEthereumChain'));
+    await edition.locator('.ce-shortcuts a[href="#dossier"]').click();
+    assert.equal(await page.locator('.founding-archive').getAttribute('open'),'');
+    assert.equal(await page.locator('#dossier').isVisible(),true);
     await page.locator('#conclave-club-lock').click();
+    assert.equal(await page.locator('.founding-archive').getAttribute('open'),null);
     assert.equal(await page.locator('#conclave-vision').isVisible(),true);
     assert.equal(await page.locator('#conclave-edition').count(),0);
     assert.equal(await host.count(),0);

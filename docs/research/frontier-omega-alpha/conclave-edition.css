@@ -142,3 +142,46 @@
   .conclave-page .brand{font-size:9.5px}
   .vision-loop{padding:17px}
 }
+
+
+/* Event finishing pass — make the verified entry immediately actionable. */
+.conclave-page .ce-head{
+  min-height:clamp(350px,34vw,470px);
+  padding:clamp(23px,3.5vw,48px) clamp(18px,4vw,50px);
+}
+.conclave-page .ce-head::before{
+  background:radial-gradient(ellipse at center,#100820eb 0%,#150a26c7 44%,#150a2640 79%,#150a2618 100%);
+}
+.conclave-page .ce-omega{font-size:clamp(34px,4vw,54px);margin-bottom:10px}
+.conclave-page .ce-head h2{font-size:clamp(35px,5.4vw,71px);margin:9px 0 12px}
+.conclave-page .ce-lineage{font-size:clamp(18px,2.3vw,25px);margin:15px 0 0}
+.conclave-page .ce-head .ce-actions{
+  justify-content:center;gap:10px;margin:20px 0 5px;max-width:100%;
+}
+.conclave-page .ce-head .ce-actions:empty{display:none}
+.conclave-page .ce-head .ce-primary{box-shadow:0 8px 32px #0c051b66}
+.conclave-page .ce-head .ce-secondary{background:#1b1028e8}
+.conclave-page .ce-head .ce-status{margin:9px 0 0;max-width:65ch;color:#f3d39f;font:600 12px/1.5 system-ui,sans-serif}
+.ce-offline-note{margin:7px 0 0;color:#ded0e9;font:12px/1.5 system-ui,sans-serif;max-width:65ch}
+.conclave-page .ce-card-body{padding-bottom:22px}
+.conclave-page .ce-card h3{overflow-wrap:anywhere}
+.conclave-page .ce-card:hover img{filter:brightness(1.055)}
+.conclave-page .ce-card img{transition:filter .18s ease}
+@media(max-width:680px){
+ .conclave-page .celestial-hero .hero-art{background-size:100% auto;background-position:center bottom 24px}
+ .conclave-page .celestial-hero::before{background:linear-gradient(180deg,#10081b 0%,#10081b 65%,#10081b4a 80%,#10081b00 93%,#0c0716 100%)}
+ .conclave-page .hero-content{padding-bottom:clamp(166px,54vw,300px)}
+ .conclave-page .ce-head{min-height:0;padding:21px 13px 20px}
+ .conclave-page .ce-head h2{font-size:clamp(29px,8.1vw,38px);margin:8px 0 10px}
+ .conclave-page .ce-omega{font-size:34px;margin-bottom:8px}
+ .conclave-page .ce-head .ce-kicker{font-size:10px;letter-spacing:.09em}
+ .conclave-page .ce-intro{font-size:15px;line-height:1.48}
+ .conclave-page .ce-lineage{font-size:17px;margin:11px 0 0}
+ .conclave-page .ce-head .ce-actions{display:grid;width:100%;margin:15px 0 3px;gap:8px}
+ .conclave-page .ce-head .ce-actions:empty{display:none}
+ .conclave-page .ce-head .ce-actions a{min-height:48px;padding:10px 12px;font-size:13px}
+ .conclave-page .ce-head .ce-status{font-size:11px}
+ .ce-offline-note{font-size:11px}
+ .conclave-page .club-toolbar{gap:8px}
+}
+@media(prefers-reduced-motion:reduce){.conclave-page .ce-card img{transition:none}}
