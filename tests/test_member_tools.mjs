@@ -137,3 +137,19 @@ test('Conclave interventions only open the next invention with both loops', asyn
   assert.deepEqual(selectFlywheelState(run,true,true),{budget:9,cost:6,open:true,gap:3});
   assert.equal(selectFlywheelState(runDoubleFlywheel({rejectFirst:true}),true,true).open,false);
 });
+
+
+test('First Light finds both synthetic worlds with independent cameras and rejects false controls', async () => {
+  const {runFirstLight}=await import('../docs/research/frontier-omega-alpha/double-flywheel.mjs');
+  for(const [i,period,phase,visits] of [[0,29,11,9],[1,37,17,7]]) {
+    const r=runFirstLight(i);
+    assert.deepEqual([r.candidate.period,r.candidate.phase,r.verify.matches,r.verify.visits,r.accepted],
+      [period,phase,visits,visits,true]);
+    assert.notEqual(r.lowest%period,phase,'strongest single dip is a misleading control');
+    assert.notDeepEqual(r.discovery,r.independent);
+    assert.equal(runFirstLight(i,{blank:true}).candidate,null);
+    const wrong=runFirstLight(i,{corrupt:true});
+    assert.equal(wrong.verify.matches,0);
+    assert.equal(wrong.accepted,false);
+  }
+});

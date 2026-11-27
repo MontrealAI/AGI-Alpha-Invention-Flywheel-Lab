@@ -143,8 +143,10 @@ function fakeWallet() {
       if (method === 'personal_sign') {
         if (state.cancel) throw {code: 4001};
         state.signed.push(params[0]);
-        return '0x' + '00'.repeat(65);
+        return '0x' + '00'.repeat(64)+'1b';
       }
+      if(method==='eth_call'&&params[0]?.to==='0x'+'0'.repeat(39)+'1'&&params[1]==='latest')
+        return '0x' + addressWord(account);
       if (method !== 'eth_call' || params[1] !== block().number) throw Error('Unexpected wallet call');
       const {data, to} = params[0];
       const selector = data.slice(0, 10);
@@ -154,7 +156,7 @@ function fakeWallet() {
         if (data.slice(10) !== addressWord(state.account)) throw Error('Wrong balance account');
         return abi(state.account === account ? state.balance * 10n ** 18n : 0n);
       }
-      if (selector === '0x02571be3') return '0x' + addressWord(account);
+      if (selector === '0x02571be3') return '0x' + addressWord(state.clubOwner??account);
       if (to.toLowerCase() === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85') {
         return abi(data.length === 10 ? 0 : (state.expiration ? 1 : Math.floor(Date.now() / 1000) + 86400));
       }
@@ -1403,6 +1405,8 @@ async function doubleFlywheel(page, language, width, reject) {
       return title.top >= nav.bottom-1 && title.bottom <= innerHeight;
     });
     assert.equal(readable,true,`Conclave heading obscured: ${language} / ${width}px / phase ${i} / reject ${reject}`);
+    if(i===1)assert.match(await host.locator('.df-sky').innerText(),reject
+      ?/NO REPEAT CONFIRMED|AUCUNE RÉPÉTITION CONFIRMÉE/:/29 h/);
   }
   const finale=host.locator('[data-df="finale"]');
   const audit=host.locator('[data-df="audit"]');
@@ -1431,6 +1435,8 @@ async function doubleFlywheel(page, language, width, reject) {
     await state('fund',9,10,false);
     await tool.press('Enter');
     await state('open',9,6,true);
+    assert.match(await chamber.locator('[data-df-out=signal]').innerText(),/37 h · 7\/7/);
+    assert.match(await chamber.locator('.df-second-sky').innerText(),/37 h/);
     assert.equal(await tool.getAttribute('aria-pressed'),'true');
     assert.equal(await fund.getAttribute('aria-pressed'),'true');
     await tool.press('Enter');
@@ -1443,7 +1449,9 @@ async function doubleFlywheel(page, language, width, reject) {
   }
   await audit.locator('summary').click();
   assert.equal(await ledger.isVisible(),true);
-  const {receipt}=JSON.parse(await host.locator('[data-df="raw"]').textContent());
+  const {receipt,observatory}=JSON.parse(await host.locator('[data-df="raw"]').textContent());
+  assert.equal(observatory.first.accepted,!reject);
+  assert.equal(observatory.second?.candidate.period,reject?undefined:37);
   assert.equal(receipt.acceptedFirst,!reject);
   assert.equal(receipt.receipts,reject?0:13);
   assert.equal(receipt.budget2,reject?5:9);
@@ -1452,6 +1460,47 @@ async function doubleFlywheel(page, language, width, reject) {
   assert.equal(await stage.isVisible(),true);
   // Leave a completed state while going back; the wallet session lock must clear it.
   await destination(page,'my-frontier');
+}
+
+async function conclaveDoor(browser, language) {
+  const page=await browser.newPage({viewport:dimensions(language==='fr'?390:1440),reducedMotion:'reduce'});
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  try{
+    await page.addInitScript(fakeWallet);
+    const r=await page.goto(new URL('../frontier-conclave.html',base).href);
+    assert.equal(r.status(),200);
+    assert.equal(await page.locator('#member').isVisible(),false);
+    assert.equal(await page.locator('#double-flywheel').count(),0);
+    assert.equal(await page.locator('#dossier').isVisible(),false);
+    if(language==='fr')await page.locator('[data-club-lang=fr]').click();
+    const go=page.locator('#conclave-club-enter');
+    const label=page.locator('#conclave-club-label');
+    await label.fill('frontier-check');
+    await page.evaluate(()=>{window.walletScenario.clubOwner='0x'+'34'.repeat(20);});
+    await go.click();
+    await page.waitForFunction(()=>document.getElementById('conclave-club-status').textContent.match(/does not own|ne détient pas/)&&!document.getElementById('conclave-club-enter').disabled);
+    assert.equal(await page.locator('#member').isVisible(),false);
+    assert.equal(await page.evaluate(()=>window.walletScenario.signed.length),0);
+    await page.evaluate(()=>{delete window.walletScenario.clubOwner;});
+    await go.click();
+    const host=page.locator('#double-flywheel');
+    await host.waitFor({state:'visible'});
+    assert.match(await host.locator('#df-title').innerText(),/First Light|Première Lumière/);
+    assert.equal(await page.locator('#top').isVisible(),false);
+    const start=host.locator('[data-df=start]');
+    for(let i=0;i<4;i++)await start.press('Enter');
+    await host.locator('.df-switch-tool').press('Space');
+    await host.locator('.df-switch-fund').press('Enter');
+    assert.match(await host.locator('.df-second-sky').innerText(),/37 h/);
+    assert.equal(await page.evaluate(()=>window.walletScenario.signed.length),1);
+    const methods=await page.evaluate(()=>window.walletScenario.methods);
+    assert.ok(!methods.some(m=>m==='eth_sendTransaction'||m==='wallet_switchEthereumChain'));
+    await page.locator('#conclave-club-lock').click();
+    assert.equal(await host.count(),0);
+    assert.equal(await page.locator('#dossier').isVisible(),false);
+    assert.deepEqual(errors,[]);
+    checks.push({type:'club-only-conclave-door',language});
+  }finally{await page.close();}
 }
 
 async function walletPaths(browser, language, width) {
@@ -1668,6 +1717,7 @@ async function walletPaths(browser, language, width) {
         await publicAtlas(browser, language, width);
         await walletPaths(browser, language, width);
       }
+      await conclaveDoor(browser, language);
       await pairedRevisionJourney(browser, language);
       await revokedSourceRetry(browser, language);
       await pairedStatusRecovery(browser, language);

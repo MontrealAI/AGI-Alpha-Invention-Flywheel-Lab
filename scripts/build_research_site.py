@@ -57,7 +57,8 @@ CONTINUITY_MEDIA = tuple(
     for suffix in ('.gif', '-poster.png')
 )
 ASSETS += CONTINUITY_MEDIA + ('continuity-omega-media-manifest.json',)
-PAGES += ('frontier-conclave.html',)
+CONCLAVE_PAGE = 'frontier-conclave.html'
+PAGES += (CONCLAVE_PAGE,)
 ASSETS += ('frontier-conclave-hero.png', 'frontier-conclave-salon.png', 'FRONTIER_CONCLAVE_COMPLETE.zip')
 PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html')
 PAGES += ('ignition/index.html', 'ignition/demo.html')
@@ -71,6 +72,9 @@ DECISION_EDITION_ASSETS = tuple(
 ASSETS += (
     'frontier-omega-alpha/frontier.css',
     'frontier-omega-alpha/double-flywheel.mjs',
+    'frontier-omega-alpha/conclave-door.mjs',
+    'frontier-omega-alpha/three-0.160.1.min.mjs',
+    'frontier-omega-alpha/three-0.160.1-LICENSE.txt',
     'frontier-omega-alpha/double-flywheel-cover.webp',
     'frontier-omega-alpha/double-flywheel-finale.webp',
     'frontier-omega-alpha/wallet-check.js',
@@ -335,6 +339,19 @@ class Links(HTMLParser):
                     self.links.append(attrs[key])
 
 
+def render_conclave(page):
+    """Use the exact canonical bilingual demo sections, never a second implementation."""
+    templates = Path(__file__).resolve().parents[1] / 'products/frontier-member-tools'
+    for lang in ('en', 'fr'):
+        marker = f'<!-- CONCLAVE_DEMO_{lang.upper()} -->'
+        source = (templates / f'member.{lang}.html').read_text()
+        sections = re.findall(r'<section class="df" id="double-flywheel"[^>]*>.*?</section>', source, re.S)
+        if page.count(marker) != 1 or len(sections) != 1 or 'data-double-flywheel' not in sections[0]:
+            raise ValueError('Missing or ambiguous Conclave demo template')
+        page = page.replace(marker, sections[0])
+    return page
+
+
 def validate(source, *, staged=False):
     """Fail closed on changed PDFs, nonlocal files, or broken relative links."""
     source = Path(source)
@@ -342,6 +359,9 @@ def validate(source, *, staged=False):
         path = source / name
         if path.is_symlink() or not path.is_file() or path.resolve() != source.resolve() / name:
             raise ValueError(f'Not a regular publication file: {name}')
+    three = 'frontier-omega-alpha/three-0.160.1.min.mjs'
+    if hashlib.sha256((source / three).read_bytes()).hexdigest() != '3e690ac7d180b0aadf0891bea39eec643e29e2d3e75c99b18689518665f69ba6':
+        raise ValueError('Pinned Three.js asset changed')
     manifest = json.loads((source / 'publication-manifest.json').read_text())
     entries = manifest['papers']
     if manifest['schema_version'] != 1 or len(entries) != len(PAPERS) or {p['file'] for p in entries} != set(PAPERS):
@@ -355,6 +375,11 @@ def validate(source, *, staged=False):
     for name in PAGES:
         parser = Links()
         page = (source / name).read_text()
+        if name == CONCLAVE_PAGE:
+            if staged and '<!-- CONCLAVE_DEMO_' in page:
+                raise ValueError('Unrendered Conclave member templates')
+            if not staged:
+                page = render_conclave(page)
         if name in POSSIBILITY_PAGES:
             if staged and POSSIBILITY_MARKER in page:
                 raise ValueError('Unrendered possibility publication')
@@ -408,6 +433,8 @@ def build(source, output):
         (output / name).parent.mkdir(parents=True, exist_ok=True)
         if name in POSSIBILITY_PAGES:
             (output / name).write_text(render_possibility_page((source / name).read_text(), name, records))
+        elif name == CONCLAVE_PAGE:
+            (output / name).write_text(render_conclave((source / name).read_text()))
         else:
             shutil.copyfile(source / name, output / name)
     (output / '.nojekyll').write_text('')
