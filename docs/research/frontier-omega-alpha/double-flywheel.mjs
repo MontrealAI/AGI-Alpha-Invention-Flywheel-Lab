@@ -30,7 +30,8 @@ export function runDoubleFlywheel({rejectFirst=false}={}) {
     budget1:COST.start, cost1, receipts, surplus, reinvestment, retainedSurplus:Math.max(surplus,0)-reinvestment,
     reusable, budget2, freshCost, retainedCost, fresh, next, expectedNext,
     freshEligible:passes(fresh)&&freshCost<=budget2,
-    retainedEligible:passes(next)&&retainedCost<=budget2
+    retainedEligible:passes(next)&&retainedCost<=budget2,
+    retainedBudgetRemaining:passes(next)&&retainedCost<=budget2?budget2-retainedCost:null
   };
 }
 
@@ -47,7 +48,7 @@ const copy={
       ['Delivery pays for a second experiment.','In the simulation, the accepted outcome triggers a 13-credit payment. Production cost is 8, leaving 5; reinvest 4 and retain 1. The fresh and reuse arms get the same next-cycle budget.'],
       ['One tool, a second measurement problem.','The next sensor has both offset and scale. Both approaches can solve the five controls. Only the reusable approach fits the modeled budget: no need to rebuild the already-verified comparator.']
     ],
-    rows:['First-cycle budget','First-cycle cost','Modeled payment','Modeled surplus','Reinvested','Next budget (5 base + reinvestment)','Rebuild comparator','Reuse comparator'],
+    rows:['First-cycle budget','First-cycle cost','Modeled payment','Modeled surplus','Reinvested','Next budget (5 base + reinvestment)','Rebuild comparator','Reuse comparator','Credits left with reuse'],
     audit:'Fixture: [raw, offset, threshold] in cycle 1, [raw, offset, scale, threshold] in cycle 2. Measure strictly above the threshold; equality is not above. All costs and payments are assumed.'
   },
   fr:{
@@ -62,7 +63,7 @@ const copy={
       ['La livraison finance un deuxième essai.','Dans la simulation, la livraison acceptée rapporte 13 crédits. Produire coûte 8; il reste 5 crédits. On en réinvestit 4 et on en conserve 1. Les deux méthodes reçoivent le même budget au cycle suivant.'],
       ['Un outil, un deuxième problème de mesure.','Le deuxième capteur présente un décalage et un facteur d’échelle. Les deux méthodes résolvent les cinq cas de contrôle. Seul le réemploi respecte le budget simulé : nul besoin de rebâtir le comparateur déjà vérifié.']
     ],
-    rows:['Budget du premier cycle','Coût du premier cycle','Paiement simulé','Excédent simulé','Réinvestissement','Nouveau budget (5 de base + réinvestissement)','Rebâtir le comparateur','Réutiliser le comparateur'],
+    rows:['Budget du premier cycle','Coût du premier cycle','Paiement simulé','Excédent simulé','Réinvestissement','Nouveau budget (5 de base + réinvestissement)','Rebâtir le comparateur','Réutiliser le comparateur','Crédits restants avec réemploi'],
     audit:'Données : [valeur brute, décalage, seuil] au cycle 1; [valeur brute, décalage, échelle, seuil] au cycle 2. Le dépassement est strict. Tous les coûts et paiements sont hypothétiques.'
   }
 };
@@ -95,7 +96,10 @@ export function mountDoubleFlywheel(host, locale='en') {
     step.textContent=t.labels[phase]+' · '+(phase+1)+'/4';
     title.textContent=t.story[phase][0];
     body.textContent=!run.acceptedFirst&&phase>=2?t.held:t.story[phase][1];
-    status.textContent=phase===1?((run.acceptedFirst?t.accepted:t.rejected)+' · '+run.checks.filter((v,i)=>v===run.expectedFirst[i]).length+'/4'):'';
+    const matchCount=(actual,expected)=>actual?.filter((v,i)=>v===expected[i]).length;
+    status.textContent=phase===1?((run.acceptedFirst?t.accepted:t.rejected)+' · '+matchCount(run.checks,run.expectedFirst)+'/4')
+      :phase===3&&run.retainedEligible?(locale==='fr'?'Réponses exactes, reconstruction / réemploi : ':'Correct readings, rebuild / reuse: ')+
+        matchCount(run.fresh,run.expectedNext)+'/5 · '+matchCount(run.next,run.expectedNext)+'/5':'';
     ledger.replaceChildren();
     if(phase>=1) [run.budget1,run.cost1].forEach((v,i)=>add(t.rows[i],v));
     if(phase>=2) [run.receipts,run.surplus,run.reinvestment].forEach((v,i)=>add(t.rows[i+2],v));
@@ -103,6 +107,7 @@ export function mountDoubleFlywheel(host, locale='en') {
       add(t.rows[5],run.budget2);
       add(t.rows[6],run.freshCost+' · '+(run.freshEligible?t.feasible:t.noFunds));
       add(t.rows[7],run.reusable?run.retainedCost+' · '+(run.retainedEligible?t.feasible:t.noFunds):t.none);
+      if(run.retainedEligible)add(t.rows[8],run.retainedBudgetRemaining);
     }
     audit.hidden=phase<3;
     auditTitle.textContent=t.audit;
