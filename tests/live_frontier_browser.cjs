@@ -1402,7 +1402,7 @@ async function doubleFlywheel(page, language, width, reject) {
       const title=el.getBoundingClientRect(), nav=document.querySelector('.mf-bar').getBoundingClientRect();
       return title.top >= nav.bottom-1 && title.bottom <= innerHeight;
     });
-    assert.equal(readable,true);
+    assert.equal(readable,true,`Conclave heading obscured: ${language} / ${width}px / phase ${i} / reject ${reject}`);
   }
   const finale=host.locator('[data-df="finale"]');
   const audit=host.locator('[data-df="audit"]');
@@ -1414,9 +1414,29 @@ async function doubleFlywheel(page, language, width, reject) {
       .map(key=>finale.locator('[data-df="'+key+'"]').textContent())), ['5','6','9','10','9','6','3']);
     assert.deepEqual(await finale.locator('.df-counter-verdict').allTextContents(), language==='fr'
       ? ['Bloqué','Bloqué','Le cycle s’ouvre'] : ['Blocked','Blocked','Next cycle opens']);
-    const reserved=await finale.locator('.df-reserve').boundingBox();
-    assert.ok(reserved.y+reserved.height<=dimensions(width).height,'the full payoff must be visible without scrolling');
-    assert.equal(await finale.locator('.df-crossing').evaluate(el=>getComputedStyle(el).animationName),'none');
+    const chamber=finale.locator('[data-df=chamber]');
+    const tool=chamber.locator('.df-switch-tool'), fund=chamber.locator('.df-switch-fund');
+    const state=async (mode,budget,cost,open)=>{
+      assert.equal(await chamber.locator('.df-reactor').getAttribute('data-mode'),mode);
+      assert.equal(await chamber.locator('[data-df-out=budget]').textContent(),String(budget));
+      assert.equal(await chamber.locator('[data-df-out=cost]').textContent(),String(cost));
+      assert.equal(await chamber.locator('.df-reveal-line').isVisible(),open);
+      assert.equal(await chamber.locator('.df-trace-v').evaluate(el=>getComputedStyle(el).animationName),'none');
+    };
+    await state('cold',5,10,false);
+    await tool.press('Enter');
+    await state('tool',5,6,false);
+    await tool.press('Enter');
+    await fund.press('Space');
+    await state('fund',9,10,false);
+    await tool.press('Enter');
+    await state('open',9,6,true);
+    assert.equal(await tool.getAttribute('aria-pressed'),'true');
+    assert.equal(await fund.getAttribute('aria-pressed'),'true');
+    await tool.press('Enter');
+    await state('fund',9,10,false);
+    await tool.press('Enter');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),true);
     await capture(page, language, width, 'double-flywheel');
   } else {
     assert.equal(await finale.locator('[data-df=spare]').textContent(),'');

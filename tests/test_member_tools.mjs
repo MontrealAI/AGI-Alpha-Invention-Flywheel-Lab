@@ -127,3 +127,13 @@ test('double flywheel independently compares exact measured answers and applies 
   assert.equal(failure.retainedBudgetRemaining,null);
   assert.equal(failure.counterfactuals,null);
 });
+
+test('Conclave interventions only open the next invention with both loops', async () => {
+  const {runDoubleFlywheel,selectFlywheelState} = await import('../docs/research/frontier-omega-alpha/double-flywheel.mjs');
+  const run = runDoubleFlywheel();
+  assert.deepEqual(selectFlywheelState(run,false,false),{budget:5,cost:10,open:false,gap:-5});
+  assert.deepEqual(selectFlywheelState(run,true,false),{budget:5,cost:6,open:false,gap:-1});
+  assert.deepEqual(selectFlywheelState(run,false,true),{budget:9,cost:10,open:false,gap:-1});
+  assert.deepEqual(selectFlywheelState(run,true,true),{budget:9,cost:6,open:true,gap:3});
+  assert.equal(selectFlywheelState(runDoubleFlywheel({rejectFirst:true}),true,true).open,false);
+});
