@@ -834,3 +834,80 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
   @keyframes df-lift{from{transform:translateY(8px)}to{transform:translateY(0)}}
   @keyframes df-lift-alt{from{transform:translateY(8px)}to{transform:translateY(0)}}
 }
+
+/* Conclave control room. Motion follows intervention, never substituting for evidence. */
+.df [data-df=chamber]{border:1px solid #79588d;border-radius:18px;overflow:hidden;background:#0f091d;box-shadow:0 16px 62px #08041370}
+.df .df-reactor{position:relative;isolation:isolate;overflow:hidden;background:#080518 radial-gradient(ellipse at center,#46297077 0%,#14102680 52%,#080518 87%)}
+.df .df-reactor::before{content:"";position:absolute;inset:0;z-index:-1;background:center 51%/cover url("double-flywheel-finale.webp");opacity:.23;transition:opacity .6s}
+.df .df-reactor[data-mode=open]::before{opacity:.62}
+.df .df-orbits{width:100%;height:clamp(140px,29vw,270px);display:block;overflow:visible}
+.df .df-stars{fill:#e6d2ff}
+.df .df-instrument{stroke:#c0a3e96c;stroke-width:.65}
+.df .df-orbit,.df .df-trace{fill:none;stroke-width:2.1}
+.df .df-orbit{opacity:.27;transition:opacity .28s}
+.df .df-orbit-v,.df .df-trace-v{stroke:url(#df-tool-color)}
+.df .df-orbit-g,.df .df-trace-g{stroke:url(#df-cap-color)}
+.df .df-trace{stroke-width:5;stroke-linecap:round;stroke-dasharray:9 91;opacity:0}
+.df .df-pivot{fill:#160d29;stroke:#bd93ce;stroke-width:1.5}
+.df .df-omega,.df .df-omega-new{font:64px Georgia,serif;fill:#eadcff}
+.df .df-omega-new,.df .df-halo{opacity:0;transition:opacity .35s}
+.df [data-mode=tool] .df-orbit-v,.df [data-mode=fund] .df-orbit-g,.df [data-mode=open] .df-orbit{opacity:1}
+.df [data-mode=open] .df-halo,.df [data-mode=open] .df-omega-new{opacity:1}
+.df [data-mode=open] .df-omega-new{fill:#fff2bd}
+.df [data-mode=open] .df-pivot{fill:#211028;stroke:#ffd786}
+.df [data-mode=open] .df-omega{opacity:0}
+.df .df-reactor-key{position:absolute;inset:auto 9% .6rem;display:flex;justify-content:space-between;font-size:.85rem;font-weight:750}
+.df .df-reactor-key span:first-child{color:#f0ccff}
+.df .df-reactor-key span+span{color:#ffe8af}
+.df .df-experiment{padding:clamp(.75rem,2.5vw,1.3rem);background:linear-gradient(135deg,#1c122e,#130d21)}
+.df .df-experiment-caption{margin:0 0 .65rem;color:#f2e6fc;font-size:.96rem}
+.df .df-switches,.df .df-proof-strip,.df .df-capital-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+.df .df-switch{appearance:none;min-height:48px;text-align:start;display:flex;gap:.47rem;align-items:center;padding:.45rem .65rem;border-radius:8px;border:1px solid #a080b5;background:#25183a;color:#fff;font:inherit;font-size:.9rem;line-height:1.12;cursor:pointer}
+.df .df-switch span{display:inline-block;flex:0 0 .73rem;height:.73rem;border:1px solid currentColor;border-radius:100%;color:#e2b4ff}
+.df .df-switch-fund span{color:#ffdda0}
+.df .df-switch[aria-pressed=true]{border-color:#ddb2ff;background:#412059}
+.df .df-switch-fund[aria-pressed=true]{border-color:#ffd786;background:#4b3227}
+.df .df-switch[aria-pressed=true] span{background:currentColor;box-shadow:0 0 11px currentColor}
+.df .df-switch:focus-visible{outline:2px solid #fff2bb;outline-offset:2px}
+.df .df-chamber-output{display:grid;gap:.15rem;margin-top:.7rem;padding:.65rem .7rem;border-inline-start:2px solid #ba88d5;background:#0d0818;border-radius:3px;color:#ecdbff}
+.df .df-chamber-output[data-open=true]{border-color:#ffd786;background:#302214;color:#ffecb9}
+.df .df-chamber-output strong{font-size:clamp(1.02rem,3vw,1.35rem);line-height:1.16}
+.df .df-chamber-output p{display:flex;gap:.65rem;align-items:baseline;flex-wrap:wrap;margin:0;font-size:.85rem}
+.df .df-chamber-output b{font:700 1.18rem Georgia,serif;color:#fff}
+.df .df-reveal-line{margin:.6rem 0 0;color:#fff0cb;font:600 clamp(1.05rem,3vw,1.45rem)/1.25 Georgia,serif}
+.df .df-counterfactuals{margin-top:.75rem}
+.df .df-counterfactuals>summary{cursor:pointer;color:#f3d594;margin-bottom:.5rem}
+.df .df-signal{position:relative;border:1px solid #805d9a;border-radius:10px;overflow:hidden;background:linear-gradient(145deg,#201039,#110a20)}
+.df .df-signal svg{width:100%;height:75px;display:block}
+.df .df-gridline,.df .df-grid-threshold,.df .df-scope-wave{fill:none;vector-effect:non-scaling-stroke}
+.df .df-gridline{stroke:#654680;stroke-width:.65}
+.df .df-grid-threshold{stroke:#e7c080;stroke-width:1;stroke-dasharray:3 7}
+.df .df-scope-wave{stroke:#deacff;stroke-width:2;filter:drop-shadow(0 0 4px #cd95ff)}
+.df .df-signal-label{display:flex;flex-wrap:wrap;gap:.35rem 1rem;padding:.45rem .65rem;color:#e4d1f2;font-size:.9rem}
+.df .df-signal-label b{color:#fff0c8}
+.df .df-proof-strip span,.df .df-capital-strip span{padding:.58rem .6rem;border:1px solid #9467ac;border-radius:8px;background:#291b3a;color:#f8eaff}
+.df .df-proof-strip span[data-pass=false]{border-color:#eaa6a5;color:#ffdcda;background:#3b222c}
+.df .df-capital-strip b{display:inline-block;margin-right:.3rem;font:700 1.45rem Georgia,serif;color:#ffe1a3}
+.df .df-method-note{font-size:.88rem;color:#eadaf6}
+@media(min-width:760px){
+  .df .df-proof-strip,.df .df-capital-strip{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:520px){
+  .df .df-orbits{width:130%;margin-left:-15%}
+  .df .df-reactor-key{inset-inline:6%}
+  .df .df-stage[data-df-state=payoff] h4{scroll-margin-top:10.4rem}
+}
+@media(prefers-reduced-motion:no-preference){
+  .df [data-mode=tool] .df-trace-v,.df [data-mode=fund] .df-trace-g,.df [data-mode=open] .df-trace{animation:df-impulse 1.25s ease-out 2}
+  .df [data-mode=open] .df-halo{transform-origin:center;animation:df-corona .9s ease-out both}
+  .df .df-scope-wave{animation:df-acquire .85s ease-out both}
+  @keyframes df-impulse{0%{opacity:0;stroke-dashoffset:0}24%{opacity:1}80%{opacity:.9}100%{opacity:0;stroke-dashoffset:-100}}
+  @keyframes df-corona{from{opacity:0;transform:scale(.42)}50%{opacity:1;transform:scale(1.14)}to{opacity:1;transform:scale(1)}}
+  @keyframes df-acquire{from{stroke-dasharray:0 100}to{stroke-dasharray:100 0}}
+}
+@media(prefers-reduced-motion:reduce){.df .df-reactor::before,.df .df-orbit,.df .df-halo,.df .df-omega-new{transition:none}}
+.df .df-workshop{border-top:1px solid #654a78;margin-top:.6rem;padding-top:.8rem}
+.df .df-workshop summary{color:#f2ce91}
+@media(max-width:650px){
+  .df .df-hero{background-position:62% center;background-image:linear-gradient(90deg,#150d26f4 0%,#150d26d7 55%,#150d268c 100%),url("double-flywheel-cover.webp")}
+}

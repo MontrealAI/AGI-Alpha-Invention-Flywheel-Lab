@@ -42,6 +42,112 @@ export function runDoubleFlywheel({rejectFirst=false}={}) {
   };
 }
 
+/** One controlled intervention. Verification and sensor data never change across arms. */
+export function selectFlywheelState(run, keep, invest) {
+  const budget=COST.nextBase+(invest?run.reinvestment:0);
+  const cost=keep&&run.reusable?run.retainedCost:run.freshCost;
+  const verified=run.acceptedFirst&&(keep?run.next:run.fresh)?.every((v,i)=>v===run.expectedNext[i]);
+  const open=Boolean(verified&&budget>=cost);
+  return {budget,cost,open,gap:budget-cost};
+}
+
+const chamberCopy={
+ en:{armed:'Put both flywheels in motion', action:'Test each flywheel. Keep the measurement task fixed.', keep:'Keep the verified tool', invest:'Reinvest the surplus', budget:'Budget', cost:'Cost', units:'simulated credits', wait:'Next invention out of reach', open:'Next invention unlocked', missing:n=>n+' more credits needed', reserve:n=>n+' credits left for another experiment', vision:'The invention made the next invention possible.', limit:'An executable simulation. It does not train a model or prove recursive self-improvement.', source:'Raw reading', threshold:'Threshold', calibrated:'Calibrated reading', tool:'Tool', capital:'Capital', payout:'Payment', expenses:'Full cost', surplus:'Surplus', carry:'Reinvest', pass:'Verified', fail:'Rejected', direction:'A frontier model could invent the specialist. Verification decides what survives.'},
+ fr:{armed:'Mettez les deux volants en mouvement', action:'Testez chaque volant sans changer le problème de mesure.', keep:'Garder l’outil vérifié', invest:'Réinvestir l’excédent', budget:'Budget', cost:'Coût', units:'crédits simulés', wait:'Prochaine invention hors de portée', open:'Prochaine invention débloquée', missing:n=>n+' crédits manquants', reserve:n=>n+' crédits pour une autre expérience', vision:'Cette invention a rendu la suivante possible.', limit:'Simulation exécutable. Aucun entraînement de modèle ni preuve d’autoamélioration récursive.', source:'Mesure brute', threshold:'Seuil', calibrated:'Mesure étalonnée', tool:'Outil', capital:'Capital', payout:'Paiement', expenses:'Coût total', surplus:'Excédent', carry:'Réinvestissement', pass:'Vérifié', fail:'Refusé', direction:'Un modèle de pointe pourrait inventer le spécialiste. La vérification décide ce qu’on garde.'}
+};
+
+function mountChamber(root, lang, run) {
+  const t=chamberCopy[lang]??chamberCopy.en;
+  root.innerHTML=`<div class="df-reactor" data-mode="cold">
+    <svg class="df-orbits" viewBox="0 0 720 258" aria-hidden="true">
+     <defs>
+       <radialGradient id="df-halo"><stop stop-color="#ffe8ab" stop-opacity=".75"/><stop offset=".32" stop-color="#fff0cc" stop-opacity=".15"/><stop offset="1" stop-color="#ffd477" stop-opacity="0"/></radialGradient>
+       <linearGradient id="df-tool-color"><stop stop-color="#3d1d6d"/><stop offset=".5" stop-color="#f2c9ff"/><stop offset="1" stop-color="#b86aff"/></linearGradient>
+       <linearGradient id="df-cap-color"><stop stop-color="#5b3b31"/><stop offset=".5" stop-color="#fff0b0"/><stop offset="1" stop-color="#e5a746"/></linearGradient>
+     </defs>
+     <g class="df-stars"></g>
+     <g class="df-instrument" fill="none">
+       <circle cx="360" cy="129" r="111"/><circle cx="360" cy="129" r="96" stroke-dasharray="1 7"/>
+       <path d="M56 129H664M360 16V243" stroke-dasharray="1 7"/>
+       <ellipse cx="360" cy="129" rx="295" ry="83"/>
+     </g>
+     <circle class="df-halo" cx="360" cy="129" r="124" fill="url(#df-halo)"/>
+     <path class="df-orbit df-orbit-v" d="M360 129C305 38 231 28 182 65C113 118 156 211 234 197C282 189 326 158 360 129Z"/>
+     <path class="df-orbit df-orbit-g" d="M360 129C415 220 489 230 538 193C607 140 564 47 486 61C438 69 394 100 360 129Z"/>
+     <path class="df-trace df-trace-v" pathLength="100" d="M360 129C305 38 231 28 182 65C113 118 156 211 234 197C282 189 326 158 360 129Z"/>
+     <path class="df-trace df-trace-g" pathLength="100" d="M360 129C415 220 489 230 538 193C607 140 564 47 486 61C438 69 394 100 360 129Z"/>
+     <circle class="df-pivot" cx="360" cy="129" r="57"/>
+     <text class="df-omega" x="360" y="147" text-anchor="middle">Ω</text>
+     <text class="df-omega-new" x="360" y="147" text-anchor="middle">Ω<tspan font-size="20" dy="-20">+1</tspan></text>
+    </svg>
+    <div class="df-reactor-key"><span>${t.tool}</span><span>${t.capital}</span></div>
+  </div>
+  <div class="df-experiment">
+    <p class="df-experiment-caption">${t.action}</p>
+    <div class="df-switches">
+      <button type="button" class="df-switch df-switch-tool" aria-pressed="false"><span></span>${t.keep}</button>
+      <button type="button" class="df-switch df-switch-fund" aria-pressed="false"><span></span>${t.invest}</button>
+    </div>
+    <div class="df-chamber-output" role="status" aria-atomic="true">
+      <strong data-df-out="result"></strong>
+      <p><span>${t.budget} <b data-df-out="budget"></b></span><span>${t.cost} <b data-df-out="cost"></b></span> <small>${t.units}</small></p>
+      <p data-df-out="gap"></p>
+    </div>
+    <p class="df-reveal-line" hidden>${t.vision}</p>
+  </div>`;
+  // Fixed procedural points; decorative, no external requests and no stochastic verdicts.
+  const stars=root.querySelector('.df-stars');
+  for(let k=1;k<=98;k++){
+    const star=root.ownerDocument.createElementNS('http://www.w3.org/2000/svg','circle');
+    star.setAttribute('cx',String((k*157)%719));
+    star.setAttribute('cy',String((k*k*37+k*47)%258));
+    star.setAttribute('r',String(k%13===0?1.35:k%4===0?.8:.42));
+    star.setAttribute('opacity',String(.22+(k%6)*.12));
+    stars.append(star);
+  }
+  const [tool,fund]=root.querySelectorAll('.df-switch');
+  const scene=root.querySelector('.df-reactor');
+  const output=root.querySelector('.df-chamber-output');
+  const field=name=>output.querySelector('[data-df-out="'+name+'"]');
+  function redraw(){
+    const keep=tool.getAttribute('aria-pressed')==='true';
+    const invest=fund.getAttribute('aria-pressed')==='true';
+    const v=selectFlywheelState(run,keep,invest);
+    scene.dataset.mode=v.open?'open':keep?'tool':invest?'fund':'cold';
+    output.dataset.open=String(v.open);
+    field('result').textContent=v.open?t.open:t.wait;
+    field('budget').textContent=v.budget;
+    field('cost').textContent=v.cost;
+    field('gap').textContent=v.open?t.reserve(v.gap):t.missing(-v.gap);
+    root.querySelector('.df-reveal-line').hidden=!v.open;
+  }
+  for(const button of [tool,fund])button.addEventListener('click',()=>{
+    const section=root.closest('#member');
+    if(!section||section.hidden||root.closest('[hidden]'))return;
+    button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed')!=='true'));
+    redraw();
+  });
+  redraw();
+}
+
+function illustrate(run, phase, lang) {
+  const t=chamberCopy[lang]??chamberCopy.en;
+  if(phase===0){
+    const [raw,offset,limit]=CASES.first[0];
+    const y=n=>Math.max(10,Math.min(110,60+(limit-n)*5));
+    return `<div class="df-signal">
+    <svg viewBox="0 0 600 120" aria-hidden="true"><path class="df-gridline" d="M0 24H600M0 60H600M0 96H600"/><path class="df-scope-wave" pathLength="100" d="M0 ${y(raw)}H265L335 ${y(raw-offset)}H600"/><path class="df-grid-threshold" d="M0 ${y(limit)}H600"/></svg>
+    <div class="df-signal-label"><span>${t.source} <b>${raw}</b></span><span>${t.threshold} <b>${limit}</b></span><span>${t.calibrated} <b>${raw-offset}</b></span></div></div>`;
+  }
+  if(phase===1){
+    return `<div class="df-proof-strip">${run.checks.map((check,i)=>`<span data-pass="${check===run.expectedFirst[i]}"><b>${String(i+1).padStart(2,'0')}</b> ${check===run.expectedFirst[i]?t.pass:t.fail}</span>`).join('')}</div><p class="df-method-note">${t.direction}</p>`;
+  }
+  if(phase===2&&run.acceptedFirst){
+    return `<div class="df-capital-strip">${[[t.payout,run.receipts],[t.expenses,run.cost1],[t.surplus,run.surplus],[t.carry,run.reinvestment]].map(([label,n])=>`<span><b>${n}</b> ${label}</span>`).join('')}</div>`;
+  }
+  return '';
+}
+
 const copy={
   en:{
     labels:['Discover','Invent and verify','Earn and reinvest','Try the next cycle'],
@@ -50,7 +156,7 @@ const copy={
     tier:'Cycle', accepted:'Accepted', rejected:'Rejected', feasible:'Within budget', noFunds:'Over budget', none:'No retained tool',
     details:'Audit the fixture and ledger', held:'HOLD: no delivery, no paid outcome, no reuse.',
     story:[
-      ['A shop needs trustworthy readings.','Its optical sensor has an offset. Raw values can cross a threshold even when calibrated values don’t. The first invention is a tiny decision tool: subtract the offset, then compare.'],
+      ['A false alarm at the stellar observatory.','A collector’s sensor reports a spike. Is it really above the limit, or is the sensor biased? Build a tiny specialist: correct the reading, then compare it with the limit.'],
       ['Check the invention, not its confidence.','The same strict comparison is run on four frozen controls. The independent expected results include a boundary tie and a false alarm from a raw reading. Only a passing tool is kept.'],
       ['Delivery pays for a second experiment.','In the simulation, the accepted outcome triggers a 13-credit payment. Production cost is 8, leaving 5; reinvest 4 and retain 1. The fresh and reuse arms get the same next-cycle budget.'],
       ['One tool, a second measurement problem.','The next sensor has both offset and scale. Both approaches can solve the five controls. Only the reusable approach fits the modeled budget: no need to rebuild the already-verified comparator.']
@@ -65,7 +171,7 @@ const copy={
     tier:'Cycle', accepted:'Accepté', rejected:'Refusé', feasible:'Dans le budget', noFunds:'Hors budget', none:'Aucun outil réutilisable',
     details:'Vérifier les données et le registre', held:'EN ATTENTE : aucune livraison, aucun paiement ni réemploi.',
     story:[
-      ['Un atelier a besoin de mesures fiables.','Son capteur optique présente un décalage. Le relevé brut peut dépasser un seuil sans que la mesure étalonnée le dépasse. Le premier outil soustrait le décalage, puis compare.'],
+      ['Fausse alerte à l’observatoire stellaire.','Le capteur d’un collecteur signale un pic. Le seuil est-il vraiment dépassé ou le capteur est-il biaisé? Construisez un petit spécialiste : corrigez la mesure, puis comparez-la au seuil.'],
       ['Vérifier l’invention plutôt que de lui faire confiance.','Le comparateur strict est mis à l’épreuve sur quatre cas figés. Les réponses de référence couvrent notamment une égalité au seuil et une fausse alerte du capteur brut. L’outil n’est conservé que s’il réussit.'],
       ['La livraison finance un deuxième essai.','Dans la simulation, la livraison acceptée rapporte 13 crédits. Produire coûte 8; il reste 5 crédits. On en réinvestit 4 et on en conserve 1. Les deux méthodes reçoivent le même budget au cycle suivant.'],
       ['Un outil, un deuxième problème de mesure.','Le deuxième capteur présente un décalage et un facteur d’échelle. Les deux méthodes résolvent les cinq cas de contrôle. Seul le réemploi respecte le budget simulé : nul besoin de rebâtir le comparateur déjà vérifié.']
@@ -81,11 +187,11 @@ export function mountDoubleFlywheel(host, locale='en') {
   const find=id=>host.querySelector('[data-df="'+id+'"]');
   const landing=find('start-slot'), progress=find('next-slot'), start=find('start'), stage=find('stage'), step=find('step'), title=find('title'), body=find('body'),
     ledgerSlot=find('ledger-slot'), ledger=find('ledger'), audit=find('audit'), auditTitle=find('audit-title'), raw=find('raw'),
-    finale=find('finale'), spare=find('spare'),
+    finale=find('finale'), spare=find('spare'), chamber=find('chamber'), visual=find('visual'), refs=find('counterfactuals'), workshop=find('workshop'),
     failure=find('reject'), status=find('status'), rail=[...host.querySelectorAll('[data-df-phase]')];
   const rows=['tool','fund','both'].map(key=>[key,find(key+'-budget'),find(key+'-cost')]);
   const payoffFields=[spare,...rows.flatMap(([,budget,cost])=>[budget,cost])];
-  if(![landing,progress,start,stage,step,title,body,ledgerSlot,ledger,audit,auditTitle,raw,failure,status,finale,...payoffFields].every(Boolean))return;
+  if(![landing,progress,start,stage,step,title,body,ledgerSlot,ledger,audit,auditTitle,raw,failure,status,finale,chamber,visual,refs,workshop,...payoffFields].every(Boolean))return;
   let phase=-1, run;
   const add=(name,value)=>{
     const row=doc.createElement('div'), term=doc.createElement('dt'), amount=doc.createElement('dd');
@@ -97,6 +203,13 @@ export function mountDoubleFlywheel(host, locale='en') {
     const payoff=Boolean(paths?.tool.correct&&paths.fund.correct&&paths.both.eligible&&
       !paths.tool.eligible&&!paths.fund.eligible);
     finale.hidden=!payoff;
+    visual.innerHTML=active?illustrate(run,phase,locale):'';
+    visual.hidden=!visual.firstElementChild;
+    refs.open=false;
+    workshop.hidden=phase!==3;
+    workshop.open=false;
+    if(payoff)mountChamber(chamber,locale,run);
+    else chamber.replaceChildren();
     stage.dataset.dfState=payoff?'payoff':phase===3?'held':String(phase);
     if(!payoff)payoffFields.forEach(node=>{node.textContent='';});
     if(phase===3){
@@ -113,12 +226,13 @@ export function mountDoubleFlywheel(host, locale='en') {
     if(!active){ledger.replaceChildren();raw.textContent='';status.textContent='';audit.open=false;failure.disabled=false;failure.checked=false;return;}
     failure.disabled=true;
     step.textContent=t.labels[phase]+' · '+(phase+1)+'/4';
-    title.textContent=payoff?(locale==='fr'?'Aucun des deux ne suffit. Ensemble, ils ouvrent le cycle suivant.':'Neither alone. Together, the next invention is possible.'):
+    title.textContent=payoff?(locale==='fr'?'Pouvez-vous mettre le prochain instrument en service?':'Can you bring the next instrument online?'):
       phase===3&&!run.acceptedFirst?(locale==='fr'?'Le cycle suivant reste fermé.':'The next cycle stays closed.'):t.story[phase][0];
-    body.textContent=payoff?(locale==='fr'?'Au deuxième cycle, les deux méthodes donnent les cinq bonnes réponses. Voici ce que change chaque levier, en crédits simulés.':
-      'Both methods get all five readings right in cycle two. Here’s what each flywheel changes, in simulated credits.'):
+    body.textContent=payoff?(locale==='fr'?'Même problème, cinq résultats vérifiés. Essayez les deux leviers, séparément puis ensemble.':
+      'Same problem, five verified readings. Try the two switches, one at a time and then together.'):
       !run.acceptedFirst&&phase>=2?t.held:t.story[phase][1];
     const matchCount=(actual,expected)=>actual?.filter((v,i)=>v===expected[i]).length;
+    ledgerSlot.hidden=phase<3;
     status.textContent=phase===1?((run.acceptedFirst?t.accepted:t.rejected)+' · '+matchCount(run.checks,run.expectedFirst)+'/4'):'';
     if(payoff){
       for(const [key,budget,cost] of rows){
