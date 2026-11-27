@@ -1397,6 +1397,11 @@ async function doubleFlywheel(page, language, width, reject) {
     await action.press('Enter');
     assert.equal(await host.locator('[data-df-phase][aria-current="step"]').count(), 1);
     assert.equal(await page.locator(':focus').getAttribute('data-df'),'title');
+    const readable=await host.locator('[data-df="title"]').evaluate(el=>{
+      const title=el.getBoundingClientRect(), nav=document.querySelector('.mf-bar').getBoundingClientRect();
+      return title.top >= nav.bottom-1 && title.bottom <= innerHeight;
+    });
+    assert.equal(readable,true);
   }
   await host.locator('[data-df="audit"] summary').click();
   const {receipt}=JSON.parse(await host.locator('[data-df="raw"]').textContent());

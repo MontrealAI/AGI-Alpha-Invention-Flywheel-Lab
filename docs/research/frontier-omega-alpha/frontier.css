@@ -765,7 +765,7 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .df .df-rail li{padding:.5rem;border-block-start:2px solid #6e5b8a;color:#dbcee9;font-size:.86rem;overflow-wrap:anywhere}
 .df .df-rail li[aria-current]{border-color:#f7d795;color:#fff7e8;background:#332344;font-weight:700}
 .df .df-stage{border-top:1px solid #574375;background:#201531}
-.df .df-stage h4{font:650 clamp(1.35rem,3vw,1.85rem)/1.1 Georgia,serif;scroll-margin-top:80px}
+.df .df-stage h4{font:650 clamp(1.35rem,3vw,1.85rem)/1.1 Georgia,serif;scroll-margin-top:8rem}
 .df .df-ledger{max-width:630px;margin:.4rem 0 1rem}
 .df .df-ledger>div{display:flex;justify-content:space-between;gap:1rem;padding:.42rem 0;border-top:1px solid #5c4c71}
 .df .df-ledger dt,.df .df-ledger dd{margin:0}
@@ -778,6 +778,7 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
   .df .df-loops{grid-template-columns:1fr}
   .df .df-loops>div+div{border-left:0;border-top:1px solid #574375}
   .df .df-rail{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .df .df-stage h4{scroll-margin-top:11rem}
 }
 .df-entry-link{color:#f5d89f;text-underline-offset:.2em}
 .df [data-df=next-slot] .df-start{margin-top:1rem}
