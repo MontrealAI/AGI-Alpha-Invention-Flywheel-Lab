@@ -70,6 +70,8 @@ DECISION_EDITION_ASSETS = tuple(
 )
 ASSETS += (
     'frontier-omega-alpha/frontier.css',
+    'frontier-omega-alpha/double-flywheel.mjs',
+    'frontier-omega-alpha/double-flywheel-cover.webp',
     'frontier-omega-alpha/wallet-check.js',
     'frontier-omega-alpha/member-brief-001.js',
     'frontier-omega-alpha/carina.webp',
