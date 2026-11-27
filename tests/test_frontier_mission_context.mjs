@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {missionContextLines, missionIntelligencePackage, selectMissionContext}
+import {missionContextLines, missionIntelligencePackage, missionIntent, selectMissionContext}
   from '../docs/research/frontier-omega-alpha/frontier-mission-context.mjs';
 
 const gitRevision = '1'.repeat(40);
@@ -149,5 +149,50 @@ test('open-ended technology activation finds applicable research while grounded 
     'Find exponential decay of a sample', 'Build frontier intelligence to calibrate NIRSpec wavelength',
     'Vérifier les précipitations mesurées et calculer le cumul quotidien']) {
     assert.deepEqual(choose(ambition).items, [], ambition);
+  }
+});
+
+test('frontier exploration finds dated evidence across unfamiliar wording and both languages', () => {
+  for (const [ambition, language] of [
+    ['Surfing the Frontier of AI', 'en'], ['Surfer à la frontière de l’IA', 'fr'],
+    ['Show me which doors just opened in machine intelligence', 'en'],
+    ['Que puis-je accomplir aujourd’hui grâce aux percées de l’intelligence artificielle ?', 'fr'],
+  ]) {
+    const context = choose(ambition, {language, atlas:{...atlas, records:[...atlas.records,
+      {...record, id:'recently-mentioned-without-source-date', sources:{}}]}});
+    assert.equal(missionIntent(ambition), 'explore', ambition);
+    assert.equal(context.items[0].id, 'shift-repofactory', ambition);
+    assert.ok(!context.items.some(item => item.id === 'recently-mentioned-without-source-date'), ambition);
+  }
+});
+
+test('narrow goals and routine work keep broad acquisition out of the mission', () => {
+  for (const ambition of ['Translate this article about frontier AI into Spanish', 'Translate this sentence into French',
+    'Traduis cet article sur l’IA de pointe en espagnol', 'Translate this scanned document into Spanish', 'Integrate e to the 2x']) {
+    assert.equal(missionIntent(ambition), 'ordinary', ambition);
+    assert.deepEqual(choose(ambition).items, [], ambition);
+  }
+  for (const ambition of ['Build a local summarizer with the newest LLM',
+    'Créer un outil de suivi des commandes avec l’IA de pointe',
+    'Explore recent advances in artificial intelligence for coral restoration',
+    'Prepare a reproducible local workflow for extracting text and tables from scanned documents without sharing them',
+    'Préparer un processus local pour extraire le texte et les tableaux de documents numérisés',
+    'Set up a local coding assistant']) {
+    assert.equal(missionIntent(ambition), 'focused', ambition);
+    assert.deepEqual(choose(ambition).items, [], ambition);
+  }
+  const ambition = 'Construire un LLM de pointe pour la théorie des jeux';
+  assert.equal(missionIntent(ambition), 'focused');
+  assert.deepEqual(choose(ambition, {language:'fr'}).items.map(item => item.id), ['strategic-allocation']);
+  assert.equal(missionIntent('Activate Frontier AI', 'Translate this sentence into French'), 'ordinary');
+});
+
+test('focused evidence can match a shared mechanism when the member uses different terms', () => {
+  for (const [ambition, language] of [['Compare learning environments for tool-using agents', 'en'],
+    ['Comparer les bancs d’entraînement pour les agents', 'fr']]) {
+    const context = choose(ambition, {language});
+    assert.equal(missionIntent(ambition), 'focused', ambition);
+    assert.deepEqual(context.items.map(item => item.id), ['shift-repofactory', 'dated-lead'], ambition);
+    assert.ok(context.items.every(item => item.kind === 'lead'), ambition);
   }
 });

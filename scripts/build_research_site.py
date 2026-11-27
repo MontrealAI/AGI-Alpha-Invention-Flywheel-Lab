@@ -84,6 +84,8 @@ ASSETS += (
     'frontier-omega-alpha/frontier-native-work.mjs',
     'frontier-omega-alpha/frontier-mission-instruments.mjs',
     'frontier-omega-alpha/frontier-mission-context.mjs',
+    'frontier-omega-alpha/frontier-current-opportunities.mjs',
+    'frontier-omega-alpha/frontier-opportunity-operation.mjs',
     'frontier-omega-alpha/frontier-artifact-exchange.mjs',
     'frontier-omega-alpha/dpp-source-review.mjs',
     'frontier-omega-alpha/frontier-battery-source-example.json',

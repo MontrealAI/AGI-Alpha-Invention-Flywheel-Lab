@@ -731,6 +731,18 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 #mission-intelligence, #mission-keeper {
   scroll-margin-block-start: calc(var(--member-scroll-offset) + 2rem);
 }
+.frontier-possibility {
+  margin-block: 1rem;
+  padding: clamp(1rem, 3vw, 1.7rem);
+  border: 1px solid #856849;
+  border-radius: .7rem;
+  background: linear-gradient(145deg, #2c1e3b, #1b1426 70%);
+}
+.frontier-possibility h3 { font: 400 clamp(1.45rem, 3vw, 2.15rem)/1.14 var(--serif); color: #f4d38f; }
+.frontier-possibility h4 { font: 400 1.28rem/1.2 var(--serif); }
+.frontier-possibility article + article { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #594566; }
+.frontier-possibility .mv-actions { flex-wrap: wrap; align-items: center; }
+.frontier-possibility .mv-actions > a { padding-block: .65rem; }
 #foundry-factory-title { font: 400 clamp(1.25rem, 2.3vw, 1.75rem)/1.2 var(--serif); margin-bottom: .4rem; }
 .factory-findings { align-items: stretch; }
 .factory-findings h5 { color: var(--ink); font: 400 1.3rem/1.2 var(--serif); margin: 0 0 .55rem; }

@@ -14,7 +14,9 @@ import {createAssistedBrief, maximumReturnedBytes, readAssistedReply, renderAssi
 import {inspectReturnedWork, readMissionArtifact, importMissionArtifacts, missionArtifactBytes, maximumArtifacts, maximumArtifactBytes} from './frontier-artifact-exchange.mjs';
 import {evaluateMissionFiles} from './frontier-native-work.mjs';
 import {evaluateMissionInstruments, instrumentBatch} from './frontier-mission-instruments.mjs';
-import {selectMissionContext, missionContextLines, missionIntelligencePackage, missionWorkPlan} from './frontier-mission-context.mjs';
+import {selectMissionContext, missionContextLines, missionIntelligencePackage, missionWorkPlan, missionIntent} from './frontier-mission-context.mjs';
+import {currentOpportunities} from './frontier-current-opportunities.mjs';
+import {opportunityOperation, runOpportunityOperation} from './frontier-opportunity-operation.mjs';
 import {reviewBatterySources, sourceReviewSchema} from './dpp-source-review.mjs';
 
 const messages = {
@@ -224,6 +226,48 @@ const text = (key, value) => { node(key).textContent = value ?? ''; };
 const show = (key, visible) => { node(key).hidden = !visible; };
 const encoder = new TextEncoder();
 const browserModelId = 'browser-gemini-nano';
+const opportunityLabels = {
+  en: {
+    heading:'What becomes possible for you now?',
+    available:'Work you can start now', make:'Make something possible', continue:'Continue my advantage',
+    choices:'Choose work you can start now',
+    acquiring:'Checking the published files and their exact revisions…',
+    result:'Your local deployment manifest', savedResult:'Deployment files saved in this mission',
+    contents:(count, size, license) => `${count} release files · ${size} · declared license ${license}`,
+    smaller:size => `${size} less to download than the documented alternative.`,
+    larger:size => `${size} more to download than the documented alternative.`,
+    download:'Download manifest', evidence:'Download original source record',
+    kept:'The files are in this mission. Download the mission to reopen it on another device.',
+    restored:'These files were saved in this mission. A new source check has not been run.',
+    unavailable:'The public source did not return a usable record. You can retry or continue with ChatGPT.',
+    cannotKeep:'This mission already holds its maximum number or size of files. Download the manifest here to keep it.',
+  },
+  fr: {
+    heading:'Qu’est-ce qui devient possible pour vous?',
+    available:'Ce que vous pouvez faire dès maintenant', make:'Réaliser une ambition', continue:'Poursuivre sur votre lancée',
+    choices:'Choisissez un travail à lancer dès maintenant',
+    acquiring:'Vérification des fichiers publiés et de leurs révisions exactes…',
+    result:'Votre manifeste de déploiement local', savedResult:'Fichiers de déploiement sauvegardés dans cette mission',
+    contents:(count, size, license) => `${count} fichiers publiés · ${size} · licence déclarée ${license}`,
+    smaller:size => `${size} de moins à télécharger que l’option décrite dans la documentation.`,
+    larger:size => `${size} de plus à télécharger que l’option décrite dans la documentation.`,
+    download:'Télécharger le manifeste', evidence:'Télécharger le relevé source original',
+    kept:'Les fichiers sont joints à cette mission. Téléchargez la mission pour la reprendre sur un autre appareil.',
+    restored:'Ces fichiers sont sauvegardés dans la mission. La vérification des sources reste à relancer.',
+    unavailable:'La source publique n’a pas fourni de relevé exploitable. Vous pouvez réessayer ou poursuivre avec ChatGPT.',
+    cannotKeep:'Cette mission a atteint sa limite de fichiers. Téléchargez le manifeste ici pour le conserver.',
+  },
+};
+
+function normalizeGoal(value) {
+  return value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+}
+
+function newOpportunity(record) {
+  const age = Date.now() - Date.parse(record.date + 'T00:00:00Z');
+  return age >= 0 && age <= 35 * 86400 * 1000;
+}
 
 function downloadText(value, filename, type = 'text/plain;charset=utf-8') {
   const url = URL.createObjectURL(new Blob([value], {type}));
@@ -254,6 +298,7 @@ function publicContext() {
 export function setupMissionConsole(member, shell) {
   const language = document.documentElement.lang === 'fr' ? 'fr' : 'en';
   const words = messages[language];
+  const opportunityWords = opportunityLabels[language];
   const i = language === 'fr' ? 1 : 0;
   const input = node('goal-text');
   const priorRuns = publicRuns();
@@ -270,9 +315,216 @@ export function setupMissionConsole(member, shell) {
   let artifactSerial = 0, nativeKey = '', nativeResults = [];
   let instrumentKey = '', instrumentResults = [];
   let browserCheck = 0;
+  let publicOperation, publicOutcome;
+  const opportunities = currentOpportunities.filter(opportunityOperation);
   const active = () => !member.hidden;
   const files = () => mission ? mission.documents ?? recoveredDocuments ?? [] : entryDocuments ?? [];
   const settings = node('mission-intelligence');
+
+  const opportunityHome = document.createElement('section');
+  opportunityHome.className = 'frontier-possibility';
+  opportunityHome.id = 'frontier-possibilities';
+  node('mission-entry').after(opportunityHome);
+  const opportunityResult = document.createElement('section');
+  opportunityResult.className = 'frontier-possibility';
+  opportunityResult.id = 'mission-opportunity-result';
+  opportunityResult.tabIndex = -1;
+  opportunityResult.setAttribute('aria-live', 'polite');
+  node('mission-next').after(opportunityResult);
+
+  function displayElement(tag, value) {
+    const element = document.createElement(tag);
+    element.textContent = value;
+    return element;
+  }
+
+  function operationButton(label, action, quiet = false) {
+    const button = displayElement('button', label);
+    button.type = 'button';
+    button.className = quiet ? 'quiet' : 'entry-button';
+    button.addEventListener('click', () => { if (active()) action(); });
+    return button;
+  }
+
+  function opportunitySource(record) {
+    const source = displayElement('a', words.openSource);
+    source.href = record.sourceURL;
+    source.target = '_blank';
+    source.rel = 'noopener noreferrer';
+    return source;
+  }
+
+  function missionOpportunities() {
+    if (!mission) return [];
+    const {ambition, instruction} = missionPacket(mission);
+    const intent = missionIntent(ambition, instruction);
+    if (intent === 'ordinary') return [];
+    const query = ' ' + normalizeGoal(instruction || ambition) + ' ';
+    const ranked = opportunities.map(record => {
+      const name = normalizeGoal(record.operation.repo.split('/').at(-1));
+      const match = new Set(Object.values(record.match ?? {}).flat().map(normalizeGoal));
+      const score = [...match].reduce((total, value) => {
+        if (!query.includes(' ' + value + ' ')) return total;
+        if (name.split(' ').includes(value)) return total + 4;
+        return total + (value.includes(' ') ? 2 : 1);
+      }, 0);
+      return {record, score};
+    }).sort((a,b) => b.score - a.score);
+    if (ranked[0]?.score >= 2 && ranked[0].score > (ranked[1]?.score ?? 0)) return [ranked[0].record];
+    return ['explore','apply'].includes(intent) ? opportunities.filter(newOpportunity) : [];
+  }
+
+  function operationPairs() {
+    const files = resultFiles();
+    return files.flatMap(file => {
+      if (!file.name.endsWith('-deployment-manifest.json')) return [];
+      try {
+        const manifest = JSON.parse(file.content);
+        if (manifest?.schema !== 'frontier/model-distribution-manifest-v1'
+          || !/^[a-f0-9]{40}$/u.test(manifest.revision) || !Array.isArray(manifest.artifacts)
+          || !opportunities.some(record => record.operation.repo === manifest.repo)) return [];
+        const stem = 'frontier-' + manifest.repo.replace('/', '-').toLowerCase() + '-' + manifest.revision.slice(0, 12);
+        if (file.name !== stem + '-deployment-manifest.json' || manifest.source?.filename !== stem + '-hub-source.json') return [];
+        const source = files.find(candidate => candidate.name === manifest.source.filename
+          && candidate.sha256 === manifest.source.sha256 && candidate.bytes === manifest.source.bytes);
+        if (!source) return [];
+        const metadata = JSON.parse(source.content);
+        return metadata?.id === manifest.repo && metadata.sha === manifest.revision
+          ? [{repo:manifest.repo, files:[file, source]}] : [];
+      } catch {
+        return [];
+      }
+    });
+  }
+
+  function proposePublicWork() {
+    const held = new Set(operationPairs().map(pair => pair.repo));
+    const records = missionOpportunities().filter(record => !held.has(record.operation.repo));
+    if (!records.length) return false;
+    publicOutcome = {status:'choices', records};
+    render();
+    return true;
+  }
+
+  function runPublicOpportunity(record) {
+    if (!active() || !mission || !record || publicOperation || ['running','canceled'].includes(mission.status)) return false;
+    const plan = opportunityOperation(record);
+    if (!plan) return false;
+    const {id, revision} = mission;
+    const controller = new AbortController();
+    publicOperation = controller;
+    publicOutcome = {record, status:'running'};
+    const current = () => active() && publicOperation === controller && mission?.id === id
+      && mission.revision === revision && !['running','canceled'].includes(mission.status);
+    render();
+    opportunityResult.focus({preventScroll:true});
+    void (async () => {
+      try {
+        const receipt = await runOpportunityOperation(plan, {signal:controller.signal});
+        if (!current()) return;
+        const artifacts = await Promise.all(receipt.files.map(file =>
+          readMissionArtifact(new File([file.content], file.name), revision)));
+        if (!current()) return;
+        let retained = true;
+        try { mission = addMissionArtifacts(mission, artifacts); }
+        catch { retained = false; }
+        publicOutcome = {record, status:'complete', receipt, artifacts, retained};
+      } catch {
+        if (current()) publicOutcome = {record, status:'unavailable'};
+      } finally {
+        if (publicOperation === controller) {
+          publicOperation = undefined;
+          if (active()) render();
+        }
+      }
+    })();
+    return true;
+  }
+
+  function resetPublicOpportunity() {
+    const operation = publicOperation;
+    publicOperation = publicOutcome = undefined;
+    operation?.abort();
+  }
+
+  function renderPublicOpportunity() {
+    const held = operationPairs().flatMap(pair => pair.files);
+    opportunityResult.hidden = !mission || !publicOutcome && !held.length;
+    opportunityResult.replaceChildren();
+    if (opportunityResult.hidden) return;
+    const {record, records, status, receipt, artifacts, retained} = publicOutcome ?? {};
+    if (status === 'choices') {
+      opportunityResult.append(displayElement('h3', opportunityWords.choices));
+      for (const [index, choice] of records.entries()) {
+        const content = choice[language];
+        const card = document.createElement('article');
+        const actions = document.createElement('div');
+        actions.className = 'mv-actions';
+        actions.append(operationButton(content.action, () => runPublicOpportunity(choice), index > 0), opportunitySource(choice));
+        card.append(displayElement('h4', content.title), displayElement('p', content.change), displayElement('p', content.benefit), actions);
+        opportunityResult.append(card);
+      }
+      return;
+    }
+    if (status === 'running' || status === 'unavailable') {
+      opportunityResult.append(displayElement('h3', record[language].title),
+        displayElement('p', status === 'running' ? opportunityWords.acquiring : opportunityWords.unavailable));
+      if (status === 'unavailable') opportunityResult.append(operationButton(record[language].action, () => runPublicOpportunity(record)));
+      return;
+    }
+    if (!receipt && !held.length) {
+      opportunityResult.hidden = true;
+      return;
+    }
+    opportunityResult.append(displayElement('h3', receipt ? opportunityWords.result : opportunityWords.savedResult));
+    if (receipt) {
+      const size = new Intl.NumberFormat(language, {style:'unit', unit:'gigabyte', maximumFractionDigits:2});
+      const delta = receipt.comparison?.deltaBytes;
+      opportunityResult.append(displayElement('p', receipt.repo),
+        displayElement('p', opportunityWords.contents(receipt.artifacts.length, size.format(receipt.totalBytes / 1e9), receipt.declaredLicense)));
+      if (delta) opportunityResult.append(displayElement('p',
+        (delta > 0 ? opportunityWords.smaller : opportunityWords.larger)(size.format(Math.abs(delta) / 1e9))));
+      opportunityResult.append(displayElement('p', record[language].limit));
+    }
+    const actions = document.createElement('div');
+    actions.className = 'mv-actions';
+    for (const file of artifacts ?? held) {
+      const evidence = file.name.endsWith('-hub-source.json');
+      actions.append(operationButton(evidence ? opportunityWords.evidence : opportunityWords.download,
+        () => downloadText(missionArtifactBytes(file), file.name, 'application/json'), evidence));
+    }
+    opportunityResult.append(actions, displayElement('p', retained === false ? opportunityWords.cannotKeep
+      : receipt ? opportunityWords.kept : opportunityWords.restored));
+  }
+
+  function renderOpportunityHome() {
+    const fresh = opportunities.filter(newOpportunity);
+    opportunityHome.replaceChildren(displayElement('h3', fresh.length ? opportunityWords.heading : opportunityWords.available));
+    const records = fresh.length ? fresh : opportunities;
+    for (const [index, record] of records.entries()) {
+      const content = record[language];
+      const card = document.createElement('article');
+      card.append(displayElement('h4', content.title), displayElement('p', fresh.length ? content.change : content.benefit));
+      if (fresh.length) card.append(displayElement('p', content.benefit));
+      const actions = document.createElement('div');
+      actions.className = 'mv-actions';
+      actions.append(operationButton(content.action, () => {
+        input.value = content.ambition;
+        start(content.ambition, {execute:true, publicLead:record});
+      }, index > 0), opportunitySource(record));
+      card.append(actions);
+      opportunityHome.append(card);
+    }
+    const navigation = document.createElement('div');
+    navigation.className = 'mv-actions';
+    for (const [label, target] of [[opportunityWords.make, 'goal-text'], [opportunityWords.continue, 'mission-keeper']]) {
+      const link = displayElement('a', label);
+      link.href = '#' + target;
+      if (target === 'mission-keeper') link.addEventListener('click', () => { node(target).open = true; });
+      navigation.append(link);
+    }
+    opportunityHome.append(navigation);
+  }
 
   function showSetup() {
     if (mission) {
@@ -310,6 +562,7 @@ export function setupMissionConsole(member, shell) {
     onOpen({ambition, original_ambition: originalAmbition = ambition, language: missionLanguage, instruction, documents}) {
       stopRequest();
       resetHandoff();
+      resetPublicOpportunity();
       mission = createMission(originalAmbition, {language:missionLanguage === 'fr' ? 'fr' : missionLanguage === 'en' ? 'en' : language});
       if (originalAmbition !== ambition) mission = reviseMission(mission, ambition);
       if (instruction) mission = addMissionInstruction(mission, instruction);
@@ -701,6 +954,7 @@ export function setupMissionConsole(member, shell) {
 
   function activateWork({preferred, continuation = false} = {}) {
     if (!mission || mission.status === 'running' || mission.status === 'canceled') return;
+    if (publicOperation) return;
     if (files().length && !node('mission-document-consent').checked) {
       node('mission-files').open = true;
       showSetup();
@@ -710,6 +964,7 @@ export function setupMissionConsole(member, shell) {
     if (!files().length && preferred === 'assisted') { void prepareAssistance(); return; }
     if (!files().length && preferred === browserModelId) { node('intelligence-browser-start').click(); return; }
     if (!files().length && connection && !execution.hasPreferredRoute()) { void runConfiguredModel(); return; }
+    if (!files().length && !execution.hasPreferredRoute() && !publicOutcome && proposePublicWork()) return;
     if (!files().length && !execution.hasPreferredRoute()) { void prepareAssistance({focus:false}); return; }
     if (!execution.hasPreferredRoute()) showSetup();
     void execution.activate(mission.ambition, {continuation});
@@ -755,7 +1010,12 @@ export function setupMissionConsole(member, shell) {
     const plan = state === 'waiting' && evidenceContext?.items.length ? missionWorkPlan(evidenceContext, [...selectedEvidence]) : '';
     text('mission-plan', plan);
     show('mission-plan', Boolean(plan));
-    text('mission-status', message ?? native?.status ?? (instrument ? words.instrumentScope : null)
+    const productiveWork = !native && !report && state === 'ready' && (
+      publicOutcome?.status === 'running' ? opportunityWords.acquiring
+        : publicOutcome?.status === 'choices' ? opportunityWords.choices
+        : publicOutcome?.status === 'complete' ? opportunityWords.result
+        : operationPairs().length ? opportunityWords.savedResult : null);
+    text('mission-status', message ?? productiveWork ?? native?.status ?? (instrument ? words.instrumentScope : null)
       ?? (nativeChecks().some(result => result.disposition === 'VERIFIED_CALCULATION') ? words.auditDone
         : report && state === 'review' ? labels.join(' · ') : running ? words.browserRunning : words[state]));
     const missing = state === 'review' ? workInspection(report).missing : [];
@@ -764,6 +1024,8 @@ export function setupMissionConsole(member, shell) {
       : state === 'canceled' ? words.canceledNext : state === 'paused' ? words.pausedNext
       : state === 'waiting' ? words.assisted : state === 'running' ? words.localNext
       : state === 'ready' && missionPacket(mission).instruction ? words.nextInstruction : report?.nextAction ?? words.choose));
+    const next = node('mission-next');
+    next.hidden = Boolean(productiveWork && !native && !instrument && !check);
   }
 
   function render(message) {
@@ -777,6 +1039,8 @@ export function setupMissionConsole(member, shell) {
     show('mission-reopen-current', Boolean(mission));
     show('mission-checkpoint', Boolean(mission));
     show('mission-entry', !mission || editingAmbition);
+    opportunityHome.hidden = Boolean(mission);
+    renderPublicOpportunity();
     const filesSlot = node(mission && !editingAmbition ? 'mission-inline-files' : 'mission-entry-files');
     if (node('mission-files').parentElement !== filesSlot) filesSlot.append(node('mission-files'));
     renderFiles();
@@ -877,7 +1141,7 @@ export function setupMissionConsole(member, shell) {
     show('mission-pause', state === 'running' || state === 'waiting');
     show('mission-continue', ['paused','canceled','review'].includes(state));
     node('mission-cancel').disabled = state === 'canceled';
-    node('mission-prepare').disabled = state === 'running' || state === 'canceled';
+    node('mission-prepare').disabled = Boolean(publicOperation) || state === 'running' || state === 'canceled';
     show('mission-prepare', state !== 'waiting' || mission.run?.provider !== 'assisted');
   }
 
@@ -899,7 +1163,7 @@ export function setupMissionConsole(member, shell) {
     });
   }
 
-  function start(ambition, {execute = false, atlasLead} = {}) {
+  function start(ambition, {execute = false, atlasLead, publicLead} = {}) {
     if (!active()) return false;
     try {
       let updated = mission ? (mission.ambition !== ambition ? reviseMission(mission, ambition) : mission)
@@ -910,6 +1174,7 @@ export function setupMissionConsole(member, shell) {
           stopRequest();
           resetHandoff();
           execution.clearView({preservePrevious:true});
+          resetPublicOpportunity();
           mission = updated;
         }
         editingAmbition = false;
@@ -917,7 +1182,10 @@ export function setupMissionConsole(member, shell) {
         atlas = atlasLead;
         render();
         shell.show(node('frontier-mission-panel'), {remember:true});
-        if (execute) activateWork();
+        if (execute && !publicLead) activateWork();
+        else if (execute && publicLead) {
+          if (!operationPairs().some(pair => pair.repo === publicLead.operation.repo)) runPublicOpportunity(publicLead);
+        }
         else execution.clearView();
       };
       if (updated !== mission) afterPendingSetup(open, {stopWork:true});
@@ -1053,10 +1321,20 @@ export function setupMissionConsole(member, shell) {
   function refreshEvidence() {
     const {ambition, instruction, language:missionLanguage} = missionPacket(mission);
     const requestScope = {ambition, language:missionLanguage, ...evidenceSources};
-    const previous = currentReport();
-    const previousScope = !instruction && previous?.provider === 'assisted' && previous.work
-      ? selectMissionContext({...requestScope, instruction:workPreview(previous.work,2200)}) : null;
-    evidenceContext = previousScope?.items.length ? previousScope : selectMissionContext({...requestScope, instruction});
+    evidenceContext = selectMissionContext({...requestScope, instruction});
+    const candidates = publicOutcome?.status === 'complete' ? [publicOutcome.record] : missionOpportunities();
+    const releases = candidates.map(record => {
+      const content = record[missionLanguage];
+      return {
+        id:record.id, kind:'lead', title:content.title, fact:content.change, scope:content.limit,
+        relevance:content.benefit, recordURL:record.resources?.[0],
+        source:{url:record.sourceURL, date:record.date, dateBasis:'sourceDate'},
+      };
+    });
+    if (releases.length) {
+      evidenceContext.items.unshift(...releases);
+      evidenceContext.gap = null;
+    }
     selectedEvidence = new Set(evidenceContext.items.map(item => item.id));
     renderEvidence();
   }
@@ -1194,6 +1472,7 @@ export function setupMissionConsole(member, shell) {
     const receipt = result.receipt ?? {route:'continuing', objective:mission.ambition, nextAction};
     const work = workPreview(result.work.trim() ? result.work : result.raw);
     accept({...receipt, work, artifacts:[artifact]}, mission.run.id);
+    if (!publicOutcome && proposePublicWork()) return;
     if (workInspection(currentReport()).missing.length) node('mission-deliverables').open = true;
     const workPanel = node('mission-work-panel');
     const target = workInspection(currentReport()).missing.length ? node('mission-deliverable-import') : workPanel.querySelector('summary');
@@ -1400,6 +1679,7 @@ export function setupMissionConsole(member, shell) {
       const preferred = mission.run?.provider === 'assisted' || last?.provider === 'assisted' ? 'assisted' : last?.model;
       afterPendingSetup(() => {
         resetRequest();
+        if (instruction || publicOutcome?.status === 'running') resetPublicOpportunity();
         if (next.status === 'running') {
           const stopped = interruptMission(next, next.run.id, 'USER_CONTINUED');
           mission = continueMission(stopped);
@@ -1421,6 +1701,7 @@ export function setupMissionConsole(member, shell) {
     afterPendingSetup(() => {
       execution.clearWaiting();
       resetRequest();
+      if (publicOutcome?.status === 'running') resetPublicOpportunity();
       mission = cancelMission(mission);
       render();
     }, {stopWork:'cancel'});
@@ -1435,6 +1716,7 @@ export function setupMissionConsole(member, shell) {
     if (!active()) return;
     afterPendingSetup(() => {
       resetRequest();
+      resetPublicOpportunity();
       mission = atlas = undefined;
       entryDocuments = recoveredDocuments = undefined;
       editingAmbition = false;
@@ -1486,6 +1768,7 @@ export function setupMissionConsole(member, shell) {
       if (attempt !== serial || !active()) return;
       afterPendingSetup(() => {
         resetRequest();
+        resetPublicOpportunity();
         localRuns.clear();
         mission = restored;
         nativeKey = '';
@@ -1511,6 +1794,7 @@ export function setupMissionConsole(member, shell) {
   });
   window.addEventListener('frontier:member-lock', () => {
     resetRequest();
+    resetPublicOpportunity();
     mission = atlas = connection = undefined;
     entryDocuments = recoveredDocuments = undefined;
     editingAmbition = false;
@@ -1532,6 +1816,7 @@ export function setupMissionConsole(member, shell) {
     text('intelligence-browser-status', '');
     render();
   });
+  renderOpportunityHome();
   render();
   return {start};
 }
