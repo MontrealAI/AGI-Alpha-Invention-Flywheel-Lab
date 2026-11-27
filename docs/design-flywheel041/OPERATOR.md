@@ -59,3 +59,43 @@ In this implementation, the native enterprise already chooses acquisition/capaci
 - **Outcome:** Require actual independent native audit and source-linked funded successor, not a descriptive economic story. Hosted exact-source evidence is the arbiter.
 - **Why/unknown:** Buyer values and agent/host billing are authored or unmeasured; price competition and long-horizon generalization remain unresolved.
 - **Next/avoid:** Integrate qualified complete-offer and recurring distribution capabilities after their owners' changes are safely merged; avoid second ledgers and retrospective favorable-world selection.
+
+
+## Review protocol frozen 18 November 2026 — matched spendable liquidity
+
+This is a **prospective, additive reporting review**, not an investment authorization,
+new financial operator, new account, new customer, or changed policy. Original
+design041 development seed 341014, confirmation seed 341015, operating worlds,
+historical failures and exposed results remain immutable. The review source starts
+from published main `172ea7a9b96ad123a879dde76101b944aa9cf131`; release
+`connected014-172ea7a9b96ad123a879dde76101b944aa9cf131` passed the published-byte operation workflow
+[43880969510](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43880969510).
+
+**Fixed observation before modifying source:** The independently downloaded
+released native-design041 public proof shows that earned distribution wins modeled
+matched 14-day profit by **38,344,566 microUSD**, but has **19,772,434 microUSD
+less protected available liquidity** at the same endpoint:
+challenger 4,851,019,692 versus incumbent 4,870,792,126 microUSD.
+Separate native worlds have their own capital, accounts and liabilities. This
+is not an observed buyer, cash pooling, a required new loan, or proof that the
+challenger's greater obligations caused the entire difference. A higher profit
+result must not silently imply increased spendable reinvestment funds.
+
+**Predeclared code/test change:** Add a read-only, independently re-derived
+`matched_confirmation_available_delta_microUSD` to the existing native-design
+public report and a descriptive `positive_profit_lower_available_liquidity`
+boolean. Compute challenger minus matched incumbent directly from independently
+audited observed `available_microUSD` integer values when both exist; otherwise
+report null. Leave `matched_confirmation_profit_delta_microUSD`, all selections,
+price/demand/capital/settlement/queue behavior, successor witness and actual action
+authority unchanged. Do not veto a profitable challenger using an arbitrary
+liquidity threshold. Extend the existing unit tests to cover positive profit with
+lower available cash, adverse profit/no false conflict, equal liquidity, and
+unavailable comparison. Full native `verify` must rederive the fields and reject
+tampering. Re-release and downloaded audit are required for adoption, not presumed.
+
+**Acceptance:** exact source-matched tests and CI, no new files in constrained
+archive publication, unchanged canonical native accounting, original historical
+runs untouched, and an explicit simulation-only financial interpretation. This
+isolated branch does not authorize merge or interfere with PR40 source, keys or
+the original account's exclusive writer.
