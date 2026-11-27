@@ -257,6 +257,14 @@ jobs:
           git cat-file -e '1bdac817b471157092ea4aac881916824b66734e^{commit}'
           python3 scripts/frontier_atlas.py stage "$RUNNER_TEMP/research-site" \
             "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$GITHUB_RUN_ID" >> "$GITHUB_OUTPUT"
+      - name: Stage exact Conclave participant edition
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/conclave-release"
+          gh release download frontier-conclave-participant-v2026.11.28 --repo "$GITHUB_REPOSITORY" --pattern AGI-CLUB-OMEGA-PARTICIPANT-FINAL.zip --dir "$RUNNER_TEMP/conclave-release"
+          python3 docs/research/stage_conclave_participant.py --site "$RUNNER_TEMP/research-site" --archive "$RUNNER_TEMP/conclave-release/AGI-CLUB-OMEGA-PARTICIPANT-FINAL.zip"
       - name: Qualify public member briefs, receipts and exact portable packages
         if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: |
@@ -320,6 +328,9 @@ jobs:
         run: |
           node --test products/alpha-genesis-harness/tests/*.test.cjs
           python3 products/alpha-genesis-harness/scripts/publish_preview.py --output "$RUNNER_TEMP/research-site/harness" --source-revision "$(git rev-parse HEAD)"
+      - name: Check complete Pages publication size
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
+        run: python3 docs/research/stage_conclave_participant.py --site "$RUNNER_TEMP/research-site" --size-only
       - name: Upload the allowlisted Pages artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.frontier_watch.outputs.changed == 'true'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4

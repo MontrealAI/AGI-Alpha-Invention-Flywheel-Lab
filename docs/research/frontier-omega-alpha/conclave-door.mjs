@@ -1,4 +1,5 @@
 import {eligible,k256} from './wallet-check.js';
+import {mountConclaveEdition} from './conclave-edition.mjs';
 
 const copy={
   en:{
@@ -162,13 +163,16 @@ $('form').addEventListener('submit',async event=>{
     cleanup=mountDoubleFlywheel(host,locale);
     if(host.querySelector('[data-df="start"]')?.disabled!==false)throw Error('unavailable');
     session=next;
+    const cleanupFirstLight=cleanup;
+    const cleanupEdition=mountConclaveEdition($('content'),locale);
+    cleanup=()=>{cleanupEdition();if(typeof cleanupFirstLight==='function')cleanupFirstLight();};
     status('open');
     workspace.hidden=false;
     $('legacy').hidden=false;
     root.hidden=true;
     document.getElementById('top').hidden=true;
     workspace.scrollIntoView({block:'start',behavior:'instant'});
-    host.querySelector('#df-title')?.focus({preventScroll:true});
+    $('content').querySelector('#conclave-edition-title')?.focus({preventScroll:true});
     clock=setTimeout(()=>lock(),Math.max(0,next.until-Date.now()));
     poll=setInterval(checkActiveSession,30_000);
   }catch(error){
