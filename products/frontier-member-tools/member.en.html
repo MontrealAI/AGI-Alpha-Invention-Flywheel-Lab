@@ -293,23 +293,26 @@
             <div class="df-symbols" aria-hidden="true"><span>Ω</span><span>→</span><strong>Ω<sup>+1</sup></strong></div>
             <p>One verified tool. A new cycle.</p>
           </div>
-          <p class="df-match-caption">Same problem. Same budget: <strong data-df="budget"></strong> simulated credits</p>
-          <div class="df-match-grid" aria-label="Second-cycle results">
-            <div class="df-arm df-fresh">
-              <h5>Rebuild</h5>
-              <p class="df-price"><strong data-df="fresh-cost"></strong> credits to run</p>
-              <p class="df-score"><strong data-df="fresh-score"></strong> <span>correct</span></p>
-              <p class="df-arm-state">Over budget</p>
+          <p class="df-causal-caption">What happens if you remove one flywheel?</p>
+          <div class="df-causal-grid" role="group" aria-label="Three scenarios in simulated credits">
+            <div class="df-counter df-counter-tool">
+              <div><h5>Keep the tool only</h5><p>No reinvestment</p></div>
+              <div class="df-counter-evidence"><p><strong data-df="tool-budget"></strong> available · <strong data-df="tool-cost"></strong> needed</p>
+                <p class="df-counter-verdict">Blocked</p></div>
             </div>
-            <div class="df-arm df-reused">
-              <h5>Reuse</h5>
-              <p class="df-price"><strong data-df="reuse-cost"></strong> credits to run</p>
-              <p class="df-score"><strong data-df="reuse-score"></strong> <span>correct</span></p>
-              <p class="df-arm-state">Ready to run</p>
+            <div class="df-counter df-counter-fund">
+              <div><h5>Reinvest only</h5><p>Rebuild from scratch</p></div>
+              <div class="df-counter-evidence"><p><strong data-df="fund-budget"></strong> available · <strong data-df="fund-cost"></strong> needed</p>
+                <p class="df-counter-verdict">Blocked</p></div>
+            </div>
+            <div class="df-counter df-counter-both">
+              <div><h5>Use both</h5><p>Keep the tool and reinvest</p></div>
+              <div class="df-counter-evidence"><p><strong data-df="both-budget"></strong> available · <strong data-df="both-cost"></strong> needed</p>
+                <p class="df-counter-verdict">Next cycle opens</p></div>
             </div>
           </div>
           <div class="df-reserve"><strong data-df="spare"></strong><span>simulated credits left for the next experiment</span></div>
-          <p class="df-close">The first invention didn’t just pay for itself. It made the next one possible.</p>
+          <p class="df-close">The tool lowered the cost. Reinvestment raised the budget. That’s why the next invention could begin.</p>
         </div>
         <div data-df="ledger-slot"><dl class="df-ledger" data-df="ledger"></dl></div>
         <details data-df="audit" hidden>

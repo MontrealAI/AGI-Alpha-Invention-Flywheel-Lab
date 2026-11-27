@@ -25,10 +25,17 @@ export function runDoubleFlywheel({rejectFirst=false}={}) {
   const freshCost=COST.adapter+COST.replace+COST.verify+COST.deliver;
   const retainedCost=COST.adapter+COST.verify+COST.deliver;
   const passes=x=>x!==null&&x.every((v,i)=>v===expectedNext[i]);
+  // Counterfactuals hold the second problem and oracle fixed and remove only one loop.
+  const scenario=(budget,cost,correct)=>({budget,cost,correct,eligible:correct&&cost<=budget});
+  const counterfactuals=reusable ? {
+    tool:scenario(COST.nextBase,retainedCost,passes(next)),
+    fund:scenario(budget2,freshCost,passes(fresh)),
+    both:scenario(budget2,retainedCost,passes(next))
+  } : null;
   return {
     version:1, scope:'SIMULATION', acceptedFirst, checks:first, expectedFirst,
     budget1:COST.start, cost1, receipts, surplus, reinvestment, retainedSurplus:Math.max(surplus,0)-reinvestment,
-    reusable, budget2, freshCost, retainedCost, fresh, next, expectedNext,
+    reusable, counterfactuals, budget2, freshCost, retainedCost, fresh, next, expectedNext,
     freshEligible:passes(fresh)&&freshCost<=budget2,
     retainedEligible:passes(next)&&retainedCost<=budget2,
     retainedBudgetRemaining:passes(next)&&retainedCost<=budget2?budget2-retainedCost:null
@@ -74,10 +81,10 @@ export function mountDoubleFlywheel(host, locale='en') {
   const find=id=>host.querySelector('[data-df="'+id+'"]');
   const landing=find('start-slot'), progress=find('next-slot'), start=find('start'), stage=find('stage'), step=find('step'), title=find('title'), body=find('body'),
     ledgerSlot=find('ledger-slot'), ledger=find('ledger'), audit=find('audit'), auditTitle=find('audit-title'), raw=find('raw'),
-    finale=find('finale'), budget=find('budget'), freshScore=find('fresh-score'), reuseScore=find('reuse-score'),
-    freshCost=find('fresh-cost'), reuseCost=find('reuse-cost'), spare=find('spare'),
+    finale=find('finale'), spare=find('spare'),
     failure=find('reject'), status=find('status'), rail=[...host.querySelectorAll('[data-df-phase]')];
-  const payoffFields=[budget,freshScore,reuseScore,freshCost,reuseCost,spare];
+  const rows=['tool','fund','both'].map(key=>[key,find(key+'-budget'),find(key+'-cost')]);
+  const payoffFields=[spare,...rows.flatMap(([,budget,cost])=>[budget,cost])];
   if(![landing,progress,start,stage,step,title,body,ledgerSlot,ledger,audit,auditTitle,raw,failure,status,finale,...payoffFields].every(Boolean))return;
   let phase=-1, run;
   const add=(name,value)=>{
@@ -86,7 +93,9 @@ export function mountDoubleFlywheel(host, locale='en') {
   };
   function render() {
     const active=phase>=0;
-    const payoff=phase===3&&run.retainedEligible&&!run.freshEligible;
+    const paths=phase===3?run.counterfactuals:null;
+    const payoff=Boolean(paths?.tool.correct&&paths.fund.correct&&paths.both.eligible&&
+      !paths.tool.eligible&&!paths.fund.eligible);
     finale.hidden=!payoff;
     stage.dataset.dfState=payoff?'payoff':phase===3?'held':String(phase);
     if(!payoff)payoffFields.forEach(node=>{node.textContent='';});
@@ -104,19 +113,18 @@ export function mountDoubleFlywheel(host, locale='en') {
     if(!active){ledger.replaceChildren();raw.textContent='';status.textContent='';audit.open=false;failure.disabled=false;failure.checked=false;return;}
     failure.disabled=true;
     step.textContent=t.labels[phase]+' · '+(phase+1)+'/4';
-    title.textContent=payoff?(locale==='fr'?'Votre première invention ouvre le cycle suivant.':'Your first invention unlocks the next.'):
+    title.textContent=payoff?(locale==='fr'?'Aucun des deux ne suffit. Ensemble, ils ouvrent le cycle suivant.':'Neither alone. Together, the next invention is possible.'):
       phase===3&&!run.acceptedFirst?(locale==='fr'?'Le cycle suivant reste fermé.':'The next cycle stays closed.'):t.story[phase][0];
-    body.textContent=payoff?(locale==='fr'?'Les deux méthodes donnent les cinq bonnes réponses. Seul le réemploi respecte le budget.':
-      'Both approaches get all five readings right. Only reuse fits the budget.'):
+    body.textContent=payoff?(locale==='fr'?'Au deuxième cycle, les deux méthodes donnent les cinq bonnes réponses. Voici ce que change chaque levier, en crédits simulés.':
+      'Both methods get all five readings right in cycle two. Here’s what each flywheel changes, in simulated credits.'):
       !run.acceptedFirst&&phase>=2?t.held:t.story[phase][1];
     const matchCount=(actual,expected)=>actual?.filter((v,i)=>v===expected[i]).length;
     status.textContent=phase===1?((run.acceptedFirst?t.accepted:t.rejected)+' · '+matchCount(run.checks,run.expectedFirst)+'/4'):'';
     if(payoff){
-      budget.textContent=run.budget2;
-      freshScore.textContent=matchCount(run.fresh,run.expectedNext)+'/'+run.expectedNext.length;
-      reuseScore.textContent=matchCount(run.next,run.expectedNext)+'/'+run.expectedNext.length;
-      freshCost.textContent=run.freshCost;
-      reuseCost.textContent=run.retainedCost;
+      for(const [key,budget,cost] of rows){
+        budget.textContent=paths[key].budget;
+        cost.textContent=paths[key].cost;
+      }
       spare.textContent=run.retainedBudgetRemaining;
     }
     ledger.replaceChildren();
