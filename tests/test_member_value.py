@@ -74,7 +74,10 @@ class MemberValueTests(unittest.TestCase):
                 self.assertEqual(html[language].count('data-mv-open'), 7)
                 self.assertEqual(html[language].count('href="#opportunity-capture"'), 1)
                 self.assertIn('id="goal-form"', html[language])
-                self.assertEqual(html[language].count('data-member-view'), 5)
+                self.assertEqual(html[language].count('data-member-view'), 6)
+                self.assertIn('id="double-flywheel" data-double-flywheel aria-labelledby="df-title" data-member-view hidden', html[language])
+                self.assertIn('href="#double-flywheel"', html[language])
+                self.assertNotIn('data-double-flywheel', member.home_preview(produced, language))
                 self.assertEqual(html[language].count('id="mv-consent"'), 1)
                 self.assertIn('id="mf-outcome" class="mf-outcome" hidden', html[language])
                 for brief in produced['briefs']:
