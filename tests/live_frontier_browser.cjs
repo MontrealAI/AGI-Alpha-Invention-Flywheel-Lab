@@ -1394,6 +1394,7 @@ async function doubleFlywheel(page, language, width, reject) {
   const allReady=await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth);
   assert.equal(allReady,true);
   for(let i=0;i<4;i++){
+    if(i===3)assert.match(await action.textContent(), /Open the next frontier|Ouvrir la prochaine frontière/);
     await action.press('Enter');
     assert.equal(await host.locator('[data-df-phase][aria-current="step"]').count(), 1);
     assert.equal(await page.locator(':focus').getAttribute('data-df'),'title');
@@ -1403,7 +1404,23 @@ async function doubleFlywheel(page, language, width, reject) {
     });
     assert.equal(readable,true);
   }
-  await host.locator('[data-df="audit"] summary').click();
+  const finale=host.locator('[data-df="finale"]');
+  const audit=host.locator('[data-df="audit"]');
+  const ledger=host.locator('[data-df="ledger"]');
+  assert.equal(await finale.isVisible(), !reject);
+  assert.equal(await ledger.isVisible(), false);
+  if(!reject) {
+    assert.deepEqual(await Promise.all(['budget','fresh-score','reuse-score','fresh-cost','reuse-cost','spare']
+      .map(key=>finale.locator('[data-df="'+key+'"]').textContent())), ['9','5/5','5/5','10','6','3']);
+    const reserved=await finale.locator('.df-reserve').boundingBox();
+    assert.ok(reserved.y+reserved.height<=dimensions(width).height,'the full payoff must be visible without scrolling');
+    assert.equal(await finale.locator('.df-crossing').evaluate(el=>getComputedStyle(el).animationName),'none');
+    await capture(page, language, width, 'double-flywheel');
+  } else {
+    assert.equal(await finale.locator('[data-df=spare]').textContent(),'');
+  }
+  await audit.locator('summary').click();
+  assert.equal(await ledger.isVisible(),true);
   const {receipt}=JSON.parse(await host.locator('[data-df="raw"]').textContent());
   assert.equal(receipt.acceptedFirst,!reject);
   assert.equal(receipt.receipts,reject?0:13);
@@ -1411,7 +1428,6 @@ async function doubleFlywheel(page, language, width, reject) {
   assert.equal(receipt.retainedEligible,!reject);
   assert.equal(receipt.freshEligible,false);
   assert.equal(await stage.isVisible(),true);
-  if(!reject) await capture(page, language, width, 'double-flywheel');
   // Leave a completed state while going back; the wallet session lock must clear it.
   await destination(page,'my-frontier');
 }

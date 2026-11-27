@@ -288,7 +288,30 @@
         <h4 tabindex="-1" data-df="title"></h4>
         <p data-df="body"></p>
         <p data-df="status" role="status"></p>
-        <dl class="df-ledger" data-df="ledger"></dl>
+        <div class="df-finale" data-df="finale" hidden>
+          <div class="df-crossing">
+            <div class="df-symbols" aria-hidden="true"><span>Ω</span><span>→</span><strong>Ω<sup>+1</sup></strong></div>
+            <p>One verified tool. A new cycle.</p>
+          </div>
+          <p class="df-match-caption">Same problem. Same budget: <strong data-df="budget"></strong> simulated credits</p>
+          <div class="df-match-grid" aria-label="Second-cycle results">
+            <div class="df-arm df-fresh">
+              <h5>Rebuild</h5>
+              <p class="df-price"><strong data-df="fresh-cost"></strong> credits to run</p>
+              <p class="df-score"><strong data-df="fresh-score"></strong> <span>correct</span></p>
+              <p class="df-arm-state">Over budget</p>
+            </div>
+            <div class="df-arm df-reused">
+              <h5>Reuse</h5>
+              <p class="df-price"><strong data-df="reuse-cost"></strong> credits to run</p>
+              <p class="df-score"><strong data-df="reuse-score"></strong> <span>correct</span></p>
+              <p class="df-arm-state">Ready to run</p>
+            </div>
+          </div>
+          <div class="df-reserve"><strong data-df="spare"></strong><span>simulated credits left for the next experiment</span></div>
+          <p class="df-close">The first invention didn’t just pay for itself. It made the next one possible.</p>
+        </div>
+        <div data-df="ledger-slot"><dl class="df-ledger" data-df="ledger"></dl></div>
         <details data-df="audit" hidden>
           <summary>Audit the fixture and ledger</summary>
           <p data-df="audit-title"></p>

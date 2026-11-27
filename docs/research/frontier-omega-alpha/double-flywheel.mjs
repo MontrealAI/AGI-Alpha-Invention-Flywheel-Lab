@@ -38,7 +38,7 @@ export function runDoubleFlywheel({rejectFirst=false}={}) {
 const copy={
   en:{
     labels:['Discover','Invent and verify','Earn and reinvest','Try the next cycle'],
-    start:'Start demonstration', advance:'Next step', restart:'Run again',
+    start:'Start demonstration', advance:'Next step', reveal:'Open the next frontier', restart:'Run again',
     scale:'Simulated credits', yes:'above', no:'not above',
     tier:'Cycle', accepted:'Accepted', rejected:'Rejected', feasible:'Within budget', noFunds:'Over budget', none:'No retained tool',
     details:'Audit the fixture and ledger', held:'HOLD: no delivery, no paid outcome, no reuse.',
@@ -53,7 +53,7 @@ const copy={
   },
   fr:{
     labels:['Découvrir','Inventer et vérifier','Gagner et réinvestir','Essayer le cycle suivant'],
-    start:'Lancer la démonstration', advance:'Étape suivante', restart:'Recommencer',
+    start:'Lancer la démonstration', advance:'Étape suivante', reveal:'Ouvrir la prochaine frontière', restart:'Recommencer',
     scale:'Crédits simulés', yes:'au-dessus', no:'pas au-dessus',
     tier:'Cycle', accepted:'Accepté', rejected:'Refusé', feasible:'Dans le budget', noFunds:'Hors budget', none:'Aucun outil réutilisable',
     details:'Vérifier les données et le registre', held:'EN ATTENTE : aucune livraison, aucun paiement ni réemploi.',
@@ -73,9 +73,12 @@ export function mountDoubleFlywheel(host, locale='en') {
   if(!member) return;
   const find=id=>host.querySelector('[data-df="'+id+'"]');
   const landing=find('start-slot'), progress=find('next-slot'), start=find('start'), stage=find('stage'), step=find('step'), title=find('title'), body=find('body'),
-    ledger=find('ledger'), audit=find('audit'), auditTitle=find('audit-title'), raw=find('raw'),
+    ledgerSlot=find('ledger-slot'), ledger=find('ledger'), audit=find('audit'), auditTitle=find('audit-title'), raw=find('raw'),
+    finale=find('finale'), budget=find('budget'), freshScore=find('fresh-score'), reuseScore=find('reuse-score'),
+    freshCost=find('fresh-cost'), reuseCost=find('reuse-cost'), spare=find('spare'),
     failure=find('reject'), status=find('status'), rail=[...host.querySelectorAll('[data-df-phase]')];
-  if(![landing,progress,start,stage,step,title,body,ledger,audit,auditTitle,raw,failure,status].every(Boolean))return;
+  const payoffFields=[budget,freshScore,reuseScore,freshCost,reuseCost,spare];
+  if(![landing,progress,start,stage,step,title,body,ledgerSlot,ledger,audit,auditTitle,raw,failure,status,finale,...payoffFields].every(Boolean))return;
   let phase=-1, run;
   const add=(name,value)=>{
     const row=doc.createElement('div'), term=doc.createElement('dt'), amount=doc.createElement('dd');
@@ -83,7 +86,14 @@ export function mountDoubleFlywheel(host, locale='en') {
   };
   function render() {
     const active=phase>=0;
-    start.textContent=!active?t.start:phase===3?t.restart:t.advance;
+    const payoff=phase===3&&run.retainedEligible&&!run.freshEligible;
+    finale.hidden=!payoff;
+    stage.dataset.dfState=payoff?'payoff':phase===3?'held':String(phase);
+    if(!payoff)payoffFields.forEach(node=>{node.textContent='';});
+    if(phase===3){
+      if(ledger.parentElement!==audit)audit.insertBefore(ledger,auditTitle);
+    } else if(ledger.parentElement!==ledgerSlot)ledgerSlot.append(ledger);
+    start.textContent=!active?t.start:phase===3?t.restart:phase===2?t.reveal:t.advance;
     stage.hidden=!active;
     const slot=active?progress:landing;
     if(start.parentElement!==slot) slot.append(start);
@@ -94,12 +104,21 @@ export function mountDoubleFlywheel(host, locale='en') {
     if(!active){ledger.replaceChildren();raw.textContent='';status.textContent='';audit.open=false;failure.disabled=false;failure.checked=false;return;}
     failure.disabled=true;
     step.textContent=t.labels[phase]+' · '+(phase+1)+'/4';
-    title.textContent=t.story[phase][0];
-    body.textContent=!run.acceptedFirst&&phase>=2?t.held:t.story[phase][1];
+    title.textContent=payoff?(locale==='fr'?'Votre première invention ouvre le cycle suivant.':'Your first invention unlocks the next.'):
+      phase===3&&!run.acceptedFirst?(locale==='fr'?'Le cycle suivant reste fermé.':'The next cycle stays closed.'):t.story[phase][0];
+    body.textContent=payoff?(locale==='fr'?'Les deux méthodes donnent les cinq bonnes réponses. Seul le réemploi respecte le budget.':
+      'Both approaches get all five readings right. Only reuse fits the budget.'):
+      !run.acceptedFirst&&phase>=2?t.held:t.story[phase][1];
     const matchCount=(actual,expected)=>actual?.filter((v,i)=>v===expected[i]).length;
-    status.textContent=phase===1?((run.acceptedFirst?t.accepted:t.rejected)+' · '+matchCount(run.checks,run.expectedFirst)+'/4')
-      :phase===3&&run.retainedEligible?(locale==='fr'?'Réponses exactes, reconstruction / réemploi : ':'Correct readings, rebuild / reuse: ')+
-        matchCount(run.fresh,run.expectedNext)+'/5 · '+matchCount(run.next,run.expectedNext)+'/5':'';
+    status.textContent=phase===1?((run.acceptedFirst?t.accepted:t.rejected)+' · '+matchCount(run.checks,run.expectedFirst)+'/4'):'';
+    if(payoff){
+      budget.textContent=run.budget2;
+      freshScore.textContent=matchCount(run.fresh,run.expectedNext)+'/'+run.expectedNext.length;
+      reuseScore.textContent=matchCount(run.next,run.expectedNext)+'/'+run.expectedNext.length;
+      freshCost.textContent=run.freshCost;
+      reuseCost.textContent=run.retainedCost;
+      spare.textContent=run.retainedBudgetRemaining;
+    }
     ledger.replaceChildren();
     if(phase>=1) [run.budget1,run.cost1].forEach((v,i)=>add(t.rows[i],v));
     if(phase>=2) [run.receipts,run.surplus,run.reinvestment].forEach((v,i)=>add(t.rows[i+2],v));
@@ -114,7 +133,13 @@ export function mountDoubleFlywheel(host, locale='en') {
     if(phase===3)raw.textContent=JSON.stringify({cases:CASES,cost_assumptions:COST,receipt:run},null,2);
   }
   start.disabled=false;
-  const focusNext=()=>{if(phase>=0)title.focus();else start.focus();};
+  const focusNext=()=>{
+    if(phase===3){
+      title.focus({preventScroll:true});
+      title.scrollIntoView({block:'start',behavior:'instant'});
+    } else if(phase>=0)title.focus();
+    else start.focus();
+  };
   start.addEventListener('click',()=>{
     if(member.hidden || host.hidden) return;
     if(phase<0) {run=runDoubleFlywheel({rejectFirst:failure.checked});phase=0;}
