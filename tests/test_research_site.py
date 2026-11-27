@@ -30,6 +30,10 @@ class ResearchSiteTests(unittest.TestCase):
             if name in site.POSSIBILITY_PAGES:
                 self.assertEqual(site.render_possibility_page((self.source / name).read_text(), name,
                                                             site.read_possibilities(self.source)), (out / name).read_text())
+            elif name == site.CONCLAVE_PAGE:
+                self.assertEqual(site.render_conclave((self.source / name).read_text()), (out / name).read_text())
+                self.assertIn('id="member"', (out / name).read_text())
+                self.assertEqual((out / name).read_text().count('data-double-flywheel'), 2)
             else:
                 self.assertEqual((self.source / name).read_bytes(), (out / name).read_bytes())
 
@@ -604,6 +608,8 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/frontier.css', 'frontier-omega-alpha/carina.webp',
              'frontier-omega-alpha/double-flywheel.mjs', 'frontier-omega-alpha/double-flywheel-cover.webp',
              'frontier-omega-alpha/double-flywheel-finale.webp',
+             'frontier-omega-alpha/conclave-door.mjs', 'frontier-omega-alpha/three-0.160.1.min.mjs',
+             'frontier-omega-alpha/three-0.160.1-LICENSE.txt',
              'frontier-omega-alpha/wallet-check.js', 'frontier-omega-alpha/member-brief-001.js',
              'frontier-omega-alpha/atlas.js', 'frontier-omega-alpha/endpoint-screen.mjs',
              'frontier-omega-alpha/outcome-receipt.mjs', 'frontier-omega-alpha/member-workbench.mjs',

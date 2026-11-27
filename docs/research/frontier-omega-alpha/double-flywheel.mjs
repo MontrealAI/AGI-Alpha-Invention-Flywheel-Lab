@@ -51,14 +51,211 @@ export function selectFlywheelState(run, keep, invest) {
   return {budget,cost,open,gap:budget-cost};
 }
 
+// A fictional light-curve lab: deterministic synthetic data, separate camera streams.
+const OBSERVATIONS=264;
+const FIELDS=Object.freeze([
+  Object.freeze({name:'Kepler Gate I',period:29,phase:11,seed:56831,depth:.0175}),
+  Object.freeze({name:'Kepler Gate II',period:37,phase:17,seed:85151,depth:.0150})
+]);
+const median3=(a,b,c)=>a+b+c-Math.max(a,b,c)-Math.min(a,b,c);
+function skySeries(f, camera, blank=false) {
+  let state=f.seed+camera*1069;
+  const noise=()=>{
+    state^=state<<13;state^=state>>>17;state^=state<<5;
+    return ((state>>>0)/4294967296-.5)*.0044;
+  };
+  return Array.from({length:OBSERVATIONS},(_,k)=>{
+    const step=((k-f.phase)%f.period+f.period)%f.period;
+    const shadow=!blank&&(step===0||step===1||step===f.period-1)?-f.depth:0;
+    const loneFault=k===(camera===1?57:104)?-.040:0;
+    return 1+noise()+shadow+loneFault;
+  });
+}
+function checkTimes(data,period,phase) {
+  const visits=[];
+  for(let k=phase; k<data.length-1; k+=period) if(k>=1) {
+    const level=median3(data[k-1],data[k],data[k+1]);
+    visits.push({k,depth:1-level,seen:level<.991});
+  }
+  const matches=visits.filter(v=>v.seen);
+  return {visits:visits.length,matches:matches.length,depth:matches.length?matches.reduce((sum,v)=>sum+v.depth,0)/matches.length:0};
+}
+function scanCamera(data){
+  let best=null;
+  for(let p=20;p<=48;p++) for(let f=0;f<p;f++){
+    const v=checkTimes(data,p,f);
+    if(v.visits<5||v.matches!==v.visits)continue;
+    if(!best||v.matches>best.matches||(v.matches===best.matches&&v.depth>best.depth))best={period:p,phase:f,...v};
+  }
+  return best;
+}
+export function runFirstLight(index=0, {blank=false, corrupt=false}={}) {
+  const field=FIELDS[index];
+  if(!field)throw new RangeError('Unknown observatory field');
+  const discovery=skySeries(field,1,blank);
+  const independent=skySeries(field,2,blank);
+  const candidate=scanCamera(discovery);
+  const phase=candidate?(candidate.phase+(corrupt?4:0))%candidate.period:null;
+  const verify=candidate?checkTimes(independent,candidate.period,phase):null;
+  return {
+    field:field.name, discovery, independent, candidate, verify, testedPhase:phase,
+    lowest:discovery.reduce((k,v,i)=>v<discovery[k]?i:k,0),
+    accepted:Boolean(verify&&verify.matches>=5&&verify.matches===verify.visits)
+  };
+}
+
+const skyCopy={
+ en:{observed:'CAMERA A · STELLAR BRIGHTNESS', rawTitle:'One deep dip. Is it a world?', fault:'Deepest dip', sample:'Ordered observations', noise:'A single dip is not enough to claim an orbit.', locked:'CAMERA B · INDEPENDENT CONFIRMATION', period:'Repeat period', signals:'Shadows confirmed', depth:'Typical dip', noSignal:'NO REPEAT CONFIRMED', candidate:'A WORLD CANDIDATE', next:'SECOND FIELD · NEW WORLD CANDIDATE', synthetic:'Synthetic observations · hours and normalized brightness', energy:'Simulated credits from accepted work', first:'FIRST LIGHT', paired:'TWO FIELDS · ONE RETAINED SPECIALIST'},
+ fr:{observed:'CAMÉRA A · LUMINOSITÉ STELLAIRE', rawTitle:'Une forte baisse. Est-ce un monde?', fault:'Baisse la plus forte', sample:'Observations dans l’ordre', noise:'Une seule baisse ne suffit pas pour conclure à une orbite.', locked:'CAMÉRA B · CONFIRMATION INDÉPENDANTE', period:'Période', signals:'Ombres confirmées', depth:'Baisse moyenne', noSignal:'AUCUNE RÉPÉTITION CONFIRMÉE', candidate:'UN MONDE CANDIDAT', next:'SECOND CHAMP · NOUVEAU MONDE CANDIDAT', synthetic:'Observations simulées · heures et luminosité normalisée', energy:'Crédits simulés pour un résultat vérifié', first:'PREMIÈRE LUMIÈRE', paired:'DEUX CHAMPS · UN SEUL SPÉCIALISTE RÉUTILISÉ'}
+};
+function traceMarkup(result, label, folded, accepted){
+  const data=folded?result.independent:result.discovery;
+  const w=720,h=154;
+  const x=k=>16+k*(w-32)/(data.length-1);
+  const y=v=>Math.max(8,Math.min(h-9,25+(1-v)*2580));
+  const path=data.map((v,k)=>(k?'L':'M')+x(k).toFixed(1)+' '+y(v).toFixed(1)).join('');
+  const guides=[];
+  if(folded&&result.candidate){
+    for(let k=result.testedPhase;k<data.length;k+=result.candidate.period) {
+      guides.push(`<line class="${accepted?'df-sky-marker':'df-sky-glitch'}" x1="${x(k)}" x2="${x(k)}" y1="9" y2="${h-9}"/><circle class="${accepted?'df-sky-dot':'df-sky-glitch'}" cx="${x(k)}" cy="${y(data[k])}" r="4"/>`);
+    }
+  } else {
+    const k=result.lowest;
+    guides.push(`<line class="df-sky-glitch" x1="${x(k)}" x2="${x(k)}" y1="9" y2="${h-9}"/><circle class="df-sky-glitch" cx="${x(k)}" cy="${y(data[k])}" r="5"/>`);
+  }
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${label}" preserveAspectRatio="none">
+  <path class="df-sky-grid" d="M16 25H704 M16 61H704 M16 97H704 M16 133H704"/>
+  <path class="df-sky-path" pathLength="100" d="${path}"/>${guides.join('')}</svg>`;
+}
+function renderSky(result, locale, mode) {
+  const a=skyCopy[locale]??skyCopy.en;
+  const detected=mode!=='raw';
+  const ok=detected&&result.accepted;
+  const tag=mode==='second'?a.next:ok?a.candidate:a.noSignal;
+  const stats=ok?`<div class="df-sky-stats"><span><b>${result.candidate.period} h</b>${a.period}</span><span><b>${result.verify.matches}/${result.verify.visits}</b>${a.signals}</span><span><b>${(100*result.verify.depth).toFixed(2).replace('.',locale==='fr'?',':'.')}%</b>${a.depth}</span></div>`:'';
+  return `<figure class="df-sky ${ok?'df-sky-confirmed':''}"><figcaption><span>${detected?a.locked:a.observed}</span><strong>${detected?tag:a.rawTitle}</strong></figcaption>
+    ${traceMarkup(result,detected?a.locked:a.observed,detected,ok)}
+    ${stats}<p>${detected?a.synthetic:a.noise}</p></figure>`;
+}
+
 const chamberCopy={
- en:{armed:'Put both flywheels in motion', action:'Test each flywheel. Keep the measurement task fixed.', keep:'Keep the verified tool', invest:'Reinvest the surplus', budget:'Budget', cost:'Cost', units:'simulated credits', wait:'Next invention out of reach', open:'Next invention unlocked', missing:n=>n+' more credits needed', reserve:n=>n+' credits left for another experiment', vision:'The invention made the next invention possible.', limit:'An executable simulation. It does not train a model or prove recursive self-improvement.', source:'Raw reading', threshold:'Threshold', calibrated:'Calibrated reading', tool:'Tool', capital:'Capital', payout:'Payment', expenses:'Full cost', surplus:'Surplus', carry:'Reinvest', pass:'Verified', fail:'Rejected', direction:'A frontier model could invent the specialist. Verification decides what survives.'},
- fr:{armed:'Mettez les deux volants en mouvement', action:'Testez chaque volant sans changer le problème de mesure.', keep:'Garder l’outil vérifié', invest:'Réinvestir l’excédent', budget:'Budget', cost:'Coût', units:'crédits simulés', wait:'Prochaine invention hors de portée', open:'Prochaine invention débloquée', missing:n=>n+' crédits manquants', reserve:n=>n+' crédits pour une autre expérience', vision:'Cette invention a rendu la suivante possible.', limit:'Simulation exécutable. Aucun entraînement de modèle ni preuve d’autoamélioration récursive.', source:'Mesure brute', threshold:'Seuil', calibrated:'Mesure étalonnée', tool:'Outil', capital:'Capital', payout:'Paiement', expenses:'Coût total', surplus:'Excédent', carry:'Réinvestissement', pass:'Vérifié', fail:'Refusé', direction:'Un modèle de pointe pourrait inventer le spécialiste. La vérification décide ce qu’on garde.'}
+ en:{armed:'Put both flywheels in motion', action:'Try each switch alone. Then activate both.', keep:'Keep the verified tool', invest:'Reinvest the surplus', budget:'Budget', cost:'Cost', units:'simulated credits', wait:'Next invention out of reach', open:'Second search unlocked', missing:n=>n+' more credits needed', reserve:n=>n+' credits left for another experiment', vision:'You didn’t just find a signal. You kept the means to find the next one.', limit:'An executable simulation. It does not train a model or prove recursive self-improvement.', source:'Raw reading', threshold:'Threshold', calibrated:'Calibrated reading', tool:'Tool', capital:'Capital', payout:'Payment', expenses:'Full cost', surplus:'Surplus', carry:'Reinvest', pass:'Verified', fail:'Rejected', direction:'A frontier model could invent the specialist. Verification decides what survives.'},
+ fr:{armed:'Mettez les deux volants en mouvement', action:'Essayez chaque commande séparément, puis activez les deux.', keep:'Garder l’outil vérifié', invest:'Réinvestir l’excédent', budget:'Budget', cost:'Coût', units:'crédits simulés', wait:'Prochaine invention hors de portée', open:'Deuxième recherche débloquée', missing:n=>n+' crédits manquants', reserve:n=>n+' crédits pour une autre expérience', vision:'Vous n’avez pas seulement trouvé un signal. Vous avez gardé le moyen d’en trouver d’autres.', limit:'Simulation exécutable. Aucun entraînement de modèle ni preuve d’autoamélioration récursive.', source:'Mesure brute', threshold:'Seuil', calibrated:'Mesure étalonnée', tool:'Outil', capital:'Capital', payout:'Paiement', expenses:'Coût total', surplus:'Excédent', carry:'Réinvestissement', pass:'Vérifié', fail:'Refusé', direction:'Un modèle de pointe pourrait inventer le spécialiste. La vérification décide ce qu’on garde.'}
 };
 
-function mountChamber(root, lang, run) {
+function wireObservatory(host){
+  const win=host.ownerDocument.defaultView;
+  const preference=win.matchMedia('(prefers-reduced-motion: reduce)');
+  let latest=[false,false,false], pending=false, display, release, frame=0;
+  function dispose(){
+    win.cancelAnimationFrame(frame);
+    release?.();
+    display=null;
+    release=null;
+  }
+  function paint(){
+    if(display)display(...latest);
+  }
+  async function initialize(){
+    if(pending||display||preference.matches)return;
+    pending=true;
+    try{
+      const THREE=await import('./three-0.160.1.min.mjs');
+      if(!host.isConnected||preference.matches)return;
+      const canvas=host.ownerDocument.createElement('canvas');
+      // The 3D layer is purely decorative; WebGL is optional and never required to use the experiment.
+      const opts={alpha:true,antialias:true,powerPreference:'low-power'};
+      const context=canvas.getContext('webgl2',opts);
+      if(!context)return;
+      const renderer=new THREE.WebGLRenderer({canvas,context,...opts});
+      renderer.setPixelRatio(Math.min(win.devicePixelRatio||1,1.75));
+      host.append(canvas);
+      const scene=new THREE.Scene();
+      const camera=new THREE.PerspectiveCamera(37,1,.1,40);
+      camera.position.set(.1,.35,7.8);
+      const objects=new THREE.Group();
+      scene.add(objects);
+      const orbital=(color,r,axis)=>{
+        const group=new THREE.Group();
+        const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.012,6,126),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.18}));
+        ring.rotation.x=axis;
+        group.add(ring);
+        const points=new Float32Array(105*3);
+        for(let i=0;i<105;i++){
+          const theta=i*2*Math.PI/105, k=r+.018*Math.sin(i*67);
+          points.set([k*Math.cos(theta),k*Math.sin(theta)*Math.cos(axis),k*Math.sin(theta)*Math.sin(axis)],3*i);
+        }
+        const geo=new THREE.BufferGeometry();
+        geo.setAttribute('position',new THREE.BufferAttribute(points,3));
+        const dots=new THREE.Points(geo,new THREE.PointsMaterial({color,size:.032,transparent:true,opacity:.16}));
+        group.add(dots);
+        objects.add(group);
+        return {group,ring,dots};
+      };
+      const violet=orbital(0xdc96ff,1.31,.99);
+      const amber=orbital(0xffcd75,1.52,-.84);
+      const globeGeometry=new THREE.SphereGeometry(.82,52,30);
+      const globe=new THREE.Mesh(globeGeometry,new THREE.MeshBasicMaterial({color:0xa78bff,wireframe:true,transparent:true,opacity:0}));
+      globe.position.set(0,0,-.20);objects.add(globe);
+      const fit=()=>{
+        const {clientWidth:w,clientHeight:h}=host;
+        if(w&&h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+      };
+      let started=0;
+      const observer=new win.ResizeObserver(()=>{
+        fit();
+        if(host.isConnected)renderer.render(scene,camera);
+        else dispose();
+      });
+      observer.observe(host);
+      const layout=(now)=>{
+        if(!host.isConnected){dispose();return;}
+        const dt=Math.min(1,(now-started)/2200);
+        const ease=1-Math.pow(1-dt,3);
+        const [tool,fund,online]=latest;
+        violet.group.rotation.z=-.63+ease*(tool?.32:0);
+        amber.group.rotation.z=.65-ease*(fund?.32:0);
+        globe.rotation.y=-.8+ease*1.8;
+        for(const [obj,on] of [[violet,tool],[amber,fund]]){
+          obj.ring.material.opacity=on?.8:.18;
+          obj.dots.material.opacity=on?.8:.16;
+        }
+        globe.material.opacity=online?ease*.27:0;
+        renderer.render(scene,camera);
+        if(dt<1)frame=win.requestAnimationFrame(layout);
+      };
+      const removed=new win.MutationObserver(()=>{if(!host.isConnected)dispose();});
+      removed.observe(host.closest('[data-double-flywheel]')??host,{childList:true,subtree:true});
+      canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();dispose();},{once:true});
+      release=()=>{
+        observer.disconnect();removed.disconnect();
+        scene.traverse(mesh=>{mesh.geometry?.dispose();mesh.material?.dispose();});
+        renderer.dispose();canvas.remove();
+        host.removeAttribute('data-renderer');
+      };
+      display=()=>{
+        if(!host.isConnected){dispose();return;}
+        fit();
+        win.cancelAnimationFrame(frame);
+        started=win.performance.now();
+        frame=win.requestAnimationFrame(layout);
+      };
+      host.dataset.renderer='three';
+      paint();
+    }catch{/* Keep the independent SVG and all controls on devices without 3D. */}
+    finally{pending=false;}
+  }
+
+  return (keep,invest,open)=>{
+    latest=[keep,invest,open];
+    if(display)paint();
+    else if(keep||invest)initialize();
+  };
+}
+
+function mountChamber(root, lang, run, recordSecond) {
   const t=chamberCopy[lang]??chamberCopy.en;
-  root.innerHTML=`<div class="df-reactor" data-mode="cold">
+  root.innerHTML=`<div class="df-reactor" data-mode="cold"><div class="df-viewport" aria-hidden="true"></div>
     <svg class="df-orbits" viewBox="0 0 720 258" aria-hidden="true">
      <defs>
        <radialGradient id="df-halo"><stop stop-color="#ffe8ab" stop-opacity=".75"/><stop offset=".32" stop-color="#fff0cc" stop-opacity=".15"/><stop offset="1" stop-color="#ffd477" stop-opacity="0"/></radialGradient>
@@ -94,6 +291,7 @@ function mountChamber(root, lang, run) {
       <p data-df-out="gap"></p>
     </div>
     <p class="df-reveal-line" hidden>${t.vision}</p>
+    <div class="df-second-sky" hidden></div>
   </div>`;
   // Fixed procedural points; decorative, no external requests and no stochastic verdicts.
   const stars=root.querySelector('.df-stars');
@@ -109,17 +307,27 @@ function mountChamber(root, lang, run) {
   const scene=root.querySelector('.df-reactor');
   const output=root.querySelector('.df-chamber-output');
   const field=name=>output.querySelector('[data-df-out="'+name+'"]');
+  const motion=wireObservatory(scene.querySelector('.df-viewport'));
+  let second;
   function redraw(){
     const keep=tool.getAttribute('aria-pressed')==='true';
     const invest=fund.getAttribute('aria-pressed')==='true';
     const v=selectFlywheelState(run,keep,invest);
     scene.dataset.mode=v.open?'open':keep?'tool':invest?'fund':'cold';
+    motion(keep,invest,v.open);
     output.dataset.open=String(v.open);
     field('result').textContent=v.open?t.open:t.wait;
     field('budget').textContent=v.budget;
     field('cost').textContent=v.cost;
     field('gap').textContent=v.open?t.reserve(v.gap):t.missing(-v.gap);
+    const result=root.querySelector('.df-second-sky');
     root.querySelector('.df-reveal-line').hidden=!v.open;
+    result.hidden=!v.open;
+    if(v.open&&!second) {
+      second=runFirstLight(1);
+      result.innerHTML=renderSky(second,lang,'second');
+      recordSecond(second);
+    }
   }
   for(const button of [tool,fund])button.addEventListener('click',()=>{
     const section=root.closest('#member');
@@ -130,18 +338,10 @@ function mountChamber(root, lang, run) {
   redraw();
 }
 
-function illustrate(run, phase, lang) {
+function illustrate(run, phase, lang, signal) {
   const t=chamberCopy[lang]??chamberCopy.en;
-  if(phase===0){
-    const [raw,offset,limit]=CASES.first[0];
-    const y=n=>Math.max(10,Math.min(110,60+(limit-n)*5));
-    return `<div class="df-signal">
-    <svg viewBox="0 0 600 120" aria-hidden="true"><path class="df-gridline" d="M0 24H600M0 60H600M0 96H600"/><path class="df-scope-wave" pathLength="100" d="M0 ${y(raw)}H265L335 ${y(raw-offset)}H600"/><path class="df-grid-threshold" d="M0 ${y(limit)}H600"/></svg>
-    <div class="df-signal-label"><span>${t.source} <b>${raw}</b></span><span>${t.threshold} <b>${limit}</b></span><span>${t.calibrated} <b>${raw-offset}</b></span></div></div>`;
-  }
-  if(phase===1){
-    return `<div class="df-proof-strip">${run.checks.map((check,i)=>`<span data-pass="${check===run.expectedFirst[i]}"><b>${String(i+1).padStart(2,'0')}</b> ${check===run.expectedFirst[i]?t.pass:t.fail}</span>`).join('')}</div><p class="df-method-note">${t.direction}</p>`;
-  }
+  if(phase===0)return renderSky(signal,lang,'raw');
+  if(phase===1)return renderSky(signal,lang,'confirm');
   if(phase===2&&run.acceptedFirst){
     return `<div class="df-capital-strip">${[[t.payout,run.receipts],[t.expenses,run.cost1],[t.surplus,run.surplus],[t.carry,run.reinvestment]].map(([label,n])=>`<span><b>${n}</b> ${label}</span>`).join('')}</div>`;
   }
@@ -151,14 +351,14 @@ function illustrate(run, phase, lang) {
 const copy={
   en:{
     labels:['Discover','Invent and verify','Earn and reinvest','Try the next cycle'],
-    start:'Start demonstration', advance:'Next step', reveal:'Open the next frontier', restart:'Run again',
+    start:'Open the observatory', advance:'Next step', reveal:'Open the next frontier', restart:'Run again',
     scale:'Simulated credits', yes:'above', no:'not above',
     tier:'Cycle', accepted:'Accepted', rejected:'Rejected', feasible:'Within budget', noFunds:'Over budget', none:'No retained tool',
     details:'Audit the fixture and ledger', held:'HOLD: no delivery, no paid outcome, no reuse.',
     story:[
-      ['A false alarm at the stellar observatory.','A collector’s sensor reports a spike. Is it really above the limit, or is the sensor biased? Build a tiny specialist: correct the reading, then compare it with the limit.'],
-      ['Check the invention, not its confidence.','The same strict comparison is run on four frozen controls. The independent expected results include a boundary tie and a false alarm from a raw reading. Only a passing tool is kept.'],
-      ['Delivery pays for a second experiment.','In the simulation, the accepted outcome triggers a 13-credit payment. Production cost is 8, leaving 5; reinvest 4 and retain 1. The fresh and reuse arms get the same next-cycle budget.'],
+      ['There may be a world in this signal.','Your first camera sees a star dim. A single dip can mislead. Can the specialist find a shadow that returns on schedule?'],
+      ['The shadow returned.','The specialist predicts when the star will dim again. A second camera, held back from the search, checks those predictions.'],
+      ['The first discovery buys the next search.','A fictional buyer pays 13 simulated credits for the verified result. After costs, 5 are left. Reinvest 4 of them and keep the search tool.'],
       ['One tool, a second measurement problem.','The next sensor has both offset and scale. Both approaches can solve the five controls. Only the reusable approach fits the modeled budget: no need to rebuild the already-verified comparator.']
     ],
     rows:['First-cycle budget','First-cycle cost','Modeled payment','Modeled surplus','Reinvested','Next budget (5 base + reinvestment)','Rebuild comparator','Reuse comparator','Credits left with reuse'],
@@ -166,14 +366,14 @@ const copy={
   },
   fr:{
     labels:['Découvrir','Inventer et vérifier','Gagner et réinvestir','Essayer le cycle suivant'],
-    start:'Lancer la démonstration', advance:'Étape suivante', reveal:'Ouvrir la prochaine frontière', restart:'Recommencer',
+    start:'Ouvrir l’observatoire', advance:'Étape suivante', reveal:'Ouvrir la prochaine frontière', restart:'Recommencer',
     scale:'Crédits simulés', yes:'au-dessus', no:'pas au-dessus',
     tier:'Cycle', accepted:'Accepté', rejected:'Refusé', feasible:'Dans le budget', noFunds:'Hors budget', none:'Aucun outil réutilisable',
     details:'Vérifier les données et le registre', held:'EN ATTENTE : aucune livraison, aucun paiement ni réemploi.',
     story:[
-      ['Fausse alerte à l’observatoire stellaire.','Le capteur d’un collecteur signale un pic. Le seuil est-il vraiment dépassé ou le capteur est-il biaisé? Construisez un petit spécialiste : corrigez la mesure, puis comparez-la au seuil.'],
-      ['Vérifier l’invention plutôt que de lui faire confiance.','Le comparateur strict est mis à l’épreuve sur quatre cas figés. Les réponses de référence couvrent notamment une égalité au seuil et une fausse alerte du capteur brut. L’outil n’est conservé que s’il réussit.'],
-      ['La livraison finance un deuxième essai.','Dans la simulation, la livraison acceptée rapporte 13 crédits. Produire coûte 8; il reste 5 crédits. On en réinvestit 4 et on en conserve 1. Les deux méthodes reçoivent le même budget au cycle suivant.'],
+      ['Un monde se cache peut-être dans ce signal.','La première caméra voit une étoile faiblir. Une seule baisse peut tromper. Le spécialiste peut-il trouver une ombre qui revient à intervalles réguliers?'],
+      ['L’ombre est revenue.','Le spécialiste prédit quand l’étoile faiblira à nouveau. Une deuxième caméra, tenue à l’écart de la recherche, vérifie ces prédictions.'],
+      ['La première découverte finance la suivante.','Un acheteur fictif paie 13 crédits simulés pour le résultat vérifié. Après les coûts, il en reste 5. Réinvestissez-en 4 et gardez l’outil de recherche.'],
       ['Un outil, un deuxième problème de mesure.','Le deuxième capteur présente un décalage et un facteur d’échelle. Les deux méthodes résolvent les cinq cas de contrôle. Seul le réemploi respecte le budget simulé : nul besoin de rebâtir le comparateur déjà vérifié.']
     ],
     rows:['Budget du premier cycle','Coût du premier cycle','Paiement simulé','Excédent simulé','Réinvestissement','Nouveau budget (5 de base + réinvestissement)','Rebâtir le comparateur','Réutiliser le comparateur','Crédits restants avec réemploi'],
@@ -192,30 +392,35 @@ export function mountDoubleFlywheel(host, locale='en') {
   const rows=['tool','fund','both'].map(key=>[key,find(key+'-budget'),find(key+'-cost')]);
   const payoffFields=[spare,...rows.flatMap(([,budget,cost])=>[budget,cost])];
   if(![landing,progress,start,stage,step,title,body,ledgerSlot,ledger,audit,auditTitle,raw,failure,status,finale,chamber,visual,refs,workshop,...payoffFields].every(Boolean))return;
-  let phase=-1, run;
+  let phase=-1, run, signal, secondSignal;
+  const summary=result=>result?{field:result.field,candidate:result.candidate,testedPhase:result.testedPhase,cameraB:result.verify,accepted:result.accepted}:null;
+  const writeAudit=()=>{
+    raw.textContent=JSON.stringify({cases:CASES,cost_assumptions:COST,receipt:run,observatory:{synthetic:true,first:summary(signal),second:summary(secondSignal)}},null,2);
+  };
   const add=(name,value)=>{
     const row=doc.createElement('div'), term=doc.createElement('dt'), amount=doc.createElement('dd');
     term.textContent=name;amount.textContent=String(value);row.append(term,amount);ledger.append(row);
   };
   function render() {
     const active=phase>=0;
+    host.toggleAttribute('data-df-active',active);
     const paths=phase===3?run.counterfactuals:null;
-    const payoff=Boolean(paths?.tool.correct&&paths.fund.correct&&paths.both.eligible&&
+    const payoff=Boolean(signal?.accepted&&paths?.tool.correct&&paths.fund.correct&&paths.both.eligible&&
       !paths.tool.eligible&&!paths.fund.eligible);
     finale.hidden=!payoff;
-    visual.innerHTML=active?illustrate(run,phase,locale):'';
+    visual.innerHTML=active?illustrate(run,phase,locale,signal):'';
     visual.hidden=!visual.firstElementChild;
     refs.open=false;
     workshop.hidden=phase!==3;
     workshop.open=false;
-    if(payoff)mountChamber(chamber,locale,run);
+    if(payoff)mountChamber(chamber,locale,run,result=>{secondSignal=result;writeAudit();});
     else chamber.replaceChildren();
     stage.dataset.dfState=payoff?'payoff':phase===3?'held':String(phase);
     if(!payoff)payoffFields.forEach(node=>{node.textContent='';});
     if(phase===3){
       if(ledger.parentElement!==audit)audit.insertBefore(ledger,auditTitle);
     } else if(ledger.parentElement!==ledgerSlot)ledgerSlot.append(ledger);
-    start.textContent=!active?t.start:phase===3?t.restart:phase===2?t.reveal:t.advance;
+    start.textContent=!active?t.start:phase===3?t.restart:phase===2?t.reveal:phase===0?(locale==='fr'?'Chercher une ombre qui revient':'Find a repeating shadow'):(locale==='fr'?'Financer la prochaine recherche':'Fund the next search');
     stage.hidden=!active;
     const slot=active?progress:landing;
     if(start.parentElement!==slot) slot.append(start);
@@ -226,14 +431,13 @@ export function mountDoubleFlywheel(host, locale='en') {
     if(!active){ledger.replaceChildren();raw.textContent='';status.textContent='';audit.open=false;failure.disabled=false;failure.checked=false;return;}
     failure.disabled=true;
     step.textContent=t.labels[phase]+' · '+(phase+1)+'/4';
-    title.textContent=payoff?(locale==='fr'?'Pouvez-vous mettre le prochain instrument en service?':'Can you bring the next instrument online?'):
-      phase===3&&!run.acceptedFirst?(locale==='fr'?'Le cycle suivant reste fermé.':'The next cycle stays closed.'):t.story[phase][0];
-    body.textContent=payoff?(locale==='fr'?'Même problème, cinq résultats vérifiés. Essayez les deux leviers, séparément puis ensemble.':
-      'Same problem, five verified readings. Try the two switches, one at a time and then together.'):
-      !run.acceptedFirst&&phase>=2?t.held:t.story[phase][1];
-    const matchCount=(actual,expected)=>actual?.filter((v,i)=>v===expected[i]).length;
+    title.textContent=payoff?(locale==='fr'?'La première découverte peut-elle révéler un deuxième monde?':'Can the first discovery unlock a second world?'):
+      phase===3&&!run.acceptedFirst?(locale==='fr'?'Le cycle suivant reste fermé.':'The next cycle stays closed.'):phase===1&&!signal.accepted?(locale==='fr'?'La prévision ne tient pas.':'The prediction fails.'):t.story[phase][0];
+    body.textContent=payoff?(locale==='fr'?'Une autre étoile, une autre orbite. Gardez l’outil vérifié et réinvestissez l’excédent pour lancer la prochaine recherche.':
+      'A new star. A different orbit. Bring forward the verified tool and the surplus to open the next search.'):
+      !run.acceptedFirst&&phase>=2?t.held:phase===1&&!signal.accepted?(locale==='fr'?'La deuxième caméra ne retrouve pas les ombres aux heures prévues.':'The second camera does not see shadows at the predicted times.'):t.story[phase][1];
     ledgerSlot.hidden=phase<3;
-    status.textContent=phase===1?((run.acceptedFirst?t.accepted:t.rejected)+' · '+matchCount(run.checks,run.expectedFirst)+'/4'):'';
+    status.textContent=phase===1?((run.acceptedFirst?t.accepted:t.rejected)+' · '+(signal.verify?.matches??0)+'/'+(signal.verify?.visits??0)):'';
     if(payoff){
       for(const [key,budget,cost] of rows){
         budget.textContent=paths[key].budget;
@@ -252,7 +456,7 @@ export function mountDoubleFlywheel(host, locale='en') {
     }
     audit.hidden=phase<3;
     auditTitle.textContent=t.audit;
-    if(phase===3)raw.textContent=JSON.stringify({cases:CASES,cost_assumptions:COST,receipt:run},null,2);
+    if(phase===3)writeAudit();
   }
   start.disabled=false;
   const focusNext=()=>{
@@ -266,15 +470,17 @@ export function mountDoubleFlywheel(host, locale='en') {
   };
   start.addEventListener('click',()=>{
     if(member.hidden || host.hidden) return;
-    if(phase<0) {run=runDoubleFlywheel({rejectFirst:failure.checked});phase=0;}
-    else if(phase===3){phase=-1;run=undefined;}
+    if(phase<0) {signal=runFirstLight(0,{corrupt:failure.checked});run=runDoubleFlywheel({rejectFirst:!signal.accepted});phase=0;}
+    else if(phase===3){phase=-1;run=undefined;signal=undefined;secondSignal=undefined;}
     else phase++;
     render();
     focusNext();
   });
   // No deduction from on-chain eligibility, no state saved, no funding actions.
-  host.ownerDocument.defaultView.addEventListener('frontier:member-lock',()=>{phase=-1;run=undefined;render();});
+  const lock=()=>{phase=-1;run=undefined;signal=undefined;secondSignal=undefined;render();};
+  doc.defaultView.addEventListener('frontier:member-lock',lock);
   render();
+  return ()=>doc.defaultView.removeEventListener('frontier:member-lock',lock);
 }
 
 if(typeof document!=='undefined') mountDoubleFlywheel(document.querySelector('[data-double-flywheel]'),document.documentElement.lang);

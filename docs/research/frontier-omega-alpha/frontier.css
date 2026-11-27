@@ -911,3 +911,53 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 @media(max-width:650px){
   .df .df-hero{background-position:62% center;background-image:linear-gradient(90deg,#150d26f4 0%,#150d26d7 55%,#150d268c 100%),url("double-flywheel-cover.webp")}
 }
+
+/* FIRST LIGHT: transition from the Conclave doors to one uninterrupted experiment. */
+.df .df-fiction-label{margin-top:1.15rem;color:#f2cfa0;font-size:.75rem;font-weight:700;letter-spacing:.13em}
+.df .df-hero{min-height:clamp(360px,42vw,590px);display:flex;flex-direction:column;justify-content:center;padding:clamp(1.25rem,5vw,5.25rem)}
+.df .df-hero h3{font-size:clamp(3.2rem,9vw,8.1rem);letter-spacing:-.052em;max-width:11ch}
+.df .df-lead{font:500 clamp(1.1rem,2.2vw,1.65rem)/1.3 Georgia,serif;max-width:34ch;margin:.45rem 0}
+.df .df-scope{font-size:1rem;line-height:1.55}
+.df:not([data-df-active]) .df-rail{display:none}
+.df[data-df-active] .df-hero,.df[data-df-active] .df-loops,.df[data-df-active] .df-footer{display:none}
+.df[data-df-active] .df-stage{min-height:min(76vh,730px);padding:clamp(1rem,4.6vw,4.4rem);background:radial-gradient(ellipse at 74% 11%,#351a53 0%,#170e29 48%,#10091d 100%)}
+.df[data-df-active] .df-stage h4{font:500 clamp(1.9rem,4vw,4.1rem)/1.01 Georgia,serif;letter-spacing:-.024em;max-width:24ch}
+.df[data-df-active] [data-df=body]{font-size:clamp(.97rem,1.3vw,1.12rem);color:#eae0f5;margin:.65rem 0 1rem}
+.df .df-sky{margin:0;max-width:55rem;border:1px solid #9466b6;border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at 82% 16%,#48256c66,transparent 60%),#0d0818;box-shadow:0 0 46px #130822}
+.df .df-sky-confirmed{border-color:#c5a46f}
+.df .df-sky figcaption{padding:.8rem 1rem .1rem;display:grid;gap:.18rem}
+.df .df-sky figcaption span{color:#e5b9ff;letter-spacing:.13em;font-size:.72rem;font-weight:750}
+.df .df-sky figcaption strong{color:#fff4d4;font:500 clamp(1.05rem,2.6vw,1.85rem) Georgia,serif}
+.df .df-sky svg{display:block;width:100%;height:clamp(90px,15vw,182px)}
+.df .df-sky-grid,.df .df-sky-path,.df .df-sky-marker,.df .df-sky-glitch{fill:none;vector-effect:non-scaling-stroke}
+.df .df-sky-grid{stroke:#aa85c333;stroke-width:1}
+.df .df-sky-path{stroke:#dbb0fc;stroke-width:1.7;filter:drop-shadow(0 0 4px #a55cff)}
+.df .df-sky-marker{stroke:#ffe0a3;stroke-width:1;stroke-dasharray:2 5;opacity:.7}
+.df .df-sky-dot{fill:#ffdb89;stroke:#fff4c6;stroke-width:.9;filter:drop-shadow(0 0 4px #ffcc76)}
+.df .df-sky-glitch{stroke:#ff9c9c;stroke-width:1;stroke-dasharray:3 3}
+.df .df-sky p{padding:0 1rem;margin:.35rem 0 .6rem;color:#dacfe9;font-size:.86rem}
+.df .df-sky-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem;padding:.6rem 1rem;border-top:1px solid #bc977b50}
+.df .df-sky-stats>span{display:grid;gap:.1rem;color:#f6e9ff;font-size:.8rem}
+.df .df-sky-stats b{color:#ffe6a8;font:600 clamp(1.26rem,3.6vw,2.35rem)/1.07 Georgia,serif}
+.df .df-second-sky{margin-top:.8rem}
+.df .df-second-sky figure{max-width:none}
+.df .df-second-sky svg{height:clamp(60px,10vw,128px)}
+.df .df-second-sky figcaption strong{color:#ffe3a4}
+.df .df-viewport{position:absolute;inset:0;pointer-events:none;opacity:.77}
+.df .df-viewport canvas{display:block;width:100%;height:100%}
+.df .df-orbits{position:relative}
+.df .df-capital-strip{max-width:55rem}
+.df .df-capital-strip span{display:grid;gap:.2rem;padding:clamp(.75rem,3vw,1.5rem);border-color:#b68c58}
+.df .df-capital-strip b{font-size:clamp(1.7rem,5vw,3.8rem)}
+@media(max-width:650px){
+ .df .df-hero{min-height:clamp(355px,85vw,580px)}
+ .df .df-reactor-key{font-size:.71rem}
+ .df .df-experiment{padding:.65rem}
+ .df .df-sky-stats,.df .df-sky figcaption{padding-inline:.65rem}
+}
+@media(prefers-reduced-motion:no-preference){
+ .df .df-sky-path{animation:df-acquire .85s ease-out both}
+ .df .df-sky-dot{transform-box:fill-box;transform-origin:center;animation:df-shine .8s .3s ease-out both}
+ .df .df-second-sky:not([hidden]){animation:df-lift .65s cubic-bezier(.2,.75,.2,1) both}
+ @keyframes df-shine{from{opacity:0;transform:scale(.45)}to{opacity:1;transform:scale(1)}}
+}
