@@ -289,6 +289,7 @@ function mountChamber(root, lang, run, recordSecond) {
       <strong data-df-out="result"></strong>
       <p><span>${t.budget} <b data-df-out="budget"></b></span><span>${t.cost} <b data-df-out="cost"></b></span> <small>${t.units}</small></p>
       <p data-df-out="gap"></p>
+      <p class="df-signal-now" data-df-out="signal" hidden></p>
     </div>
     <p class="df-reveal-line" hidden>${t.vision}</p>
     <div class="df-second-sky" hidden></div>
@@ -328,6 +329,9 @@ function mountChamber(root, lang, run, recordSecond) {
       result.innerHTML=renderSky(second,lang,'second');
       recordSecond(second);
     }
+    const indicator=field('signal');
+    indicator.hidden=!v.open||!second?.accepted;
+    indicator.textContent=indicator.hidden?'':(lang==='fr'?'Deuxième signal vérifié : ':'Second signal verified: ')+second.candidate.period+' h · '+second.verify.matches+'/'+second.verify.visits;
   }
   for(const button of [tool,fund])button.addEventListener('click',()=>{
     const section=root.closest('#member');

@@ -1435,6 +1435,7 @@ async function doubleFlywheel(page, language, width, reject) {
     await state('fund',9,10,false);
     await tool.press('Enter');
     await state('open',9,6,true);
+    assert.match(await chamber.locator('[data-df-out=signal]').innerText(),/37 h · 7\/7/);
     assert.match(await chamber.locator('.df-second-sky').innerText(),/37 h/);
     assert.equal(await tool.getAttribute('aria-pressed'),'true');
     assert.equal(await fund.getAttribute('aria-pressed'),'true');
@@ -1485,6 +1486,7 @@ async function conclaveDoor(browser, language) {
     const host=page.locator('#double-flywheel');
     await host.waitFor({state:'visible'});
     assert.match(await host.locator('#df-title').innerText(),/First Light|Première Lumière/);
+    assert.equal(await page.locator('#top').isVisible(),false);
     const start=host.locator('[data-df=start]');
     for(let i=0;i<4;i++)await start.press('Enter');
     await host.locator('.df-switch-tool').press('Space');

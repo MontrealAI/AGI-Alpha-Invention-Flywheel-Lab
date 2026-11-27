@@ -76,6 +76,7 @@ function lock(reason='locked'){
   session=null;
   pending=null;
   workspace.hidden=true;
+  document.getElementById('top').hidden=false;
   $('legacy').hidden=true;
   window.dispatchEvent(new Event('frontier:member-lock'));
   if(typeof cleanup==='function')cleanup();
@@ -165,7 +166,9 @@ $('form').addEventListener('submit',async event=>{
     workspace.hidden=false;
     $('legacy').hidden=false;
     root.hidden=true;
-    host.querySelector('#df-title')?.focus();
+    document.getElementById('top').hidden=true;
+    workspace.scrollIntoView({block:'start',behavior:'instant'});
+    host.querySelector('#df-title')?.focus({preventScroll:true});
     clock=setTimeout(()=>lock(),Math.max(0,next.until-Date.now()));
     poll=setInterval(checkActiveSession,30_000);
   }catch(error){
