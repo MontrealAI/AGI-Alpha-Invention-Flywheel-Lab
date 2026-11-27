@@ -34,6 +34,7 @@ async function publicAtlas(browser, language, width) {
     assert.ok(count >= 8);
     assert.equal(await page.locator('#member').isVisible(), false);
     assert.equal(await page.locator('#my-frontier').isVisible(), false);
+    assert.equal(await page.locator('#double-flywheel').isVisible(), false);
     assert.equal(await page.locator('#mf-edition').isVisible(), false);
     assert.equal(await page.locator('#foundry-cascade-results').isVisible(), false);
     assert.equal(await page.locator('#possibility-shifts #foundry-cascade-results').count(), 0);
@@ -1376,6 +1377,40 @@ async function rejectBrokenRun(page, language) {
   assert.match(await page.locator('#mv-screen-result').textContent(), /140/);
 }
 
+async function doubleFlywheel(page, language, width, reject) {
+  const host=page.locator('#double-flywheel');
+  await page.locator('#my-frontier a[href="#double-flywheel"]').press('Enter');
+  await host.waitFor({state:'visible'});
+  assert.equal(await page.locator('#my-frontier').isVisible(), false);
+  assert.equal(await page.locator(':focus').getAttribute('id'), 'df-title');
+  assert.equal(await host.locator('[data-df="start"]').count(), 1);
+  const action=host.locator('[data-df="start"]');
+  const stage=host.locator('[data-df="stage"]');
+  assert.equal(await stage.isVisible(),false);
+  if(reject){
+    await host.locator('.df-control summary').click();
+    await host.locator('[data-df="reject"]').check();
+  }
+  const allReady=await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth);
+  assert.equal(allReady,true);
+  for(let i=0;i<4;i++){
+    await action.press('Enter');
+    assert.equal(await host.locator('[data-df-phase][aria-current="step"]').count(), 1);
+    assert.equal(await page.locator(':focus').getAttribute('data-df'),'title');
+  }
+  await host.locator('[data-df="audit"] summary').click();
+  const {receipt}=JSON.parse(await host.locator('[data-df="raw"]').textContent());
+  assert.equal(receipt.acceptedFirst,!reject);
+  assert.equal(receipt.receipts,reject?0:13);
+  assert.equal(receipt.budget2,reject?5:9);
+  assert.equal(receipt.retainedEligible,!reject);
+  assert.equal(receipt.freshEligible,false);
+  assert.equal(await stage.isVisible(),true);
+  if(!reject) await capture(page, language, width, 'double-flywheel');
+  // Leave a completed state while going back; the wallet session lock must clear it.
+  await destination(page,'my-frontier');
+}
+
 async function walletPaths(browser, language, width) {
   const page = await browser.newPage({ viewport:dimensions(width), reducedMotion:'reduce' });
   try {
@@ -1429,6 +1464,7 @@ async function walletPaths(browser, language, width) {
     assert.match(await page.locator('#goal-submit').innerText(), /Activate FRONTIER Ω|Activer FRONTIER Ω/u);
     assert.ok([goalInput, goalSubmit].every(box => box.y >= 0 && box.y + box.height <= dimensions(width).height));
     await capture(page, language, width, 'arrival-token');
+    await doubleFlywheel(page, language, width, false);
     await ownerConnectionJourney(page, language, width);
     if (width === (language === 'fr' ? 390 : 1440)) {
       await proofOfAdvantageJourney(page, language, width);
@@ -1459,6 +1495,7 @@ async function walletPaths(browser, language, width) {
     await page.clock.fastForward(301_000);
     await member.waitFor({ state: 'hidden' });
     assert.equal(await brief.textContent(), '');
+    assert.equal(await page.locator('#double-flywheel [data-df=raw]').textContent(), '');
     assert.equal(await page.locator('#mv-screen-result').textContent(), '');
     assert.equal(await page.locator('#mv-consent').isChecked(), false);
     assert.equal(await page.locator('#goal-text').inputValue(), '');
@@ -1499,6 +1536,7 @@ async function walletPaths(browser, language, width) {
     await member.waitFor({ state: 'visible' });
     assert.match(await page.locator('#member-route').innerText(), /AGI CLUB/);
     await capture(page, language, width, 'arrival-club');
+    await doubleFlywheel(page, language, width, true);
     await page.locator('a[href="#opportunity-capture"]').press('Enter');
     const opportunity = page.locator('#opportunity-capture');
     assert.equal(await opportunity.isVisible(), true);

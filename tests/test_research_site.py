@@ -602,6 +602,7 @@ class ResearchSiteTests(unittest.TestCase):
             {name for name in site.FILES if name.startswith('frontier-omega-alpha/')},
             {'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html',
              'frontier-omega-alpha/frontier.css', 'frontier-omega-alpha/carina.webp',
+             'frontier-omega-alpha/double-flywheel.mjs', 'frontier-omega-alpha/double-flywheel-cover.webp',
              'frontier-omega-alpha/wallet-check.js', 'frontier-omega-alpha/member-brief-001.js',
              'frontier-omega-alpha/atlas.js', 'frontier-omega-alpha/endpoint-screen.mjs',
              'frontier-omega-alpha/outcome-receipt.mjs', 'frontier-omega-alpha/member-workbench.mjs',

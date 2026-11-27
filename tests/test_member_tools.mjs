@@ -96,3 +96,26 @@ test('a saved goal reports a corrected same-version decision and rejects unsuppo
   assert.throws(() => readSavedGoal({...envelope, goal:{text:'a'.repeat(201)}}), /INVALID_GOAL/);
   assert.throws(() => readSavedGoal({...envelope, wallet:'internal'}), /INVALID_GOAL/);
 });
+
+test('double flywheel independently compares exact measured answers and applies both resource gates', async () => {
+  const {runDoubleFlywheel,CASES,COST}=await import('../docs/research/frontier-omega-alpha/double-flywheel.mjs');
+  const run=runDoubleFlywheel();
+  assert.deepEqual(run.checks, CASES.first.map(([r,o,t])=>r-o>t));
+  assert.deepEqual(run.next, CASES.next.map(([r,o,s,t])=>(r-o)/s>t));
+  assert.deepEqual(run.next,run.fresh);
+  assert.equal(run.receipts-run.cost1,run.surplus);
+  assert.equal(run.retainedSurplus+run.reinvestment,run.surplus);
+  assert.equal(run.budget2,COST.nextBase+run.reinvestment);
+  assert.ok(COST.nextBase<run.retainedCost && run.retainedCost<=run.budget2 && run.budget2<run.freshCost);
+  assert.equal(run.freshEligible,false);
+  assert.equal(run.retainedEligible,true);
+
+  const failure=runDoubleFlywheel({rejectFirst:true});
+  assert.notDeepEqual(failure.checks,run.checks);
+  assert.equal(failure.acceptedFirst,false);
+  assert.equal(failure.receipts,0);
+  assert.equal(failure.reinvestment,0);
+  assert.equal(failure.budget2,COST.nextBase);
+  assert.equal(failure.next,null);
+  assert.equal(failure.retainedEligible,false);
+});
