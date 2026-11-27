@@ -1402,7 +1402,7 @@ async function doubleFlywheel(page, language, width, reject) {
       const title=el.getBoundingClientRect(), nav=document.querySelector('.mf-bar').getBoundingClientRect();
       return title.top >= nav.bottom-1 && title.bottom <= innerHeight;
     });
-    assert.equal(readable,true);
+    assert.equal(readable,true,`Conclave heading obscured: ${language} / ${width}px / phase ${i} / reject ${reject}`);
   }
   const finale=host.locator('[data-df="finale"]');
   const audit=host.locator('[data-df="audit"]');

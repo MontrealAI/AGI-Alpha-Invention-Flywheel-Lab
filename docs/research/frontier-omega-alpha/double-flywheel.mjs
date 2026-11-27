@@ -256,11 +256,13 @@ export function mountDoubleFlywheel(host, locale='en') {
   }
   start.disabled=false;
   const focusNext=()=>{
-    if(phase===3){
-      title.focus({preventScroll:true});
-      title.scrollIntoView({block:'start',behavior:'instant'});
-    } else if(phase>=0)title.focus();
-    else start.focus();
+    if(phase<0){start.focus();return;}
+    title.focus({preventScroll:true});
+    const nav=member.querySelector('.mf-bar');
+    const win=doc.defaultView;
+    // Recompute after layout, including a wrapped member header on phones.
+    const inset=(nav?.getBoundingClientRect().height??0)+16;
+    win.scrollBy({top:title.getBoundingClientRect().top-inset,behavior:'instant'});
   };
   start.addEventListener('click',()=>{
     if(member.hidden || host.hidden) return;
