@@ -72,6 +72,38 @@ def validate_paths(files, folder):
             require(target in files, f'Broken participant link: {rel}: {link}')
 
 
+def qualify_portal_layout(folder, recorded):
+    """Apply a narrow web-only layout repair after authenticating the release.
+
+    The downloadable ZIP is unchanged. The projected web manifest identifies
+    the actual published bytes; the edition receipt records the exact delta.
+    """
+    name = 'assets/production.css'
+    css = folder / name
+    before = '6e31bc1ae3183b20d47961216cd6c6d30934969ee486824a30adc892882b9b3a'
+    after = '0e4c5e7062c0b53c02b721c8f10fa42465b081bd878ebd7475527850f6fdfca8'
+    require(recorded.get(name) == before and digest(css) == before,
+            'Unexpected source stylesheet for the Conclave layout repair')
+    old = b'.card>img{width:100%;aspect-ratio:16/9;object-fit:cover}'
+    new = b'.card>img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}'
+    raw = css.read_bytes()
+    require(raw.count(old) == 1, 'Unexpected Conclave card layout rule')
+    fixed = raw.replace(old, new)
+    require(hashlib.sha256(fixed).hexdigest() == after, 'Unexpected corrected stylesheet')
+    manifest = folder / MANIFEST
+    original_manifest = manifest.read_bytes()
+    old_record = (before + '  ' + name).encode('ascii')
+    new_record = (after + '  ' + name).encode('ascii')
+    require(original_manifest.count(old_record) == 1, 'Missing original stylesheet receipt')
+    corrected_manifest = original_manifest.replace(old_record, new_record)
+    css.write_bytes(fixed)
+    manifest.write_bytes(corrected_manifest)
+    return {'schema': 1, 'repair': 'landscape-card-intrinsic-height',
+            'css': name, 'source_css_sha256': before, 'published_css_sha256': after,
+            'source_manifest_sha256': hashlib.sha256(original_manifest).hexdigest(),
+            'published_manifest_sha256': hashlib.sha256(corrected_manifest).hexdigest()}
+
+
 def stage(site, archive):
     site, archive = Path(site), Path(archive)
     require(site.is_dir() and not site.is_symlink() and (site / 'frontier-conclave.html').is_file(),
@@ -132,6 +164,8 @@ def stage(site, archive):
                     'Missing current production material')
         meta = {'schema': 1, 'tag': TAG, 'archive': archive.name, 'sha256': edition['sha256'],
                 'bytes': edition['bytes'], 'files': edition['files'], 'root': ROOT}
+        if archive.name == PRODUCTION_ARCHIVE:
+            meta['web_layout'] = qualify_portal_layout(folder, recorded)
         (staging / 'edition.json').write_text(json.dumps(meta, sort_keys=True) + '\n', encoding='utf-8')
         require(site_bytes(site) + site_bytes(staging) <= SITE_LIMIT, 'Pages site would exceed 1 GB')
         staging.rename(target)

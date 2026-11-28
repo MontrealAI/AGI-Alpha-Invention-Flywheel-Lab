@@ -1547,6 +1547,45 @@ async function conclaveDoor(browser, language) {
       assert.equal(portal.status(),200);const html=await portal.text();
       assert.ok(html.includes('Production-Member-Guide.pdf')&&!html.includes('TELEPROMPTER')&&!html.includes('.pptx'));
       await portal.dispose();
+      assert.equal(memberMeta.web_layout?.repair,'landscape-card-intrinsic-height');
+      assert.equal(memberMeta.web_layout.source_css_sha256,'6e31bc1ae3183b20d47961216cd6c6d30934969ee486824a30adc892882b9b3a');
+      assert.equal(memberMeta.web_layout.published_css_sha256,'0e4c5e7062c0b53c02b721c8f10fa42465b081bd878ebd7475527850f6fdfca8');
+      const portalBase=new URL('../conclave-participant/AGI-CLUB-DOUBLE-FLYWHEEL/',base);
+      const styleResponse=await page.request.get(new URL('assets/production.css',portalBase).href);
+      assert.equal(styleResponse.status(),200);
+      assert.equal(createHash('sha256').update(await styleResponse.body()).digest('hex'),memberMeta.web_layout.published_css_sha256);
+      await styleResponse.dispose();
+      const manifestResponse=await page.request.get(new URL('SHA256SUMS-COLLECTION.txt',portalBase).href);
+      assert.equal(manifestResponse.status(),200);
+      const publishedManifest=await manifestResponse.body();
+      assert.equal(createHash('sha256').update(publishedManifest).digest('hex'),memberMeta.web_layout.published_manifest_sha256);
+      assert.ok(publishedManifest.toString().includes(memberMeta.web_layout.published_css_sha256+'  assets/production.css'));
+      await manifestResponse.dispose();
+      const collectionPage=await browser.newPage({viewport:dimensions(width),reducedMotion:'reduce'});
+      try{
+        const target=new URL(language==='fr'?'START-HERE-FR.html':'START-HERE.html',portalBase);
+        target.hash='collection';
+        const response=await collectionPage.goto(target.href);
+        assert.equal(response.status(),200);
+        assert.equal(await collectionPage.locator('html').getAttribute('lang'),language);
+        for(const vw of (language==='fr'?[390,320]:[1440,1024])){
+          await collectionPage.setViewportSize(dimensions(vw));
+          await collectionPage.locator('#collection').scrollIntoViewIfNeeded();
+          const result=await collectionPage.locator('#collection .card > img').evaluateAll(async images=>{
+            await Promise.all(images.map(async img=>{img.loading='eager';await img.decode();}));
+            return {fits:document.documentElement.scrollWidth<=innerWidth+1,
+              items:images.map(img=>{const r=img.getBoundingClientRect();
+                return {w:r.width,h:r.height,loaded:img.naturalWidth>0};})};
+          });
+          assert.equal(result.items.length,6);
+          assert.ok(result.fits,'Participant collection must fit the viewport');
+          for(const image of result.items){
+            assert.ok(image.loaded&&image.w>0&&image.h>0);
+            assert.ok(Math.abs(image.h-image.w*9/16)<2,'Collection artwork must retain its landscape aspect ratio: '+JSON.stringify(image));
+          }
+          await capture(collectionPage,language,vw,'conclave-participant-collection');
+        }
+      }finally{await collectionPage.close();}
     }
     for(const href of await edition.locator('.ce-card, .ce-primary').evaluateAll(nodes=>nodes.map(node=>node.href))){
       const response=await page.request.head(href);
