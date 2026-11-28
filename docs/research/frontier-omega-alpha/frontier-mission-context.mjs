@@ -42,10 +42,6 @@ const word = {
 };
 
 const frames = {
-  discovery: [
-    /\b(?:capture|captur\w*|capter|saisir|discover|decouvrir|reperer|find|identify|identifier|leverage|tirer parti|explore|explorer)\b/u,
-    /\b(?:exponential|exponentiel\w*|newly (?:possible|attainable|feasible)|recent (?:advances?|technolog\w+)|technological progress|emerging technolog\w*|frontier advances?|nouvelles possibilites|progres technologique\w*|avancees recentes|nouvellement (?:possible|realisable))\b/u,
-  ],
   endpoint: [
     /\b(?:endpoint\w*|mlperf|llm|inference|inference locale|service de modele)\b/u,
     /\b(?:p90|ttft|first token|premier jeton)\b/u,
@@ -60,7 +56,7 @@ const frames = {
   ],
   game: [
     /\b(?:game theory|theorie des jeux|zero sum|somme nulle)\b/u,
-    /\b(?:build|construct\w*|creer|develop\w*|solver|solveur|strategie|strateg\w*|teach\w*|entrain\w*|former|learn\w*|allocat\w*|verif\w*|certif\w*|payoff|gain\w*)\b/u,
+    /\b(?:build|construct\w*|construir\w*|concevoir|creer|develop\w*|solver|solveur|strategie|strateg\w*|teach\w*|entrain\w*|former|learn\w*|allocat\w*|verif\w*|certif\w*|payoff|gain\w*)\b/u,
   ],
   battery: [
     /\b(?:battery|batterie|batteries)\b/u,
@@ -78,9 +74,30 @@ const rejects = {
 
 // The general exploration package spans industries. An ambition already
 // narrowed to a field should receive only individually matched evidence.
-const focusedDiscovery = /\b(?:(?:recent advances?|emerging technolog\w*|newly (?:possible|attainable|feasible)|nouvelles possibilites|avancees recentes) (?:in|for|within|dans|en|pour)|focus(?:ed)? on|concentre\w* sur) (?!ai\b|technology\b|technologie\b|ia\b)\w/u;
-const activate = /\b(?:activat\w*|activ\w*|mobiliz\w*|mobilis\w*|harness|exploit\w*|build|invent\w*|concevoir|construir\w*|creer|unlock|deploy\w*|deployer|apply|appliquer|put .{1,48} to work|mettre .{1,48} au travail)\b/u;
-const frontier = /\b(?:(?:ai|ia|intelligence artificielle|artificial intelligence) (?:progr\w*|advanc\w*|de pointe|de frontiere)|(?:frontier|cutting edge|state of the art) (?:ai|artificial intelligence|intelligence|capabilit\w*|models?)|(?:intelligence|capacite\w*|ia|modele\w*) (?:de pointe|de frontiere)|progres (?:de |en )?(?:l )?(?:ia|intelligence artificielle))\b/u;
+const frontierLanguage = {
+  intelligence: /\b(?:ai|ia|artificial intelligence|intelligence artificielle|machine intelligence|intelligence machine|intelligent machines?|llms?|large language models?|grands modeles? de langage|foundation models?|modeles? de fondation)\b/u,
+  technicalField: /\b(?:tech|technolog\w*)\b/u,
+  technology: /\b(?:tech|technolog\w*|intelligence|capabilit\w*|capacite\w*|models?|modeles?)\b/u,
+  frontier: /\b(?:frontiers?|frontieres?|cutting edge|leading edge|state of the art|de pointe|a la pointe|etat de l art|next wave|prochaine vague)\b/u,
+  change: /\b(?:advanc\w*|avance\w*|breakthroughs?|percees?|progr\w*|recent\w*|latest|last week|nouve\w*|new\w*|emerg\w*|just|now|aujourd hui|desormais|maintenant|vient|viennent)\b/u,
+  possibility: /\b(?:possibl\w*|attain\w*|feasib\w*|achiev\w*|accompl\w*|open\w*|ouvr\w*|doors?|portes?|enabled?|permet\w*|realisabl\w*|accessible\w*)\b/u,
+  explore: /\b(?:discover\w*|decouvr\w*|explor\w*|survey\w*|map|cartograph\w*|scout\w*|show|montr\w*|spot|reper\w*|find|identifier|veille|watch|follow|suivr\w*|where|what|which|quels?|quelles?|que puis|qu est ce)\b/u,
+  apply: /\b(?:activat\w*|activ\w*|mobiliz\w*|mobilis\w*|harness|exploit\w*|leverage|tirer parti|profit(?:er|ons|ez|e[rs]?)|build|invent\w*|concevoir|construir\w*|creer|unlock|deploy\w*|deployer|apply|appliquer|put .{1,48} to work|mettre .{1,48} au travail)\b/u,
+  capture: /\b(?:captur\w*|capter|saisir|capitaliz\w*|capitalis\w*)\b/u,
+  exponential: /\b(?:exponential\w*|exponentiel\w*)\b/u,
+};
+const explicitFocus = /\b(?:focus(?:ed)? on|concentre\w* sur|centre\w* sur)\b/u;
+const topicClause = /\b(?:in|for|within|dans|en|pour) /gu;
+const frenchPurpose = /^(?:(?:y|en|me|te|se|nous|vous|m|t|s) )*(?:[a-z]{2,}(?:er|ir|re|oir))\b/u;
+const generalSubject = /^(?:(?:the|a|an|la|le|l|les|des|du|de|un|une|mon|ma|mes|my|our|notre|nos|new|latest|recent|nouveaux|nouvelles) )*(?:ai|ia|artificial intelligence|intelligence artificielle|machine intelligence|intelligence machine|tech|technolog\w*|intelligence|capabilit\w*|capacite\w*|models?|modeles?|llms?|me|moi|us|nous|myself|team|equipe|you|vous)\b/u;
+const topicIntroduction = /\b(?:advanc\w*|avance\w*|breakthroughs?|percees?|progr\w*|emerg\w*|possibl\w*|attain\w*|feasib\w*|realisabl\w*|capabilit\w*|capacite\w*|models?|modeles?)\b/u;
+const constructionVerb = /\b(?:build|construct\w*|create|invent\w*|deploy\w*|construir\w*|concevoir|creer|inventer|deployer) /u;
+const operatingMethod = / (?:using|with|via|avec|au moyen de|grace a)\b/u;
+const unspecifiedDeliverable = /^(?:(?:an?|some|the|une?|new|nouvelle?) )*(?:(?:frontier|ai|intelligence|technolog\w*) )*(?:something|anything|capabilit\w*|capacite\w*|quelque chose)\b/u;
+const transformationVerb = /\b(?:turn|turning|transform\w*|convert\w*) /u;
+const transformationTarget = /\b(?:into|en) /gu;
+const generalOutcome = /^(?:(?:an?|the|some|un|une|des|new|real|practi\w*|useful|nouve\w*|vrai\w*|utile\w*) )*(?:edge|advantage|avantage|atouts?|opportunit\w*|possibilit\w*|capabilit\w*|capacite\w*|something|quelque chose|action|work)\b/u;
+const existingDocumentTask = /\b(?:translat\w*|rewrite|proofread|summari[sz]e|traduir\w*|traduis\w*|reecrir\w*|corriger|resum\w*) (?:this|that|the|a|my|ce|cet|cette|le|la|un|une|mon|ma) (?:(?:scanned|attached|pasted|published) )?(?:articles?|documents?|textes?|paragraph\w*|passage|sentence|phrase|paper|emails?|courriels?|transcript|transcription|draft|brouillon|report|rapport)\b/u;
 const substantiveDomain = /\b(?:game theory|theorie des jeux|wavelength|nirspec|temperature|precipitation\w*|precipitations|exchange rates?|taux de change|latency|latence|equations?|battery|batterie|calibration|efficiency|efficacite|encryption|chiffrement|neural networks?|reseaux neuronaux)\b/u;
 
 const intent = /\b(?:verify|verifier|validate|valider|research|recherch\w*|investigat\w*|enquet\w*|review|examin\w*|compare|comparer|check|evaluate|evalu\w*|discover|decouvr\w*|catalog\w*|availability|disponibilite)\b/u;
@@ -89,6 +106,15 @@ const ignored = new Set(('their about this these those what which with from plea
 const normalize = value => value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
   .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 const terms = value => new Set(normalize(value).split(' ').filter(term => term.length >= 4 && !ignored.has(term)));
+const topics = {
+  'training-environment': /\b(?:training environments?|learning environments?|training sandboxes?|environnements? (?:d apprentissage|d entrainement|avant d entrainer)|bancs? d entrainement)\b/u,
+  'inference-runtime': /\b(?:inference runtimes?|model serving|inference engines?|moteurs? d inference|execution d inference|services? d inference)\b/u,
+  'document-extraction': /\b(?:document extraction|scanned (?:documents?|pages?)|optical character recognition|ocr|extraction (?:de documents?|de tableaux)|(?:documents?|pages?) numerise\w*|reconnaissance (?:optique )?de caracteres)\b/u,
+  'local-model-deployment': /\b(?:local (?:ai|models?|inference|coding assistant)|private inference|on device coding|gguf|ia locale|inference (?:locale|privee)|modeles? locaux|modele local|assistant de programmation local)\b/u,
+  'information-partition': /\b(?:information sets?|information partitions?|hidden information|ensembles? d information|partitions? d information|information cachee)\b/u,
+  'source-provenance': /\b(?:source provenance|primary evidence|primary sources?|provenance des sources?|sources? primaires?|preuves? de premiere main)\b/u,
+};
+const topicTags = value => Object.keys(topics).filter(tag => topics[tag].test(value));
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const control = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\u202a-\u202e\u2066-\u2069]/u;
 
@@ -123,22 +149,80 @@ function scopedOverlap(words, title) {
   return overlap.length >= 2 && overlap.some(term => term.length >= 6) ? overlap.length : 0;
 }
 
-function fittingEvidence(words, title, fact) {
-  if (scopedOverlap(words,title)) return true;
-  return words && typeof title === 'string'
-    && [...terms(title)].some(term => term.length >= 6 && words.has(term))
-    && scopedOverlap(words,`${title} ${fact ?? ''}`) > 0;
+function evidenceAffinity(search, title, fact) {
+  if (!search || typeof title !== 'string') return 0;
+  const sharedTopic = topicTags(normalize(title)).some(tag => search.tags.includes(tag));
+  const titleOverlap = scopedOverlap(search.words, title);
+  const uniqueTitleAnchor = [...terms(title)].some(term => term.length >= 6 && search.words.has(term));
+  return (sharedTopic ? 3 : 0) + (titleOverlap || (uniqueTitleAnchor ? scopedOverlap(search.words, `${title} ${fact ?? ''}`) : 0));
 }
 
-function discoveryIntent(query) {
-  if (!query || rejects.discovery.test(query) || focusedDiscovery.test(query) || substantiveDomain.test(query)) return false;
-  return fits('discovery', query) || activate.test(query) && frontier.test(query);
+function conversionOutcome(query) {
+  const verb = transformationVerb.exec(query);
+  if (!verb) return null;
+  const marker = [...query.matchAll(transformationTarget)].findLast(match => match.index >= verb.index + verb[0].length);
+  if (!marker) return null;
+  const outcome = query.slice(marker.index + marker[0].length);
+  return {index:marker.index, broad:generalOutcome.test(outcome)};
 }
 
-function evidenceRank(entry, words, release) {
-  const anchors = scopedOverlap(words, `${entry.title} ${entry.fact}`);
+function narrowsScope(query, conversion) {
+  if (explicitFocus.test(query) || substantiveDomain.test(query)) return true;
+  if (conversion && !conversion.broad) return true;
+  const construction = constructionVerb.exec(query);
+  if (construction) {
+    const object = query.slice(construction.index + construction[0].length);
+    const method = object.search(operatingMethod);
+    if (method > 0 && !unspecifiedDeliverable.test(object.slice(0, method))) return true;
+  }
+  const introductions = [topicIntroduction, frontierLanguage.intelligence].flatMap(pattern => {
+    const match = pattern.exec(query);
+    return match ? [match.index + match[0].length] : [];
+  });
+  const firstSubject = Math.min(...introductions);
+  return [...query.matchAll(topicClause)].some(({index, 0: marker}) => {
+    if (index < firstSubject || index === conversion?.index) return false;
+    const topic = query.slice(index + marker.length);
+    return !(marker === 'pour ' && frenchPurpose.test(topic)) && !generalSubject.test(topic);
+  });
+}
+
+function intentOf(query) {
+  if (!query || existingDocumentTask.test(query) || rejects.discovery.test(query)) return 'ordinary';
+  const intelligence = frontierLanguage.intelligence.test(query);
+  const technologyField = frontierLanguage.technicalField.test(query);
+  const conversion = intelligence || technologyField ? conversionOutcome(query) : null;
+  if (narrowsScope(query, conversion)) return 'focused';
+  const has = key => frontierLanguage[key].test(query);
+  const technology = intelligence || has('technology');
+  const frontier = has('frontier');
+  const change = has('change');
+  const possibility = has('possibility');
+  const apply = has('apply') || conversion?.broad;
+  const explore = has('explore');
+  if (has('capture') && has('exponential')) return 'apply';
+  if (apply && (technology && frontier || (intelligence || technologyField) && change)) return 'apply';
+  if (intelligence && frontier || change && (explore && (intelligence || technologyField) || intelligence && possibility)) return 'explore';
+  if (technology && (apply || explore || intent.test(query)) || topicTags(query).length) return 'focused';
+  return 'ordinary';
+}
+
+/** Interpret public-research scope without assigning authority or choosing a capability. */
+export function missionIntent(ambition, instruction) {
+  return intentOf(missionQuery(ambition, instruction));
+}
+
+function missionQuery(ambition, instruction) {
+  return typeof ambition === 'string' && ambition.trim()
+    ? normalize(typeof instruction === 'string' && instruction.trim() ? instruction : ambition) : '';
+}
+
+function evidenceRank(entry, search, aiScope, release) {
+  const anchors = evidenceAffinity(search, entry.title, entry.fact);
+  const description = normalize(`${entry.title} ${entry.fact} ${entry.scope}`);
+  const pertinent = aiScope && (frontierLanguage.intelligence.test(description) || topicTags(description).some(tag => tag !== 'source-provenance'));
   const lead = entry.kind === 'lead';
-  return 4 * anchors + Number(!lead) * 4 + Number(recent(entry, release)) * 2
+  return 4 * anchors + Number(pertinent) * 5 + Number(!lead) * 4 + Number(recent(entry, release)) * 2
     + Number(Boolean(entry.artifact)) * 2 + Number(Boolean(entry.source.primaryMetadataSha256));
 }
 
@@ -326,33 +410,36 @@ function recent(item, release) {
 /** Select from the released public evidence. The ambition and private work stay on this device. */
 export function selectMissionContext({ambition, instruction, language = 'en', atlas, opportunity, memberValue, release} = {}) {
   language = language === 'fr' ? 'fr' : 'en';
-  const query = typeof ambition === 'string' && ambition.trim()
-    ? normalize(typeof instruction === 'string' && instruction.trim() ? instruction : ambition) : '';
+  const query = missionQuery(ambition, instruction);
   const items = [];
-  if (query) {
+  if (query && !existingDocumentTask.test(query)) {
     for (const key of Object.keys(tools)) if (fits(key, query)) items.push(toolItem(key, language, memberValue, release));
     if (fits('game', query)) items.push(gameItem(language, release));
     if (/\b(?:algorithmic impact assessments?|evaluations? d incidence algorithmique|aia|eia)\b/u.test(query)
       && /\b(?:scor\w*|scores?|denominat\w*|seuil\w*|impact levels?|niveaux? d incidence)\b/u.test(query)) {
       items.push(assessmentItem(language, release));
     }
-    const broad = discoveryIntent(query);
+    const classification = intentOf(query);
+    const broad = classification === 'explore' || classification === 'apply';
+    const aiScope = broad && frontierLanguage.intelligence.test(query);
     if (fits('battery', query)) items.push(batterySourceStudy(language, release));
-    const researchTerms = intent.test(query) || activate.test(query) ? terms(query) : null;
+    const search = !broad && (classification === 'focused' || intent.test(query) || frontierLanguage.apply.test(query))
+      ? {words:terms(query), tags:topicTags(query)} : null;
     if (opportunity?.schema === 'frontier/opportunity-capture-v1' && Array.isArray(opportunity.opportunities)) {
       const opportunities = opportunity.opportunities.filter(record)
-        .filter(entry => broad || fittingEvidence(researchTerms, entry[language]?.title, entry[language]?.finding))
+        .filter(entry => broad || evidenceAffinity(search, entry[language]?.title, entry[language]?.finding))
         .map(entry => opportunityItem(opportunity, entry, language, broad, release))
         .filter(entry => entry && (!broad || recent(entry, release)));
       items.push(...opportunities);
     }
     if (atlas?.schema === 'frontier-omega-alpha/atlas-ledger-v1' && Array.isArray(atlas.records)) {
       const leads = atlas.records.filter(record).map(entry => atlasLead(entry, language, broad, release))
-        .filter(entry => entry && (broad ? recent(entry, release) : fittingEvidence(researchTerms, entry.title, entry.fact)));
+        .filter(entry => entry && (broad ? entry.source.dateBasis === 'sourceDate' && recent(entry, release)
+          : evidenceAffinity(search, entry.title, entry.fact)));
       items.push(...leads);
     }
     const ranked = [...new Map(items.filter(Boolean).map(entry => [entry.id, entry])).values()]
-      .sort((a, b) => evidenceRank(b, broad ? null : researchTerms, release) - evidenceRank(a, broad ? null : researchTerms, release)
+      .sort((a, b) => evidenceRank(b, search, aiScope, release) - evidenceRank(a, search, aiScope, release)
         || b.source.date.localeCompare(a.source.date) || a.id.localeCompare(b.id));
     const selected = ranked.slice(0, broad ? 3 : 4);
     const priorComparison = broad && opportunity?.schema === 'frontier/opportunity-capture-v1' ? comparison(opportunity, language, release) : null;

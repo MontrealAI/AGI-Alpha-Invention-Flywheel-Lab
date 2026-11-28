@@ -90,7 +90,8 @@ MISSION_CONTEXT_MARKER = '<!-- UNIVERSAL_PUBLIC_CONTEXT -->'
 MISSION_CONTEXT_ASSETS = (GAME_THEORY_ZIP, 'dpp-source-review.mjs', 'frontier-battery-source-example.json', 'frontier-native-work.mjs')
 PUBLIC_MISSIONS = MAIN / 'publication/universal'
 MISSION_ASSETS = ('frontier-mission.mjs', 'frontier-mission-router.mjs', 'frontier-mission-ui.mjs', 'frontier-assisted-work.mjs',
-                  'frontier-mission-context.mjs', 'frontier-artifact-exchange.mjs', 'frontier-native-work.mjs',
+                  'frontier-mission-context.mjs', 'frontier-current-opportunities.mjs', 'frontier-opportunity-operation.mjs',
+                  'frontier-artifact-exchange.mjs', 'frontier-native-work.mjs',
                   'frontier-mission-instruments.mjs', 'foundry-core.mjs', 'harness-engine.js', 'outcome-receipt.mjs',
                   'dpp-source-review.mjs',
                   'frontier-battery-source-example.json',

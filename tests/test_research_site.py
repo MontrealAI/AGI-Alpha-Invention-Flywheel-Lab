@@ -596,8 +596,8 @@ class ResearchSiteTests(unittest.TestCase):
             template = (ROOT / 'products' / 'frontier-member-tools' / f'member.{language}.html').read_text()
             page = (self.source / 'frontier-omega-alpha' / name).read_text().replace('<!-- FRONTIER_MEMBER_VALUE -->', template)
             self.assertIn('src="wallet-check.js"', page)
-            self.assertIn('connect-src http://127.0.0.1:38461/v1/chat/completions http://127.0.0.1:11434/api/chat '
-                          'http://127.0.0.1:38463/api/frontier-missions/;', page)
+            self.assertIn('connect-src https://huggingface.co http://127.0.0.1:38461/v1/chat/completions '
+                          'http://127.0.0.1:11434/api/chat http://127.0.0.1:38463/api/frontier-missions/;', page)
             self.assertIn('data-connect="club" disabled', page)
             self.assertIn('data-connect="token" disabled', page)
             self.assertIn('id="brief-content" hidden', page)
@@ -619,6 +619,7 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/frontier-mission.mjs', 'frontier-omega-alpha/frontier-mission-router.mjs',
              'frontier-omega-alpha/frontier-mission-ui.mjs', 'frontier-omega-alpha/frontier-execution.mjs',
              'frontier-omega-alpha/frontier-mission-context.mjs', 'frontier-omega-alpha/frontier-artifact-exchange.mjs',
+             'frontier-omega-alpha/frontier-current-opportunities.mjs', 'frontier-omega-alpha/frontier-opportunity-operation.mjs',
              'frontier-omega-alpha/frontier-native-work.mjs',
              'frontier-omega-alpha/frontier-mission-instruments.mjs',
              'frontier-omega-alpha/dpp-source-review.mjs', 'frontier-omega-alpha/frontier-battery-source-example.json',

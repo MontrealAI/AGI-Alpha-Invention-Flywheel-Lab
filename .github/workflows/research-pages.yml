@@ -154,6 +154,7 @@ jobs:
             tests/test_frontier_mission_router.mjs
             tests/test_frontier_assisted_work.mjs
             tests/test_frontier_mission_context.mjs
+            tests/test_frontier_mission_opportunity.mjs
             tests/test_frontier_artifact_exchange.mjs
             tests/test_frontier_native_work.mjs
             tests/test_frontier_browser_model.mjs
@@ -279,7 +280,7 @@ jobs:
         if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: |
           python3 -m unittest discover -s tests -p 'test_member_value.py' -v
-          node --test tests/test_member_tools.mjs tests/test_frontier_mission.mjs tests/test_frontier_mission_router.mjs tests/test_frontier_assisted_work.mjs tests/test_frontier_browser_model.mjs tests/test_frontier_mission_context.mjs tests/test_frontier_artifact_exchange.mjs tests/test_frontier_native_work.mjs
+          node --test tests/test_member_tools.mjs tests/test_frontier_mission.mjs tests/test_frontier_mission_router.mjs tests/test_frontier_assisted_work.mjs tests/test_frontier_browser_model.mjs tests/test_frontier_mission_context.mjs tests/test_frontier_mission_opportunity.mjs tests/test_frontier_artifact_exchange.mjs tests/test_frontier_native_work.mjs
           for suite in test_pages_missions.py test_universal_missions.py test_mission_contracts.py test_mission_tools.py test_intelligence_profiles.py test_mission_evidence.py test_mission_schema_context.py test_mission_outcomes.py test_outcome_driven_missions.py test_bridge.py test_instrument_construction.py test_native_intelligence.py test_paired_intelligence.py; do
             PYTHONPATH="$PWD/products/alpha-genesis-harness" python3 -m unittest discover -s products/alpha-genesis-harness/tests -p "$suite" -v
           done

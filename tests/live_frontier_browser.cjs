@@ -4,7 +4,7 @@
    from a real wallet. The provider fixture is isolated to its own browser page. */
 const assert = require('node:assert/strict');
 const {createHash} = require('node:crypto');
-const {mkdir, readFile} = require('node:fs/promises');
+const {mkdir, readFile, writeFile} = require('node:fs/promises');
 const {join} = require('node:path');
 const { chromium } = require('playwright-core');
 
@@ -12,6 +12,7 @@ const base = process.env.FRONTIER_BROWSER_URL ??
   'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/';
 const checks = [];
 const screenshots = process.env.FRONTIER_SCREENSHOTS;
+const verifyLiveOpportunities = process.env.FRONTIER_LIVE_OPPORTUNITIES === '1';
 const dimensions = width => ({width, height:width === 390 ? 844 : 900});
 
 async function capture(page, language, width, subject) {
@@ -582,7 +583,9 @@ function content(name, item) {
 }
 
 async function ownerConnectionJourney(page, language, width) {
-  const ambition = 'Capture the exponential of AI progrees.';
+  const ambition = language === 'fr'
+    ? 'Quels mots riment avec orange?'
+    : 'What rhymes with orange?';
   const externalRequests = [];
   const origin = new URL(base).origin;
   const observe = request => {
@@ -695,6 +698,111 @@ async function ownerConnectionJourney(page, language, width) {
   page.off('request', observe);
   await page.evaluate(() => { delete navigator.clipboard.writeText; });
   await page.locator('#mission-new').click();
+}
+
+async function liveOpportunityJourney(browser, language) {
+  const fr = language === 'fr';
+  const width = fr ? 390 : 1440;
+  const ambition = fr ? 'Je veux extraire le texte des pages numérisées de mes fiches fournisseurs.' : 'Surfing the Frontier of AI';
+  const expectedRepo = fr ? 'AminiTech/Soma-1X-lite-GGUF' : 'prism-ml/Ternary-Bonsai-2.5-27B-GGUF';
+  const page = await browser.newPage({viewport:dimensions(width), reducedMotion:'reduce'});
+  const requests = [];
+  const errors = [];
+  page.on('request', request => {
+    if (new URL(request.url()).origin !== new URL(base).origin) requests.push({method:request.method(), url:request.url()});
+  });
+  page.on('pageerror', error => errors.push(error.message));
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  try {
+    await page.addInitScript(fakeWallet);
+    await page.goto(base + (fr ? 'fr.html#my-frontier' : '#my-frontier'));
+    if (fr) {
+      await page.locator('#enter-club').click();
+      await page.locator('#club-label').fill('frontier-check');
+      await page.locator('[data-connect="club"]').click();
+    } else {
+      await page.locator('[data-connect="token"]').click();
+    }
+    const home = page.locator('#frontier-possibilities');
+    await home.waitFor({state:'visible'});
+    assert.ok(await home.getByRole('button').count() >= 1);
+    assert.equal(await page.locator('#mission-documents').evaluate(input => input.files.length), 0);
+    const start = performance.now();
+    await page.locator('#goal-text').fill(ambition);
+    await page.locator('#goal-submit').click();
+    const result = page.locator('#mission-opportunity-result');
+    const activate = result.getByRole('button', {name:fr ? 'Relever les fichiers nécessaires' : 'Compare model files', exact:true});
+    await activate.waitFor({state:'visible'});
+    assert.equal(await page.locator('#mission-prompt').isVisible(), false);
+    assert.deepEqual(requests, []);
+    await activate.click();
+    const manifestButton = result.getByRole('button', {name:fr ? 'Télécharger le manifeste' : 'Download manifest', exact:true});
+    await manifestButton.waitFor({state:'visible', timeout:60_000});
+    const resultMs = Math.round(performance.now() - start);
+    assert.equal(await page.locator('#mission-prompt').isVisible(), false);
+    assert.equal(await page.locator('#mission-ambition').textContent(), ambition);
+    assert.match(await result.innerText(), /apache-2\.0/u);
+    const resultPosition = await result.evaluate(section => ({
+      headingTop:section.querySelector('h3').getBoundingClientRect().top,
+      navigationBottom:document.querySelector('.mf-bar').getBoundingClientRect().bottom,
+      actionBottom:section.querySelector('button').getBoundingClientRect().bottom,
+      viewportHeight:innerHeight,
+    }));
+    assert.ok(resultPosition.headingTop >= resultPosition.navigationBottom - 1);
+    assert.ok(resultPosition.actionBottom <= resultPosition.viewportHeight);
+    await capture(page, language, width, 'fresh-opportunity');
+
+    const download = async control => {
+      const started = page.waitForEvent('download');
+      await control.click();
+      const file = await started;
+      return {filename:file.suggestedFilename(), data:await readFile(await file.path())};
+    };
+    const manifestDownload = await download(manifestButton);
+    const manifest = JSON.parse(manifestDownload.data);
+    const source = await download(result.getByRole('button', {name:fr ? 'Télécharger le relevé source original' : 'Download original source record'}));
+    const original = JSON.parse(source.data);
+    assert.equal(manifest.repo, expectedRepo);
+    assert.equal(manifest.revision, original.sha);
+    assert.equal(manifest.source.sha256, hash(source.data));
+    assert.equal(manifest.declaredLicense, original.cardData.license);
+    assert.equal(manifest.artifacts.length, fr ? 4 : 1);
+    const files = [...manifest.artifacts];
+    if (manifest.comparison) files.push(manifest.comparison);
+    assert.equal(files.length, fr ? 4 : 2);
+    for (const file of files) {
+      const upstream = original.siblings.find(item => item.rfilename === file.filename);
+      assert.equal(file.bytes, upstream.size);
+      assert.equal(file.gitBlobSha1, upstream.blobId);
+      if (upstream.lfs) assert.equal(file.sha256, upstream.lfs.sha256);
+    }
+    assert.equal(manifest.qualification.weightBytesAcquired, false);
+    assert.equal(manifest.qualification.modelQualityTested, false);
+    const expectedUrls = [manifest.source.url, ...files.map(file => file.evidenceURL)].sort();
+    assert.deepEqual(requests.map(({method,url}) => { assert.equal(method, 'GET'); return url; }).sort(), expectedUrls);
+
+    await destination(page, 'mv-results');
+    if (!await page.locator('#mission-keeper').evaluate(item => item.open)) await page.locator('#mission-keeper summary').click();
+    const saved = await download(page.locator('#mission-export'));
+    await page.locator('#mission-import').setInputFiles({name:saved.filename, mimeType:'application/json', buffer:saved.data});
+    const reopened = result.getByRole('button', {name:fr ? 'Télécharger le manifeste' : 'Download manifest', exact:true}).first();
+    await reopened.waitFor({state:'visible'});
+    const reopenedDownload = await download(reopened);
+    assert.deepEqual(reopenedDownload.data, manifestDownload.data);
+    assert.equal(requests.length, expectedUrls.length);
+    assert.deepEqual(errors, []);
+    const check = {kind:'fresh-public-acquisition', language, width, ambition, repo:expectedRepo, revision:manifest.revision,
+      userActionsToResult:3, resultMs, sourceBytes:source.data.length, manifestSha256:hash(manifestDownload.data),
+      externalGETs:requests.length, weightBytesAcquired:false, exactReopen:true, resultPosition,
+      wallet:'isolated declared test wallet'};
+    if (screenshots) {
+      const evidence = join(screenshots, 'opportunity-evidence');
+      await mkdir(evidence, {recursive:true});
+      await Promise.all([manifestDownload, source].map(file => writeFile(join(evidence, file.filename), file.data)));
+      await writeFile(join(evidence, 'browser-journey-' + language + '.json'), JSON.stringify(check, null, 2) + '\n');
+    }
+    checks.push(check);
+  } finally { await page.close(); }
 }
 
 async function proofOfAdvantageJourney(page, language, width) {
@@ -1828,8 +1936,14 @@ async function walletPaths(browser, language, width) {
 }
 
 (async () => {
-  const browser = await chromium.launch({ executablePath: process.env.FRONTIER_CHROME ?? '/usr/bin/google-chrome' });
+  if (verifyLiveOpportunities && !['127.0.0.1','localhost'].includes(new URL(base).hostname)) {
+    throw Error('Fresh acquisition qualification requires a loopback staged site');
+  }
+  const proxyServer = process.env.FRONTIER_BROWSER_PROXY;
+  const browser = await chromium.launch({ executablePath: process.env.FRONTIER_CHROME ?? '/usr/bin/google-chrome',
+    ...(proxyServer ? {proxy:{server:proxyServer, bypass:'127.0.0.1,localhost'}} : {}) });
   try {
+    if (verifyLiveOpportunities) for (const language of ['en', 'fr']) await liveOpportunityJourney(browser, language);
     for (const language of ['en', 'fr']) {
       for (const width of [1440,390]) {
         await publicAtlas(browser, language, width);
