@@ -1,0 +1,528 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FRONTIER Ω ALPHA normalized public research record v2",
+  "type": "object",
+  "required": [
+    "schema",
+    "finding_id",
+    "scope",
+    "profile",
+    "classification",
+    "created_at",
+    "observed_at",
+    "effective_on",
+    "status",
+    "reopened",
+    "source_evidence",
+    "reception",
+    "change",
+    "opportunity",
+    "evaluation",
+    "asset",
+    "economics",
+    "production_authority"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "frontier-omega-alpha/research-finding-v2"
+    },
+    "finding_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "profile": {
+      "enum": [
+        "upstream-release",
+        "prusa-retrofit",
+        "lean-bitvector",
+        "hf-harness-adapter"
+      ]
+    },
+    "classification": {
+      "const": "public-evidence"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effective_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "status": {
+      "enum": [
+        "source-insufficient",
+        "detected",
+        "experiment-prepared",
+        "technically-verified",
+        "falsified"
+      ]
+    },
+    "reopened": {
+      "type": "boolean"
+    },
+    "source_evidence": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "url",
+          "sha256",
+          "publisher",
+          "version",
+          "published_on",
+          "effective_on",
+          "evidence_location"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https://"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "published_on": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "effective_on": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence_location": {
+            "type": "string"
+          },
+          "artifact": {
+            "type": "object",
+            "properties": {
+              "repository": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              },
+              "license": {
+                "type": "string"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "repository",
+              "file",
+              "revision",
+              "sha256",
+              "license",
+              "bytes"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "reception": {
+      "type": "object",
+      "required": [
+        "submitted_at",
+        "submitter",
+        "github_pr",
+        "commit_sha",
+        "authenticated_by",
+        "declared_method",
+        "received_at",
+        "task_origin"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "submitted_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "submitter": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "github_pr": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "commit_sha": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "authenticated_by": {
+          "enum": [
+            "github-rest",
+            "local-only"
+          ]
+        },
+        "declared_method": {
+          "enum": [
+            "interactive-connector",
+            "manual-export"
+          ]
+        },
+        "received_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "task_origin": {
+          "const": "operator-declared, task authorship unverified"
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "required": [
+        "publisher_profile",
+        "prior",
+        "current",
+        "material_constraint_link",
+        "reported_improvement",
+        "independently_measured",
+        "access_and_license",
+        "uncertainty"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "publisher_profile": {
+          "type": "string"
+        },
+        "prior": {
+          "type": "string"
+        },
+        "current": {
+          "type": "string"
+        },
+        "material_constraint_link": {
+          "type": "boolean"
+        },
+        "reported_improvement": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "independently_measured": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "access_and_license": {
+          "type": "string"
+        },
+        "uncertainty": {
+          "type": "string"
+        }
+      }
+    },
+    "opportunity": {
+      "type": "object",
+      "required": [
+        "purpose",
+        "binding_condition",
+        "missing_means",
+        "structural_transfer",
+        "beneficiary",
+        "payer",
+        "permissions",
+        "existing_alternative"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "purpose": {
+          "type": "string"
+        },
+        "binding_condition": {
+          "type": "string"
+        },
+        "missing_means": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "structural_transfer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "beneficiary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "payer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "permissions": {
+          "type": "string"
+        },
+        "existing_alternative": {
+          "type": "string"
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "required": [
+        "id",
+        "command",
+        "comparison",
+        "acceptance",
+        "falsifier",
+        "purpose",
+        "asset_contract",
+        "successor",
+        "bounded_runner",
+        "identical_inputs_and_authority",
+        "independence",
+        "complete_cost_categories",
+        "resources",
+        "experiment_receipt",
+        "input_lock"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "command": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "comparison": {
+          "type": "string"
+        },
+        "acceptance": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "falsifier": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "asset_contract": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "successor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bounded_runner": {
+          "type": "boolean"
+        },
+        "identical_inputs_and_authority": {
+          "type": "boolean"
+        },
+        "independence": {
+          "type": "object"
+        },
+        "complete_cost_categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resources": {
+          "type": "string"
+        },
+        "experiment_receipt": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "input_lock": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "repository": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              },
+              "license": {
+                "type": "string"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "repository",
+              "file",
+              "revision",
+              "sha256",
+              "license",
+              "bytes"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "required": [
+        "verified_identity",
+        "contract",
+        "reuse_benefit",
+        "successor",
+        "rejection_condition"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "verified_identity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contract": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reuse_benefit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "successor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rejection_condition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "economics": {
+      "type": "object",
+      "required": [
+        "hypothesized_value",
+        "technical_improvement",
+        "beneficiary_acceptance",
+        "funds_collected",
+        "complete_cost_net",
+        "incremental_advantage",
+        "repeatability",
+        "causal_successor"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hypothesized_value": {
+          "type": "null"
+        },
+        "technical_improvement": {
+          "type": "null"
+        },
+        "beneficiary_acceptance": {
+          "type": "null"
+        },
+        "funds_collected": {
+          "type": "null"
+        },
+        "complete_cost_net": {
+          "type": "null"
+        },
+        "incremental_advantage": {
+          "type": "null"
+        },
+        "repeatability": {
+          "type": "null"
+        },
+        "causal_successor": {
+          "type": "null"
+        }
+      }
+    },
+    "production_authority": {
+      "const": false
+    }
+  }
+}

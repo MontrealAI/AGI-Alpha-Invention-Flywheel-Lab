@@ -1,0 +1,580 @@
+{
+  "as_of": "2026-11-23",
+  "checks_reproduced_by_sql": 61,
+  "decisions_reproduced_by_sql": 22265,
+  "economic_advantage_established": false,
+  "exploratory_first_token_screen": {
+    "decisions_reproduced_by_sql": 365,
+    "dispositions": {
+      "above-ceiling": 4,
+      "below-threshold": 3,
+      "outside-scope": 337,
+      "qualified": 21
+    },
+    "minimum_e2e_tokens_per_second": "40",
+    "p90_milliseconds_at_most": "500",
+    "witnesses": [
+      {
+        "facts": {
+          "availability": "Available",
+          "dataset": "mlperf_agentic_inference_dataset",
+          "division": "Standardized",
+          "model": "deepseek-v4_1-flash",
+          "run": "valid-online",
+          "submission": "official",
+          "version": "1.0"
+        },
+        "id": "d0b5df69-5a34-4fd4-b0a1-49e297fc604f",
+        "load": 512,
+        "metric": "132.2112623516208",
+        "objective": "53781.8219227318",
+        "published": "2026-11-18",
+        "result_ids": [
+          "1.0.0.deepseek-v4_1-flash.mlperf_agentic_inference_dataset.3"
+        ],
+        "submission_id": "618254e9-a8b8-47e6-8851-d21dd6b4af51",
+        "system": "NVIDIA Vera Rubin NVL72 (4-GPU SUT)",
+        "upper_metric": "327.69716"
+      }
+    ]
+  },
+  "match": {
+    "availability": "Available",
+    "dataset": "mlperf_agentic_inference_dataset",
+    "division": "Standardized",
+    "model": "deepseek-v4_1-flash",
+    "run": "valid-online",
+    "submission": "official",
+    "version": "1.0"
+  },
+  "measured_breakpoints": [
+    "30.19936345388733",
+    "30.65613348827022",
+    "38.55530065373129",
+    "52.863705109829105",
+    "54.227588481444016",
+    "56.65404826434499",
+    "74.59565008261707",
+    "80.19881785570044",
+    "87.43562868731571",
+    "98.61051268857288",
+    "104.53360654472078",
+    "132.2112623516208",
+    "134.74191113090737",
+    "141.99000333119568",
+    "172.83611721592166",
+    "175.63235782875194",
+    "185.1324214769648",
+    "217.41913154259262",
+    "221.29713140898926",
+    "230.2678323048451",
+    "240.53317571403488",
+    "252.13342729370243",
+    "270.44620520277834",
+    "279.64792833965834",
+    "288.65097492202784",
+    "335.45703698615455",
+    "364.6888193635706",
+    "397.2269201330147"
+  ],
+  "normalized_sha256": "029edf530e8b947c1227d10b379bf517f488970b4d27f7d547ec0a5861351f30",
+  "production_authority": false,
+  "purpose": "Shortlist measured configurations for a future scoped replay",
+  "registered_cases": {
+    "20": {
+      "dispositions": {
+        "outside-scope": 337,
+        "qualified": 28
+      },
+      "witnesses": [
+        {
+          "facts": {
+            "availability": "Available",
+            "dataset": "mlperf_agentic_inference_dataset",
+            "division": "Standardized",
+            "model": "deepseek-v4_1-flash",
+            "run": "valid-online",
+            "submission": "official",
+            "version": "1.0"
+          },
+          "id": "285def9f-29a8-4c67-91b2-c6a8b02add04",
+          "load": 3072,
+          "metric": "38.55530065373129",
+          "objective": "103537.01636582222",
+          "published": "2026-11-18",
+          "result_ids": [
+            "1.0.0.deepseek-v4_1-flash.mlperf_agentic_inference_dataset.3"
+          ],
+          "submission_id": "618254e9-a8b8-47e6-8851-d21dd6b4af51",
+          "system": "NVIDIA Vera Rubin NVL72 (4-GPU SUT)",
+          "upper_metric": "7085.059796"
+        }
+      ]
+    },
+    "40": {
+      "dispositions": {
+        "below-threshold": 3,
+        "outside-scope": 337,
+        "qualified": 25
+      },
+      "witnesses": [
+        {
+          "facts": {
+            "availability": "Available",
+            "dataset": "mlperf_agentic_inference_dataset",
+            "division": "Standardized",
+            "model": "deepseek-v4_1-flash",
+            "run": "valid-online",
+            "submission": "official",
+            "version": "1.0"
+          },
+          "id": "1a5e5737-f9c8-46b4-a1c8-e906500e8217",
+          "load": 2048,
+          "metric": "52.863705109829105",
+          "objective": "93065.46531959379",
+          "published": "2026-11-18",
+          "result_ids": [
+            "1.0.0.deepseek-v4_1-flash.mlperf_agentic_inference_dataset.3"
+          ],
+          "submission_id": "618254e9-a8b8-47e6-8851-d21dd6b4af51",
+          "system": "NVIDIA Vera Rubin NVL72 (4-GPU SUT)",
+          "upper_metric": "2424.824697"
+        }
+      ]
+    },
+    "60": {
+      "dispositions": {
+        "below-threshold": 6,
+        "outside-scope": 337,
+        "qualified": 22
+      },
+      "witnesses": [
+        {
+          "facts": {
+            "availability": "Available",
+            "dataset": "mlperf_agentic_inference_dataset",
+            "division": "Standardized",
+            "model": "deepseek-v4_1-flash",
+            "run": "valid-online",
+            "submission": "official",
+            "version": "1.0"
+          },
+          "id": "75bb614f-c593-4488-8c53-c3a8de63a789",
+          "load": 1024,
+          "metric": "87.43562868731571",
+          "objective": "75011.69654831875",
+          "published": "2026-11-18",
+          "result_ids": [
+            "1.0.0.deepseek-v4_1-flash.mlperf_agentic_inference_dataset.3"
+          ],
+          "submission_id": "618254e9-a8b8-47e6-8851-d21dd6b4af51",
+          "system": "NVIDIA Vera Rubin NVL72 (4-GPU SUT)",
+          "upper_metric": "2561.698611"
+        }
+      ]
+    },
+    "80": {
+      "dispositions": {
+        "below-threshold": 7,
+        "outside-scope": 337,
+        "qualified": 21
+      },
+      "witnesses": [
+        {
+          "facts": {
+            "availability": "Available",
+            "dataset": "mlperf_agentic_inference_dataset",
+            "division": "Standardized",
+            "model": "deepseek-v4_1-flash",
+            "run": "valid-online",
+            "submission": "official",
+            "version": "1.0"
+          },
+          "id": "75bb614f-c593-4488-8c53-c3a8de63a789",
+          "load": 1024,
+          "metric": "87.43562868731571",
+          "objective": "75011.69654831875",
+          "published": "2026-11-18",
+          "result_ids": [
+            "1.0.0.deepseek-v4_1-flash.mlperf_agentic_inference_dataset.3"
+          ],
+          "submission_id": "618254e9-a8b8-47e6-8851-d21dd6b4af51",
+          "system": "NVIDIA Vera Rubin NVL72 (4-GPU SUT)",
+          "upper_metric": "2561.698611"
+        }
+      ]
+    }
+  },
+  "rows": 365,
+  "schema": "frontier-omega-alpha/endpoint-witness-receipt-v1",
+  "source_generated_at": "2026-11-23T16:33:40.355Z",
+  "source_sha256": "ce3226048090ba13e5d2369b582126f8440ba3485926f91ed81396fe15acada0",
+  "source_url": "https://results.mlcommons.org/endpoints/__data.json",
+  "witness_curve": [
+    [
+      "15.099681726943665",
+      [
+        "285def9f-29a8-4c67-91b2-c6a8b02add04"
+      ]
+    ],
+    [
+      "20",
+      [
+        "285def9f-29a8-4c67-91b2-c6a8b02add04"
+      ]
+    ],
+    [
+      "30.19936345388733",
+      [
+        "285def9f-29a8-4c67-91b2-c6a8b02add04"
+      ]
+    ],
+    [
+      "30.427748471078775",
+      [
+        "285def9f-29a8-4c67-91b2-c6a8b02add04"
+      ]
+    ],
+    [
+      "30.65613348827022",
+      [
+        "285def9f-29a8-4c67-91b2-c6a8b02add04"
+      ]
+    ],
+    [
+      "34.605717071000755",
+      [
+        "285def9f-29a8-4c67-91b2-c6a8b02add04"
+      ]
+    ],
+    [
+      "38.55530065373129",
+      [
+        "285def9f-29a8-4c67-91b2-c6a8b02add04"
+      ]
+    ],
+    [
+      "40",
+      [
+        "1a5e5737-f9c8-46b4-a1c8-e906500e8217"
+      ]
+    ],
+    [
+      "45.7095028817801975",
+      [
+        "1a5e5737-f9c8-46b4-a1c8-e906500e8217"
+      ]
+    ],
+    [
+      "52.863705109829105",
+      [
+        "1a5e5737-f9c8-46b4-a1c8-e906500e8217"
+      ]
+    ],
+    [
+      "53.5456467956365605",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "54.227588481444016",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "55.440818372894503",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "56.65404826434499",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "60",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "65.62484917348103",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "74.59565008261707",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "77.397233969158755",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "80",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "80.19881785570044",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "83.817223271508075",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "87.43562868731571",
+      [
+        "75bb614f-c593-4488-8c53-c3a8de63a789"
+      ]
+    ],
+    [
+      "93.023070687944295",
+      [
+        "d0b5df69-5a34-4fd4-b0a1-49e297fc604f"
+      ]
+    ],
+    [
+      "98.61051268857288",
+      [
+        "d0b5df69-5a34-4fd4-b0a1-49e297fc604f"
+      ]
+    ],
+    [
+      "101.57205961664683",
+      [
+        "d0b5df69-5a34-4fd4-b0a1-49e297fc604f"
+      ]
+    ],
+    [
+      "104.53360654472078",
+      [
+        "d0b5df69-5a34-4fd4-b0a1-49e297fc604f"
+      ]
+    ],
+    [
+      "118.37243444817079",
+      [
+        "d0b5df69-5a34-4fd4-b0a1-49e297fc604f"
+      ]
+    ],
+    [
+      "132.2112623516208",
+      [
+        "d0b5df69-5a34-4fd4-b0a1-49e297fc604f"
+      ]
+    ],
+    [
+      "133.476586741264085",
+      [
+        "fe4b1e32-04c3-4213-b58e-ca8bedd2f999"
+      ]
+    ],
+    [
+      "134.74191113090737",
+      [
+        "fe4b1e32-04c3-4213-b58e-ca8bedd2f999"
+      ]
+    ],
+    [
+      "138.365957231051525",
+      [
+        "fe4b1e32-04c3-4213-b58e-ca8bedd2f999"
+      ]
+    ],
+    [
+      "141.99000333119568",
+      [
+        "fe4b1e32-04c3-4213-b58e-ca8bedd2f999"
+      ]
+    ],
+    [
+      "157.41306027355867",
+      [
+        "fe4b1e32-04c3-4213-b58e-ca8bedd2f999"
+      ]
+    ],
+    [
+      "172.83611721592166",
+      [
+        "fe4b1e32-04c3-4213-b58e-ca8bedd2f999"
+      ]
+    ],
+    [
+      "174.23423752233680",
+      [
+        "860a87b6-20d8-4f59-9209-0b49f04998a5"
+      ]
+    ],
+    [
+      "175.63235782875194",
+      [
+        "860a87b6-20d8-4f59-9209-0b49f04998a5"
+      ]
+    ],
+    [
+      "180.38238965285837",
+      [
+        "860a87b6-20d8-4f59-9209-0b49f04998a5"
+      ]
+    ],
+    [
+      "185.1324214769648",
+      [
+        "860a87b6-20d8-4f59-9209-0b49f04998a5"
+      ]
+    ],
+    [
+      "201.27577650977871",
+      [
+        "860a87b6-20d8-4f59-9209-0b49f04998a5"
+      ]
+    ],
+    [
+      "217.41913154259262",
+      [
+        "860a87b6-20d8-4f59-9209-0b49f04998a5"
+      ]
+    ],
+    [
+      "219.35813147579094",
+      [
+        "860a87b6-20d8-4f59-9209-0b49f04998a5"
+      ]
+    ],
+    [
+      "221.29713140898926",
+      [
+        "860a87b6-20d8-4f59-9209-0b49f04998a5"
+      ]
+    ],
+    [
+      "225.78248185691718",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "230.2678323048451",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "235.40050400943999",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "240.53317571403488",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "246.333301503868655",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "252.13342729370243",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "261.289816248240385",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "270.44620520277834",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "275.04706677121834",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "279.64792833965834",
+      [
+        "6c0a4110-464c-4310-8b9d-3e48b80f68e8"
+      ]
+    ],
+    [
+      "284.14945163084309",
+      [
+        "4cd88602-aed8-4aa3-b21c-81d280d13f37"
+      ]
+    ],
+    [
+      "288.65097492202784",
+      [
+        "4cd88602-aed8-4aa3-b21c-81d280d13f37"
+      ]
+    ],
+    [
+      "312.054005954091195",
+      [
+        "4cd88602-aed8-4aa3-b21c-81d280d13f37"
+      ]
+    ],
+    [
+      "335.45703698615455",
+      [
+        "4cd88602-aed8-4aa3-b21c-81d280d13f37"
+      ]
+    ],
+    [
+      "350.072928174862575",
+      [
+        "6bb91092-fc26-4848-aaf0-157461dbe715"
+      ]
+    ],
+    [
+      "364.6888193635706",
+      [
+        "6bb91092-fc26-4848-aaf0-157461dbe715"
+      ]
+    ],
+    [
+      "380.95786974829265",
+      [
+        "f8a89260-f03d-4299-8b13-1f777af24d6c"
+      ]
+    ],
+    [
+      "397.2269201330147",
+      [
+        "f8a89260-f03d-4299-8b13-1f777af24d6c"
+      ]
+    ],
+    [
+      "398.2269201330147",
+      []
+    ]
+  ],
+  "witness_sets_sha256": "81c0346e5525e7c6e117ede3f6a5698d6d56c179e69676ad7d91a0abaabfa45f"
+}

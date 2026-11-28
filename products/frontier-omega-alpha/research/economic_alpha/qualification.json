@@ -1,0 +1,614 @@
+{
+  "candidate": "parts-retrofit",
+  "commercial": {
+    "collected_funds": null,
+    "customer_benefit": null,
+    "eligible_real_beneficiary": null,
+    "fulfilled_orders": null,
+    "incremental_net_value": null,
+    "level_2_to_6": "not-established",
+    "orders_accepted": null
+  },
+  "cost_observations": {
+    "beneficiary_integration": null,
+    "billing": null,
+    "complete_cost": null,
+    "development": null,
+    "failed_attempts": null,
+    "labor": null,
+    "registered_replay": {
+      "cpu_seconds": 8.966600000000213e-05,
+      "wall_seconds": 9.091200081456918e-05
+    },
+    "s1_retained": {
+      "cpu_seconds": 5.9635000000002325e-05,
+      "wall_seconds": 5.949200021859724e-05
+    },
+    "s1_sql": {
+      "cpu_seconds": 4.5907999999997284e-05,
+      "wall_seconds": 4.587299918057397e-05
+    },
+    "s2_ordinary": {
+      "cpu_seconds": 0.00012491199999999092,
+      "wall_seconds": 0.0001247099989996059
+    },
+    "s2_retained": {
+      "cpu_seconds": 7.603500000000207e-05,
+      "wall_seconds": 7.588300104544032e-05
+    },
+    "s2_sql": {
+      "cpu_seconds": 0.00018271499999999996,
+      "wall_seconds": 0.0001824789997044718
+    }
+  },
+  "external_action_authorized": false,
+  "fresh_cases_sha256": "d7d8ad16f20fe57ee4f431f4c4d939688f26e2fb93d29c28b8501ab76a9a4a6f",
+  "frontier_replay": {
+    "after": "2026-10-21",
+    "before": "2026-10-20",
+    "changed": [
+      "one-over-stock",
+      "maximum-upgrade",
+      "large-variant",
+      "large-original",
+      "plus-gen2",
+      "fresh-oem-alias",
+      "fresh-gen2-lower-bound"
+    ]
+  },
+  "implementation_sha256": {
+    "__main__.py": "ec8db7b5527c8088c24de948419959ec414a7b34ef47a12825db052e8f4d70ea",
+    "baseline.py": "b76e6db859eb3a59949647efe97a3df230f5ae0464f496fd743741ac864f602e",
+    "economics.py": "c83cbc1c139682941881b1ee9234fbef54e6e909b5495a0b979c46809e3beae9",
+    "eligibility.py": "e41fbe2d13a3aeb721eb3c3e834d2d1135206d3f711c93009f62601e2e0aed62",
+    "observations.py": "602842638d96d9d084e287f922460b893e49a75d12457283929f568cb9a340f6",
+    "process.py": "6a829d5b366428e7c790c8fa3a84968662ccca38b3293abe2f48bb14668d5c3c",
+    "study.py": "da518eca781c7f2f61fe1567a740c9bc772a15323cbf119ffcc0743266900f1d"
+  },
+  "outside_options": {
+    "OEM_lookup": "public sources reviewed",
+    "commercial_specialist": "unmeasured",
+    "continue_or_outsource": "unmeasured",
+    "frontier_model_at_full_workflow": "unmeasured",
+    "human_supplier_workflow": "unmeasured",
+    "same_information_conventional": "measured"
+  },
+  "registration_sha256": "f148678e6f2247b2ff0326a9cd997a4babc2c2c43b5de35d4560b038bc07fff9",
+  "s1": [
+    {
+      "after": "existing-envelope",
+      "baseline_after": "existing-envelope",
+      "baseline_before": "existing-envelope",
+      "before": "existing-envelope",
+      "case": "standard-at-limit",
+      "expected": "existing-envelope",
+      "part": null,
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "retrofit-candidate",
+      "baseline_after": "retrofit-candidate",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "one-over-stock",
+      "expected": "retrofit-candidate",
+      "part": "prusa-ht-hotend-upgrade",
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "retrofit-candidate",
+      "baseline_after": "retrofit-candidate",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "maximum-upgrade",
+      "expected": "retrofit-candidate",
+      "part": "prusa-ht-hotend-upgrade",
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "no-documented-path",
+      "baseline_after": "no-documented-path",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "one-over-upgrade",
+      "expected": "no-documented-path",
+      "part": null,
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "retrofit-candidate",
+      "baseline_after": "retrofit-candidate",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "large-variant",
+      "expected": "retrofit-candidate",
+      "part": "prusa-ht-hotend-upgrade",
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "retrofit-candidate",
+      "baseline_after": "retrofit-candidate",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "large-original",
+      "expected": "retrofit-candidate",
+      "part": "prusa-ht-hotend-upgrade",
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "retrofit-candidate",
+      "baseline_after": "retrofit-candidate",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "plus-gen2",
+      "expected": "retrofit-candidate",
+      "part": "prusa-ht-hotend-upgrade",
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "need-model-evidence",
+      "baseline_after": "need-model-evidence",
+      "baseline_before": "need-model-evidence",
+      "before": "need-model-evidence",
+      "case": "unlisted-model",
+      "expected": "need-model-evidence",
+      "part": null,
+      "source_ids": []
+    },
+    {
+      "after": "unsupported-configuration",
+      "baseline_after": "unsupported-configuration",
+      "baseline_before": "unsupported-configuration",
+      "before": "unsupported-configuration",
+      "case": "named-exclusion",
+      "expected": "unsupported-configuration",
+      "part": null,
+      "source_ids": [
+        "upgrade"
+      ]
+    },
+    {
+      "after": "unsupported-configuration",
+      "baseline_after": "unsupported-configuration",
+      "baseline_before": "unsupported-configuration",
+      "before": "unsupported-configuration",
+      "case": "exclude-indx-l",
+      "expected": "unsupported-configuration",
+      "part": null,
+      "source_ids": [
+        "upgrade"
+      ]
+    },
+    {
+      "after": "unsupported-configuration",
+      "baseline_after": "unsupported-configuration",
+      "baseline_before": "unsupported-configuration",
+      "before": "unsupported-configuration",
+      "case": "exclude-mk4s",
+      "expected": "unsupported-configuration",
+      "part": null,
+      "source_ids": [
+        "upgrade"
+      ]
+    },
+    {
+      "after": "unsupported-configuration",
+      "baseline_after": "unsupported-configuration",
+      "baseline_before": "unsupported-configuration",
+      "before": "unsupported-configuration",
+      "case": "exclude-xl",
+      "expected": "unsupported-configuration",
+      "part": null,
+      "source_ids": [
+        "upgrade"
+      ]
+    },
+    {
+      "after": "need-model-evidence",
+      "baseline_after": "need-model-evidence",
+      "baseline_before": "need-model-evidence",
+      "before": "need-model-evidence",
+      "case": "empty-identifier",
+      "expected": "need-model-evidence",
+      "part": null,
+      "source_ids": []
+    },
+    {
+      "after": "need-model-evidence",
+      "baseline_after": "need-model-evidence",
+      "baseline_before": "need-model-evidence",
+      "before": "need-model-evidence",
+      "case": "ambiguous-alias",
+      "expected": "need-model-evidence",
+      "part": null,
+      "source_ids": []
+    },
+    {
+      "after": "external-review-required",
+      "baseline_after": "external-review-required",
+      "baseline_before": "external-review-required",
+      "before": "external-review-required",
+      "case": "safety-approval",
+      "expected": "external-review-required",
+      "part": null,
+      "source_ids": []
+    },
+    {
+      "after": "external-review-required",
+      "baseline_after": "external-review-required",
+      "baseline_before": "external-review-required",
+      "before": "external-review-required",
+      "case": "unknown-use",
+      "expected": "external-review-required",
+      "part": null,
+      "source_ids": []
+    },
+    {
+      "after": "retrofit-candidate",
+      "baseline_after": "retrofit-candidate",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "fresh-oem-alias",
+      "expected": "retrofit-candidate",
+      "part": "prusa-ht-hotend-upgrade",
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "no-documented-path",
+      "baseline_after": "no-documented-path",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "fresh-upper-limit",
+      "expected": "no-documented-path",
+      "part": null,
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "existing-envelope",
+      "baseline_after": "existing-envelope",
+      "baseline_before": "existing-envelope",
+      "before": "existing-envelope",
+      "case": "fresh-original-stock",
+      "expected": "existing-envelope",
+      "part": null,
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "unsupported-configuration",
+      "baseline_after": "unsupported-configuration",
+      "baseline_before": "unsupported-configuration",
+      "before": "unsupported-configuration",
+      "case": "fresh-maker-exclusion",
+      "expected": "unsupported-configuration",
+      "part": null,
+      "source_ids": [
+        "upgrade"
+      ]
+    },
+    {
+      "after": "need-model-evidence",
+      "baseline_after": "need-model-evidence",
+      "baseline_before": "need-model-evidence",
+      "before": "need-model-evidence",
+      "case": "fresh-missing-label",
+      "expected": "need-model-evidence",
+      "part": null,
+      "source_ids": []
+    },
+    {
+      "after": "external-review-required",
+      "baseline_after": "external-review-required",
+      "baseline_before": "external-review-required",
+      "before": "external-review-required",
+      "case": "fresh-regulated",
+      "expected": "external-review-required",
+      "part": null,
+      "source_ids": []
+    },
+    {
+      "after": "retrofit-candidate",
+      "baseline_after": "retrofit-candidate",
+      "baseline_before": "no-documented-path",
+      "before": "no-documented-path",
+      "case": "fresh-gen2-lower-bound",
+      "expected": "retrofit-candidate",
+      "part": "prusa-ht-hotend-upgrade",
+      "source_ids": [
+        "stock",
+        "release",
+        "upgrade"
+      ]
+    },
+    {
+      "after": "need-model-evidence",
+      "baseline_after": "need-model-evidence",
+      "baseline_before": "need-model-evidence",
+      "before": "need-model-evidence",
+      "case": "fresh-unknown-printer",
+      "expected": "need-model-evidence",
+      "part": null,
+      "source_ids": []
+    }
+  ],
+  "s1_asset_sha256": "e41fbe2d13a3aeb721eb3c3e834d2d1135206d3f711c93009f62601e2e0aed62",
+  "s2": [
+    {
+      "case": "large-documented-envelope",
+      "direct_without_inheritance": "documented-process-envelope",
+      "expected": "documented-process-envelope",
+      "ordinary_reuse": "documented-process-envelope",
+      "with_inheritance": "documented-process-envelope"
+    },
+    {
+      "case": "gen2-boundary",
+      "direct_without_inheritance": "documented-process-envelope",
+      "expected": "documented-process-envelope",
+      "ordinary_reuse": "documented-process-envelope",
+      "with_inheritance": "documented-process-envelope"
+    },
+    {
+      "case": "large-above-chamber-cap",
+      "direct_without_inheritance": "outside-chamber-envelope",
+      "expected": "outside-chamber-envelope",
+      "ordinary_reuse": "outside-chamber-envelope",
+      "with_inheritance": "outside-chamber-envelope"
+    },
+    {
+      "case": "smaller-above-chamber-cap",
+      "direct_without_inheritance": "outside-chamber-envelope",
+      "expected": "outside-chamber-envelope",
+      "ordinary_reuse": "outside-chamber-envelope",
+      "with_inheritance": "outside-chamber-envelope"
+    },
+    {
+      "case": "hardware-route-insufficient",
+      "direct_without_inheritance": "installed-configuration-unverified",
+      "expected": "installed-configuration-unverified",
+      "ordinary_reuse": "installed-configuration-unverified",
+      "with_inheritance": "installed-configuration-unverified"
+    },
+    {
+      "case": "incomplete-process-material",
+      "direct_without_inheritance": "site-evidence-required",
+      "expected": "site-evidence-required",
+      "ordinary_reuse": "site-evidence-required",
+      "with_inheritance": "site-evidence-required"
+    },
+    {
+      "case": "surface-incomplete",
+      "direct_without_inheritance": "accessory-evidence-required",
+      "expected": "accessory-evidence-required",
+      "ordinary_reuse": "accessory-evidence-required",
+      "with_inheritance": "accessory-evidence-required"
+    },
+    {
+      "case": "unproven-chamber-limit",
+      "direct_without_inheritance": "need-chamber-evidence",
+      "expected": "need-chamber-evidence",
+      "ordinary_reuse": "need-chamber-evidence",
+      "with_inheritance": "need-chamber-evidence"
+    },
+    {
+      "case": "unsupported-successor",
+      "direct_without_inheritance": "unsupported-configuration",
+      "expected": "unsupported-configuration",
+      "ordinary_reuse": "unsupported-configuration",
+      "with_inheritance": "unsupported-configuration"
+    },
+    {
+      "case": "missing-revision",
+      "direct_without_inheritance": "need-model-evidence",
+      "expected": "need-model-evidence",
+      "ordinary_reuse": "need-model-evidence",
+      "with_inheritance": "need-model-evidence"
+    },
+    {
+      "case": "fresh-gen2-at-55",
+      "direct_without_inheritance": "documented-process-envelope",
+      "expected": "documented-process-envelope",
+      "ordinary_reuse": "documented-process-envelope",
+      "with_inheritance": "documented-process-envelope"
+    },
+    {
+      "case": "fresh-gen2-at-56",
+      "direct_without_inheritance": "outside-chamber-envelope",
+      "expected": "outside-chamber-envelope",
+      "ordinary_reuse": "outside-chamber-envelope",
+      "with_inheritance": "outside-chamber-envelope"
+    },
+    {
+      "case": "fresh-large-kit",
+      "direct_without_inheritance": "documented-process-envelope",
+      "expected": "documented-process-envelope",
+      "ordinary_reuse": "documented-process-envelope",
+      "with_inheritance": "documented-process-envelope"
+    },
+    {
+      "case": "fresh-wrong-accessory",
+      "direct_without_inheritance": "accessory-evidence-required",
+      "expected": "accessory-evidence-required",
+      "ordinary_reuse": "accessory-evidence-required",
+      "with_inheritance": "accessory-evidence-required"
+    },
+    {
+      "case": "fresh-no-device-inspection",
+      "direct_without_inheritance": "installed-configuration-unverified",
+      "expected": "installed-configuration-unverified",
+      "ordinary_reuse": "installed-configuration-unverified",
+      "with_inheritance": "installed-configuration-unverified"
+    },
+    {
+      "case": "fresh-physical-witness-missing",
+      "direct_without_inheritance": "site-evidence-required",
+      "expected": "site-evidence-required",
+      "ordinary_reuse": "site-evidence-required",
+      "with_inheritance": "site-evidence-required"
+    },
+    {
+      "case": "fresh-safety-branch",
+      "direct_without_inheritance": "external-review-required",
+      "expected": "external-review-required",
+      "ordinary_reuse": "external-review-required",
+      "with_inheritance": "external-review-required"
+    },
+    {
+      "case": "fresh-unsupported-nozzle",
+      "direct_without_inheritance": "no-documented-path",
+      "expected": "no-documented-path",
+      "ordinary_reuse": "no-documented-path",
+      "with_inheritance": "no-documented-path"
+    }
+  ],
+  "schema": "frontier-omega-alpha/alpha-1-technical-receipt-v1",
+  "scope": "Registered technical decisions using public catalog facts and constructed challenge inquiries",
+  "source_group_check": {
+    "correction_claim": "necessary_group_count_failed",
+    "distinct_groups": 1,
+    "independent_physical_witness": null,
+    "necessary_groups_for_t_fault_correction": 3,
+    "upstream_authority": "Prusa"
+  },
+  "source_receipt": {
+    "acquired_utc": "2026-11-22T20:11:04.108316+00:00",
+    "sources": {
+      "docling": {
+        "bytes": 517650,
+        "content_sentinels": [],
+        "identity": "upstream Docling provenance fix",
+        "sha256": "681f14a71c7af60f51fbfe80f2096342c389d16d20bda8a0a47e70590956a5ae",
+        "state": "observed",
+        "upstream": "docling-project",
+        "url": "https://github.com/docling-project/docling/commit/557df04"
+      },
+      "large": {
+        "bytes": 1354863,
+        "content_sentinels": [
+          true,
+          true
+        ],
+        "identity": "OEM CORE One L+ specifications",
+        "sha256": "8b09d70022c3bf44d563d0c877fe2d0398bc2c6734b60153a57aa382eec6e587",
+        "state": "observed",
+        "upstream": "prusa",
+        "url": "https://www.prusa3d.com/en/product/prusa-core-one-l-3/"
+      },
+      "lean": {
+        "bytes": 309473,
+        "content_sentinels": [],
+        "identity": "Lean 4.36.0 release notes, 2026-11-16",
+        "sha256": "7aeed47f3f88ab65bb598bc9bc4c8ee90fe368b76c7ad9d58beddbd1583bc033",
+        "state": "observed",
+        "upstream": "lean-project",
+        "url": "https://lean-lang.org/doc/reference/latest/releases/v4.36.0/"
+      },
+      "market-signal": {
+        "bytes": 125970,
+        "content_sentinels": [],
+        "identity": "October 2026 Open Repair publication; general repair records, not RFQs",
+        "sha256": "7eef9528effc00f510f821cb151b00c82b6ce7a3a69f6a688ab1b0ec117397ee",
+        "state": "observed",
+        "upstream": "open-repair-alliance",
+        "url": "https://openrepair.org/open-data/downloads/"
+      },
+      "parts-specialist": {
+        "bytes": 51944,
+        "content_sentinels": [],
+        "identity": "installed incumbent product description",
+        "sha256": "eb755d233367dcbdcd20f1c2f10ae1b65fd783211bbf9c1489667bcf0efc0bda",
+        "state": "observed",
+        "upstream": "partium",
+        "url": "https://www.partium.io/parts-intelligence/spare-parts-identification"
+      },
+      "release": {
+        "bytes": 111394,
+        "content_sentinels": [
+          true,
+          true,
+          true
+        ],
+        "identity": "2026-10-21 manufacturer release",
+        "sha256": "ff699a42eac7c8dc4ffc46554c976550ce816a966f72cb9467bbc77a7ea51525",
+        "state": "observed",
+        "upstream": "prusa",
+        "url": "https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/"
+      },
+      "stock": {
+        "bytes": 1447800,
+        "content_sentinels": [
+          true,
+          true
+        ],
+        "identity": "OEM comparative specifications",
+        "sha256": "064263fce4746aaa16feb6501e82e9bc10955370a49a9f7e51147e66e2417a36",
+        "state": "observed",
+        "upstream": "prusa",
+        "url": "https://www.prusa3d.com/en/product/prusa-core-one/"
+      },
+      "upgrade": {
+        "bytes": 865408,
+        "content_sentinels": [
+          true,
+          true,
+          true
+        ],
+        "identity": "OEM retrofit product and compatibility table",
+        "sha256": "5dd7e25cb1610f4d3cc715953369b857ef15007d146551ad45e8213900539ffe",
+        "state": "observed",
+        "upstream": "prusa",
+        "url": "https://www.prusa3d.com/product/ht-hotend-upgrade-for-core-one-and-core-one-l/"
+      }
+    }
+  },
+  "successor": {
+    "causal_invention_improvement": "unproven",
+    "frozen_asset_consumed": true
+  },
+  "verification": {
+    "economic_promotion_authorized": false,
+    "new_catalog_routes": 7,
+    "s1_reproduced": 24,
+    "s2_reproduced": 18,
+    "technical_equivalence": true,
+    "technical_level": 1
+  }
+}

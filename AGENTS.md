@@ -16,6 +16,10 @@ Remove discretionary engineering mission timeouts and universal business-scale c
 
 ## Current mandate
 
+### FRONTIER Ω ALPHA scientific acceptance
+
+Apply the [Transformational Invention principle](products/frontier-omega-alpha/research/possibility_observatory/TRANSFORMATIONAL-INVENTION.md) to FRONTIER Ω ALPHA's 10/10 programme. Preserve the beneficiary's purpose and build changeable means and independently checkable evidence. Compare an accepted construction, useful inheritance, a better constructor and a better update rule as four separate claims. Freeze acceptance before fitting, give competing methods equal content and rights, and preserve explicit failure and cost records. Where conventional delivery leads, use it and retain the decisive evidence.
+
 ### The uncompromising target
 
 > The target remains uncompromising:
