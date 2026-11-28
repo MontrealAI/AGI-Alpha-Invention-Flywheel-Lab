@@ -1476,7 +1476,40 @@ async function conclaveDoor(browser, language) {
     assert.equal(await page.locator('#member').isVisible(),false);
     assert.equal(await page.locator('#double-flywheel').count(),0);
     assert.equal(await page.locator('#dossier').isVisible(),false);
-    if(language==='fr')await page.locator('[data-club-lang=fr]').click();
+    assert.equal(await page.locator('#conclave-vision').isVisible(),true);
+    assert.equal(await page.locator('.gold-action').first().isVisible(),true);
+    const visuals=new URL('../conclave-visuals/',base);
+    const artReceipt=await page.request.get(new URL('edition.json',visuals).href);
+    assert.equal(artReceipt.status(),200);
+    const artMeta=await artReceipt.json();
+    assert.ok(['production-2026-11-28','celestial-2026-11-28','existing-conclave'].includes(artMeta.artwork));
+    await artReceipt.dispose();
+    for(const file of ['arrival.webp','flywheel.webp','sanctum.webp','horizon.webp']){
+      const response=await page.request.get(new URL(file,visuals).href);
+      assert.equal(response.status(),200,file);
+      const body=await response.body();
+      assert.equal(createHash('sha256').update(body).digest('hex'),artMeta.sha256[file],file);
+      await response.dispose();
+    }
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    if(language==='fr') {
+      await page.locator('[data-entrance-lang=fr]').click();
+      assert.equal(await page.locator('html').getAttribute('lang'),'fr');
+      assert.match(await page.locator('#vision-title').innerText(),/Inventer la capacité/);
+      await page.locator('[data-club-lang=en]').click();
+      assert.equal(await page.locator('html').getAttribute('lang'),'en');
+      await page.locator('[data-club-lang=fr]').click();
+    }
+    const width=language==='fr'?390:1440;
+    await page.locator('#top').scrollIntoViewIfNeeded();
+    await capture(page,language,width,'conclave-entrance');
+    if(language==='fr'){
+      await page.setViewportSize({width:320,height:740});
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+      assert.ok(await page.locator('#top h1').evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+      await capture(page,language,320,'conclave-entrance');
+      await page.setViewportSize(dimensions(width));
+    }
     const go=page.locator('#conclave-club-enter');
     const label=page.locator('#conclave-club-label');
     await label.fill('frontier-check');
@@ -1496,7 +1529,25 @@ async function conclaveDoor(browser, language) {
     assert.equal(await edition.getAttribute('lang'),language);
     assert.equal(await edition.locator('.ce-card').count(),7);
     assert.equal(await edition.locator('.ce-primary').count(),1);
-    assert.match(await edition.locator('.ce-secondary').getAttribute('href'),/frontier-conclave-participant-v2026\.11\.28\/AGI-CLUB-OMEGA-PARTICIPANT-FINAL\.zip$/);
+    assert.equal(await edition.locator('.ce-head .ce-primary').count(),1,'Immediate collection action belongs in the welcome');
+    assert.equal(await edition.locator('.ce-head .ce-secondary').count(),1,'Offline action belongs in the welcome');
+    assert.ok(await edition.locator('.ce-primary').evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight;}),'Collection action must be visible immediately after sign-in');
+    const editionReceipt=await page.request.get(new URL('../conclave-participant/edition.json',base).href);
+    assert.equal(editionReceipt.status(),200);
+    const memberMeta=await editionReceipt.json();
+    await editionReceipt.dispose();
+    const current=memberMeta.archive==='AGI-CLUB-OMEGA-PARTICIPANT-PRODUCTION.zip';
+    assert.ok(["AGI-CLUB-OMEGA-PARTICIPANT-PRODUCTION.zip","AGI-CLUB-OMEGA-PARTICIPANT-FINAL.zip"].includes(memberMeta.archive));
+    assert.equal(await edition.getAttribute('data-conclave-edition'),current?'production':'founding');
+    assert.equal(await edition.locator('.ce-secondary').getAttribute('href'),'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/frontier-conclave-participant-v2026.11.28/'+memberMeta.archive);
+    assert.equal(memberMeta.sha256,current?'79d62975b108be36c99caf321951eb34200e9b5a6e07980e5b178f02aa448152':'c08b5e3432c2d5896e8f8d72845189947869acbef0fdc653540269e2aa155fa0');
+    if(current){
+      assert.equal(artMeta.artwork,'production-2026-11-28');
+      const portal=await page.request.get(new URL('../conclave-participant/AGI-CLUB-DOUBLE-FLYWHEEL/START-HERE.html',base).href);
+      assert.equal(portal.status(),200);const html=await portal.text();
+      assert.ok(html.includes('Production-Member-Guide.pdf')&&!html.includes('TELEPROMPTER')&&!html.includes('.pptx'));
+      await portal.dispose();
+    }
     for(const href of await edition.locator('.ce-card, .ce-primary').evaluateAll(nodes=>nodes.map(node=>node.href))){
       const response=await page.request.head(href);
       assert.equal(response.status(),200,href);
@@ -1505,6 +1556,10 @@ async function conclaveDoor(browser, language) {
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     assert.match(await host.locator('#df-title').innerText(),/First Light|Première Lumière/);
     assert.equal(await page.locator('#top').isVisible(),false);
+    assert.equal(await page.locator('#conclave-vision').isVisible(),false);
+    assert.equal(await edition.locator('.ce-head').isVisible(),true);
+    await edition.locator('.ce-head').scrollIntoViewIfNeeded();
+    await capture(page,language,width,'conclave-sanctum');
     const start=host.locator('[data-df=start]');
     for(let i=0;i<4;i++)await start.press('Enter');
     await host.locator('.df-switch-tool').press('Space');
@@ -1513,7 +1568,12 @@ async function conclaveDoor(browser, language) {
     assert.equal(await page.evaluate(()=>window.walletScenario.signed.length),1);
     const methods=await page.evaluate(()=>window.walletScenario.methods);
     assert.ok(!methods.some(m=>m==='eth_sendTransaction'||m==='wallet_switchEthereumChain'));
+    await edition.locator('.ce-shortcuts a[href="#dossier"]').click();
+    assert.equal(await page.locator('.founding-archive').getAttribute('open'),'');
+    assert.equal(await page.locator('#dossier').isVisible(),true);
     await page.locator('#conclave-club-lock').click();
+    assert.equal(await page.locator('.founding-archive').getAttribute('open'),null);
+    assert.equal(await page.locator('#conclave-vision').isVisible(),true);
     assert.equal(await page.locator('#conclave-edition').count(),0);
     assert.equal(await host.count(),0);
     assert.equal(await page.locator('#dossier').isVisible(),false);

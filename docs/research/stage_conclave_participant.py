@@ -19,6 +19,12 @@ SHA256 = 'c08b5e3432c2d5896e8f8d72845189947869acbef0fdc653540269e2aa155fa0'
 BYTES = 265_584_373
 COUNT = 259
 UNPACKED_BYTES = 272_168_328
+PRODUCTION_ARCHIVE = 'AGI-CLUB-OMEGA-PARTICIPANT-PRODUCTION.zip'
+EDITIONS = {
+    ARCHIVE: dict(sha256=SHA256, bytes=BYTES, files=COUNT, expanded=UNPACKED_BYTES),
+    PRODUCTION_ARCHIVE: dict(sha256='79d62975b108be36c99caf321951eb34200e9b5a6e07980e5b178f02aa448152', bytes=267239031,
+                            files=274, expanded=286478749),
+}
 ROOT = 'AGI-CLUB-DOUBLE-FLYWHEEL'
 DEST = 'conclave-participant'
 MANIFEST = 'SHA256SUMS-COLLECTION.txt'
@@ -72,9 +78,11 @@ def stage(site, archive):
             'Stage only into the built Conclave site')
     target = site / DEST
     require(not target.exists() and not target.is_symlink(), 'Participant destination already exists')
-    require(archive.name == ARCHIVE and archive.stat().st_size == BYTES and digest(archive) == SHA256,
-            'Release asset does not match the approved participant archive')
-    require(site_bytes(site) + UNPACKED_BYTES + 1024 <= SITE_LIMIT, 'Pages site would exceed 1 GB')
+    edition = EDITIONS.get(archive.name)
+    require(edition is not None and archive.stat().st_size == edition['bytes']
+            and digest(archive) == edition['sha256'],
+            'Release asset does not match an approved participant archive')
+    require(site_bytes(site) + edition['expanded'] + 1024 <= SITE_LIMIT, 'Pages site would exceed 1 GB')
     with tempfile.TemporaryDirectory(prefix='.conclave-stage-', dir=site.parent) as tmp:
         staging = Path(tmp) / DEST
         folder = staging / ROOT
@@ -82,7 +90,7 @@ def stage(site, archive):
         files, folded = set(), set()
         with zipfile.ZipFile(archive) as package:
             entries = package.infolist()
-            require(len(entries) == COUNT and sum(i.file_size for i in entries) == UNPACKED_BYTES,
+            require(len(entries) == edition['files'] and sum(i.file_size for i in entries) == edition['expanded'],
                     'Unexpected archive membership or expanded size')
             for item in entries:
                 parts = item.filename.split('/')
@@ -115,8 +123,15 @@ def stage(site, archive):
         for lang in ('EN', 'FR'):
             require(f'01-PRESENTATION/IMMERSIVE/films/Stellar-Journey-{lang}.mp4' in files, 'Missing film')
         validate_paths(files, folder)
-        meta = {'schema': 1, 'tag': TAG, 'archive': ARCHIVE, 'sha256': SHA256,
-                'bytes': BYTES, 'files': COUNT, 'root': ROOT}
+        if archive.name == PRODUCTION_ARCHIVE:
+            require({'assets/production/' + x + '.webp' for x in ('arrival', 'flywheel', 'sanctum', 'horizon')} <= files,
+                    'Missing production artwork')
+            require({'03-INTELLECTUAL-ATLAS/Production-Orientation.pdf',
+                     '05-FRONTIER-PLAYBOOK/First-Loop-Production-Canvas.pdf',
+                     '07-AGI-CLUB-EDITION/Production-Member-Guide.pdf'} <= files,
+                    'Missing current production material')
+        meta = {'schema': 1, 'tag': TAG, 'archive': archive.name, 'sha256': edition['sha256'],
+                'bytes': edition['bytes'], 'files': edition['files'], 'root': ROOT}
         (staging / 'edition.json').write_text(json.dumps(meta, sort_keys=True) + '\n', encoding='utf-8')
         require(site_bytes(site) + site_bytes(staging) <= SITE_LIMIT, 'Pages site would exceed 1 GB')
         staging.rename(target)

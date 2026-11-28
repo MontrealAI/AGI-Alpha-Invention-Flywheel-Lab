@@ -53,12 +53,19 @@ async function validSignature(wallet,message,sig,account) {
 
 let clock,poll,checkingSession,generation=0,locale='en',session=null,pending=null,activeWallet=null,cleanup=null,state='';
 const languages=[...root.querySelectorAll('[data-club-lang]')];
+const entranceLanguages=[...document.querySelectorAll('[data-entrance-lang]')];
+const entranceCopy=[...document.querySelectorAll('[data-entrance-copy]')].map(node=>({node,en:node.textContent,fr:node.dataset.fr}));
+const vision=document.getElementById('conclave-vision');
+const returnLink=document.getElementById('conclave-return');
 function status(k) {
   state=k;
   $('status').textContent=copy[locale][k]??'';
 }
 function localize(next) {
   locale=next;
+  document.documentElement.lang=locale;
+  for(const {node,en,fr} of entranceCopy)node.textContent=locale==='fr'?fr:en;
+  for(const button of entranceLanguages)button.setAttribute('aria-pressed',String(button.dataset.entranceLang===locale));
   $('copy').lang=locale;
   workspace.lang=locale;
   workspace.setAttribute('aria-label',copy[locale].workspace);
@@ -78,7 +85,11 @@ function lock(reason='locked'){
   pending=null;
   workspace.hidden=true;
   document.getElementById('top').hidden=false;
+  vision.hidden=false;
+  returnLink.href='#top';
+  returnLink.textContent=locale==='fr'?'Retour au seuil ↑':'Return to the threshold ↑';
   $('legacy').hidden=true;
+  const archive=$('legacy').querySelector('.founding-archive');if(archive)archive.open=false;
   window.dispatchEvent(new Event('frontier:member-lock'));
   if(typeof cleanup==='function')cleanup();
   cleanup=null;
@@ -171,6 +182,9 @@ $('form').addEventListener('submit',async event=>{
     $('legacy').hidden=false;
     root.hidden=true;
     document.getElementById('top').hidden=true;
+    vision.hidden=true;
+    returnLink.href='#member';
+    returnLink.textContent=locale==='fr'?'Retour au sanctuaire ↑':'Return to the Inner Sanctum ↑';
     workspace.scrollIntoView({block:'start',behavior:'instant'});
     $('content').querySelector('#conclave-edition-title')?.focus({preventScroll:true});
     clock=setTimeout(()=>lock(),Math.max(0,next.until-Date.now()));
@@ -191,6 +205,8 @@ for(const button of languages){
   button.disabled=false;
   button.addEventListener('click',()=>{if(!pending&&!session)localize(button.dataset.clubLang);});
 }
+for(const button of entranceLanguages){button.disabled=false;button.addEventListener('click',()=>{if(!pending&&!session)localize(button.dataset.entranceLang);});}
+localize(locale);
 window.addEventListener('pagehide',()=>{if(pending||session)lock();});
 async function checkActiveSession(){
   const active=session;

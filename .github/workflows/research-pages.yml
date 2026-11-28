@@ -234,6 +234,24 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 origin 5cced81256c965797988cd682fb5f910fe72c981
           python3 scripts/replay_frontier_alpha1_availability.py --check
+      - name: Stage exact Conclave participant edition and celestial artwork
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/conclave-release"
+          gh release view frontier-conclave-participant-v2026.11.28 --repo "$GITHUB_REPOSITORY" --json assets > "$RUNNER_TEMP/conclave-release/assets.json"
+          asset="$(python3 -c 'import json,sys; names={a["name"] for a in json.load(open(sys.argv[1]))["assets"]}; new="AGI-CLUB-OMEGA-PARTICIPANT-PRODUCTION.zip"; print(new if new in names else "AGI-CLUB-OMEGA-PARTICIPANT-FINAL.zip")' "$RUNNER_TEMP/conclave-release/assets.json")"
+          gh release download frontier-conclave-participant-v2026.11.28 --repo "$GITHUB_REPOSITORY" --pattern "$asset" --dir "$RUNNER_TEMP/conclave-release"
+          python3 docs/research/stage_conclave_participant.py --site "$RUNNER_TEMP/research-site" --archive "$RUNNER_TEMP/conclave-release/$asset"
+          if test "$asset" = "AGI-CLUB-OMEGA-PARTICIPANT-PRODUCTION.zip"; then
+            python3 docs/research/stage_conclave_artwork.py --site "$RUNNER_TEMP/research-site"
+          elif python3 -c 'import json,sys;sys.exit(0 if any(a["name"]=="FRONTIER-CONCLAVE-VISUALS.zip" for a in json.load(open(sys.argv[1]))["assets"]) else 1)' "$RUNNER_TEMP/conclave-release/assets.json"; then
+            gh release download frontier-conclave-participant-v2026.11.28 --repo "$GITHUB_REPOSITORY" --pattern FRONTIER-CONCLAVE-VISUALS.zip --dir "$RUNNER_TEMP/conclave-release"
+            python3 docs/research/stage_conclave_artwork.py --site "$RUNNER_TEMP/research-site" --archive "$RUNNER_TEMP/conclave-release/FRONTIER-CONCLAVE-VISUALS.zip"
+          else
+            python3 docs/research/stage_conclave_artwork.py --site "$RUNNER_TEMP/research-site"
+          fi
       - name: Replay approved public Git history and stage the bilingual Atlas
         id: frontier_watch
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
@@ -257,14 +275,6 @@ jobs:
           git cat-file -e '1bdac817b471157092ea4aac881916824b66734e^{commit}'
           python3 scripts/frontier_atlas.py stage "$RUNNER_TEMP/research-site" \
             "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$GITHUB_RUN_ID" >> "$GITHUB_OUTPUT"
-      - name: Stage exact Conclave participant edition
-        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          mkdir -p "$RUNNER_TEMP/conclave-release"
-          gh release download frontier-conclave-participant-v2026.11.28 --repo "$GITHUB_REPOSITORY" --pattern AGI-CLUB-OMEGA-PARTICIPANT-FINAL.zip --dir "$RUNNER_TEMP/conclave-release"
-          python3 docs/research/stage_conclave_participant.py --site "$RUNNER_TEMP/research-site" --archive "$RUNNER_TEMP/conclave-release/AGI-CLUB-OMEGA-PARTICIPANT-FINAL.zip"
       - name: Qualify public member briefs, receipts and exact portable packages
         if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: |
